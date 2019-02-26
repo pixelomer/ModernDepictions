@@ -1,0 +1,10 @@
+Package: com.pixelomer.betterdepictions.example
+Name: Test Package
+Depends: mobilesubstrate
+Depiction: https://repo.dynastic.co/depiction/68292503631036416/#https://repo.dynastic.co/sileo-depiction/68292503631036416/
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Ignore this package.
+Maintainer: PixelOmer
+Author: PixelOmer
+Section: Tweaks

@@ -1,0 +1,16 @@
+THEOS_DEVICE_IP = 192.168.1.30
+THEOS_DEVICE_PORT = 22
+TARGET = iphone:clang:11.2:7.0
+ARCHS = arm64 armv7
+CFLAGS = -include macros.h
+
+include $(THEOS)/makefiles/common.mk
+
+TWEAK_NAME = SmartDepictions
+$(TWEAK_NAME)_FILES = Tweak.xm $(wildcard SmartDepictions/*.x) $(wildcard SmartDepictions/*.m) $(wildcard Extensions/*.m)
+
+include $(THEOS_MAKE_PATH)/tweak.mk
+
+install-example:
+	@$(THEOS)/bin/dm.pl -Zlzma -b ExamplePackage ExamplePackage.deb
+	@cat ExamplePackage.deb | ssh -p$(THEOS_DEVICE_PORT) root@$(THEOS_DEVICE_IP) "cat > /tmp/_.deb; dpkg -i /tmp/_.deb"

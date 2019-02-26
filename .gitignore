@@ -1,0 +1,6 @@
+ExamplePackage.deb
+.theos
+obj
+packages
+_.deb
+make.sh
