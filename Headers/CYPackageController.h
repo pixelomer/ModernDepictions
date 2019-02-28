@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface CYPackageController : NSObject
+@interface CYPackageController : UIViewController
 - (instancetype)initWithDatabase:(id)database forPackage:(NSString *)packageID withReferrer:(NSString *)referrer;
 - (void)reloadData;
 - (UIBarButtonItem *)rightButton;
@@ -8,4 +8,5 @@
 - (void)setSDDelegateOverride:(id)object;
 - (bool)isLoading;
 - (void)reloadURLWithCache:(BOOL)cache;
+- (id)delegate;
 @end

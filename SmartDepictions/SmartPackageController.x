@@ -1,36 +1,68 @@
 #import "SmartPackageController.h"
 #import "../Extensions/UINavigationController+Clear.h"
-#import <substrate.h>
 
 @implementation SmartPackageController
 
-- (instancetype)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID referrer:(NSString *)referrer {
-	[super init];
-	_depiction = [dict copy];
+- (void)handleRightButton {
+	NSLog(@"Handling modification button for %@", self.package);
+	[self.delegate performSelector:@selector(installPackage:) withObject:self.package];
+}
 
-	// Create a dummy CYPackageController for the installation stuff
-	_dummyController = [[%c(CYPackageController) alloc] initWithDatabase:database forPackage:packageID withReferrer:referrer];
-	[_dummyController setSDDelegateOverride:self];
-	[_dummyController reloadData];
+- (void)reloadData {
+	NSLog(@"Database: %@, Package Name: %@", self.database, self.packageName);
+	if (_package) [_package release];
+    _package = [[self.database packageWithName:self.packageName] retain];
+    NSArray *versions = [self.package downgrades];
+	NSLog(@"Versions for %@: %@", self.package, versions);
 
-	IsWildcat_ = ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)]
+	if (modificationButtons) [modificationButtons release];
+	modificationButtons = [[NSMutableArray alloc] init];
+
+    if (self.package != nil) {
+        [(Package *) self.package parse];
+
+        if ([self.package mode] != nil)
+            [modificationButtons addObject:@"CLEAR"];
+        if ([self.package source] == nil);
+        else if ([self.package upgradableAndEssential:NO])
+            [modificationButtons addObject:@"UPGRADE"];
+        else if ([self.package uninstalled])
+            [modificationButtons addObject:@"INSTALL"];
+        else
+            [modificationButtons addObject:@"REINSTALL"];
+        if (![self.package uninstalled])
+            [modificationButtons addObject:@"REMOVE"];
+        if ([versions count] != 0)
+            [modificationButtons addObject:@"DOWNGRADE"];
+    }
+
+    NSString *title;
+    switch ([modificationButtons count]) {
+        case 0: title = nil; break;
+        case 1: title = modificationButtons[0]; break;
+        default: title = @"MODIFY"; break;
+    }
+	modificationButtonTitle = title;
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+		initWithTitle:UCLocalize(title)
+        style:UIBarButtonItemStylePlain 
+        target:self
+        action:@selector(handleRightButton)
+	];
+	NSLog(@"Reloaded data.\nPackage: %@\nRight bar button: %@", self.package, self.navigationItem.rightBarButtonItem);
+}
+
+- (SmartPackageController *)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID referrer:(NSString *)referrer {
+	PerformSelector(UIViewController, self, @selector(init));
+	_database = [database retain];
+	_packageName = [packageID copy];
+
+	depiction = [dict copy];
+	isiPad = ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)]
 		&& [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 
 	// Replace its delegate with self in order to make certain things work
 	return self;
-}
-
-- (void)showActionSheet:(UIActionSheet *)sheet fromItem:(UIBarButtonItem *)item {
-	sheet.delegate = (id<UIActionSheetDelegate>)_dummyController;
-	if (!IsWildcat_) {
-       [sheet addButtonWithTitle:UCLocalize("CANCEL")];
-       [sheet setCancelButtonIndex:[sheet numberOfButtons] - 1];
-    }
-    if (item != nil && IsWildcat_) {
-        [sheet showFromBarButtonItem:item animated:YES];
-    } else {
-        [sheet showInView:[[[UIApplication sharedApplication] windows] firstObject]];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -49,27 +81,28 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-
+	NSLog(@"-[super viewDidLoad] completed.");
+	[self reloadData];
+	NSLog(@"Reloaded data.");
 	// Initialize the table view
 	_tableView = [[UITableView alloc] initWithFrame:self.view.frame];
-	_tableView.delegate = (id<UITableViewDelegate>)self;
-	[self.view addSubview:_tableView];
-	
+	self.tableView.delegate = (id<UITableViewDelegate>)self;
+	[self.view addSubview:self.tableView];
+
 	// Disable auto contentInset adjustment
 	if (@available(iOS 11.0, *)) self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 	else self.automaticallyAdjustsScrollViewInsets = false;
 
 	// Make the navigation bar translucent
 	self.navigationController.clear = YES;
-
 #if !DEBUG
 	// Hide the seperators
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 #endif
 
 	// Get the header image and show it
-	NSData *rawImage = [NSData dataWithContentsOfURL:[NSURL URLWithString:[_depiction objectForKey:@"headerImage"]]];
-	NSLog(@"%@: %@", [_depiction objectForKey:@"headerImage"], rawImage);
+	NSData *rawImage = [NSData dataWithContentsOfURL:[NSURL URLWithString:[depiction objectForKey:@"headerImage"]]];
+	NSLog(@"%@: %@", [depiction objectForKey:@"headerImage"], rawImage);
 	if (rawImage) {
 		imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithData:rawImage]];
 	}
@@ -81,14 +114,11 @@
 
 	// Set the content inset to make place for the image
 	self.tableView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, 0, 0);
-	
+
 	// Prepare and show the image view
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	imageView.clipsToBounds = YES;
 	[self.view addSubview:imageView];
-
-	// Apply the right button
-	[[self navigationItem] setRightBarButtonItem:[_dummyController rightButton]];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
