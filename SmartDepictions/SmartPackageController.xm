@@ -133,7 +133,7 @@
 	}
 	else {
 		imageView.center = CGPointMake(origImageWidth / 2, (origImageHeight / 2) - offsetY);
-		self.navigationController.clearness = offsetY / origImageHeight;
+		self.navigationController.clearness = min(offsetY / origImageHeight, 1.0);
 	}
 }
 
