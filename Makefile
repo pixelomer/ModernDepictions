@@ -7,7 +7,7 @@ CFLAGS = -include macros.h
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = SmartDepictions
-$(TWEAK_NAME)_FILES = Tweak.xm $(wildcard SmartDepictions/*.x) $(wildcard SmartDepictions/*.m) $(wildcard Extensions/*.m)
+$(TWEAK_NAME)_FILES = Tweak.xm $(wildcard SmartDepictions/*.xm) $(wildcard SmartDepictions/*.mm) $(wildcard Extensions/*.mm)
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
