@@ -13,3 +13,9 @@
 - (BOOL)uninstalled;
 - (void)install;
 @end
+
+@interface Package(CYSupport)
+@property (nonatomic, copy) NSString *sileoDepiction;
+- (NSString *)valueForTag:(NSString *)tag;
++ (bool)isCYSupportAvailable;
+@end
