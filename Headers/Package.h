@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 @class Source;
 
 @interface Package : NSObject
@@ -10,6 +10,7 @@
 - (NSString *)mode;
 - (BOOL)upgradableAndEssential:(BOOL)essential;
 - (NSArray *)downgrades;
+- (UIImage *) icon;
 - (BOOL)uninstalled;
 - (void)install;
 @end
