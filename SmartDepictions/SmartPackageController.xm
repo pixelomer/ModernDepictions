@@ -1,19 +1,17 @@
 #import "SmartPackageController.h"
-#import "../Extensions/UINavigationController+Clear.h"
+#import "../Extensions/UINavigationController+Opacity.h"
 
 @implementation SmartPackageController
 
-- (void)handleRightButton {
+- (void)handleGetButton {
 	NSLog(@"Handling modification button for %@", self.package);
 	[self.delegate performSelector:@selector(installPackage:) withObject:self.package];
 }
 
 - (void)reloadData {
-	NSLog(@"Database: %@, Package Name: %@", self.database, self.packageName);
 	if (_package) [_package release];
     _package = [[self.database packageWithName:self.packageName] retain];
     NSArray *versions = [self.package downgrades];
-	NSLog(@"Versions for %@: %@", self.package, versions);
 
 	if (modificationButtons) [modificationButtons release];
 	modificationButtons = [[NSMutableArray alloc] init];
@@ -35,21 +33,11 @@
         if ([versions count] != 0)
             [modificationButtons addObject:@"DOWNGRADE"];
     }
-
-    NSString *title;
     switch ([modificationButtons count]) {
-        case 0: title = nil; break;
-        case 1: title = modificationButtons[0]; break;
-        default: title = @"MODIFY"; break;
+        case 0: modificationButtonTitle = nil; break;
+        case 1: modificationButtonTitle = modificationButtons[0]; break;
+        default: modificationButtonTitle = @"MODIFY"; break;
     }
-	modificationButtonTitle = title;
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-		initWithTitle:UCLocalize(title)
-        style:UIBarButtonItemStylePlain 
-        target:self
-        action:@selector(handleRightButton)
-	];
-	NSLog(@"Reloaded data.\nPackage: %@\nRight bar button: %@", self.package, self.navigationItem.rightBarButtonItem);
 }
 
 - (SmartPackageController *)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID referrer:(NSString *)referrer {
@@ -133,7 +121,7 @@
 	}
 	else {
 		imageView.center = CGPointMake(origImageWidth / 2, (origImageHeight / 2) - offsetY);
-		self.navigationController.clearness = min(offsetY / origImageHeight, 1.0);
+		self.navigationController.opacity = min(offsetY / origImageHeight, 1.0);
 	}
 }
 
