@@ -16,7 +16,6 @@
 	isiPad = ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)]
 		&& [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 	_depictionRootView = [[DepictionRootView alloc] initWithDepiction:depiction database:database packageID:packageID];
-	self.depictionRootView.frame = self.view.frame;
 	//self.depictionRootView.delegate = (id<UITableViewDelegate>)self;
 	//self.depictionRootView.dataSource = self.depictionRootView;
 	return self;
@@ -50,14 +49,6 @@
 	}
 	else imageView = [[UIImageView alloc] init];
 
-	// Set the image's frame
-	imageView.frame = CGRectMake(0, 0, origImageWidth = UIScreen.mainScreen.bounds.size.width,
-		origImageHeight = UIScreen.mainScreen.bounds.size.width * (imageView.image.size.height / imageView.image.size.width));
-
-	// Set the content inset to make place for the image
-	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, 0, 0);
-	self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];
 
@@ -65,8 +56,41 @@
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	imageView.clipsToBounds = YES;
 	[self.view addSubview:imageView];
-	
+	[self resetViews];
+	[self resetDepictionRootView];
 }
+
+- (void)resetViews {
+	imageView.frame = CGRectMake(0, 0, origImageWidth = UIScreen.mainScreen.bounds.size.width,
+		origImageHeight = UIScreen.mainScreen.bounds.size.width * (imageView.image.size.height / imageView.image.size.width));
+}
+
+- (void)resetDepictionRootView {
+	self.depictionRootView.frame = self.view.frame;
+	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, 0, 0);
+	self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+
+    // Code here will execute before the rotation begins.
+    // Equivalent to placing it in the deprecated method -[willRotateToInterfaceOrientation:duration:]
+
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+
+        // First reset - Makes the transition smooth.
+		[self resetViews];
+
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+
+        // Second reset - Fixes the DepictionRootView.
+		[self resetDepictionRootView];
+
+    }];
+}
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	if (navBarLowerY == 0.0)

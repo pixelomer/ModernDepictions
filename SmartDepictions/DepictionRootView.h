@@ -1,11 +1,15 @@
 #import <UIKit/UIKit.h>
 #import "../Headers/Headers.h"
 #import "GetPackageCell.h"
+#import "SmartCell.h"
 
 @interface DepictionRootView : UITableView<UITableViewDataSource, UITableViewDelegate> {
 	NSDictionary *depiction;
 	NSMutableArray *modificationButtons;
 	NSString *modificationButtonTitle;
+	NSMutableArray<__kindof UITableViewCell<SmartCell> *> *topCells;
+	NSMutableDictionary<NSString *, NSArray<__kindof UITableViewCell<SmartCell> *> *> *tabCells;
+	NSString *currentTab;
 }
 @property (nonatomic, readonly) Package *package;
 @property (nonatomic, readonly) Database *database;

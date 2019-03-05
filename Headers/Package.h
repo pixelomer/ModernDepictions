@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 @class Source;
+@class MIMEAddress;
 
 @interface Package : NSObject
 - (NSString *)depiction;
@@ -10,9 +11,11 @@
 - (NSString *)mode;
 - (BOOL)upgradableAndEssential:(BOOL)essential;
 - (NSArray *)downgrades;
-- (UIImage *) icon;
+- (UIImage *)icon;
 - (BOOL)uninstalled;
+- (NSString *)name;
 - (void)install;
+- (MIMEAddress *)author;
 @end
 
 @interface Package(CYSupport)

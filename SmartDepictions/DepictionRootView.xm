@@ -22,13 +22,14 @@
 	return 1;
 }
 
-// TESTING
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSLog(@"tableView:heightForRowAtIndexPath:");
-	if (indexPath.row == 0) {
-		return 92;
+	if (indexPath.row < topCells.count) {
+		return [topCells[indexPath.row] height];
 	}
-	return 0.0;
+	else {
+		// TESTING
+		return 20.0;
+	}
 }
 
 - (void)reloadData {
@@ -61,6 +62,7 @@
         case 1: modificationButtonTitle = modificationButtons[0]; break;
         default: modificationButtonTitle = @"MODIFY"; break;
     }
+	self.getPackageCell.buttonTitle = UCLocalize(modificationButtonTitle);
 }
 
 - (UITableViewCellSeparatorStyle)separatorStyle {
@@ -73,13 +75,16 @@
 
 - (instancetype)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID {
 	[super init];
+	topCells = [[NSMutableArray alloc] init];
 	_database = [database retain];
 	_packageName = [packageID retain];
 	depiction = [dict retain];
 	[self reloadData];
 	self.dataSource = self;
 	self.delegate = self;
+	self.allowsSelection = NO;
 	_getPackageCell = [[GetPackageCell alloc] initWithPackage:self.package reuseIdentifier:@"getpackagecell"];
+	[topCells addObject:self.getPackageCell];
 	return self;
 }
 
