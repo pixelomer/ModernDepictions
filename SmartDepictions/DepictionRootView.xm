@@ -1,12 +1,8 @@
 #import "DepictionRootView.h"
+#import "GetPackageCell.h"
 #import "../Extensions/UINavigationController+Opacity.h"
 
 @implementation DepictionRootView
-
-- (void)handleGetButton {
-	NSLog(@"Handling modification button for %@", self.package);
-	[self.delegate performSelector:@selector(installPackage:) withObject:self.package];
-}
 
 // TESTING
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -37,29 +33,29 @@
     _package = [[self.database packageWithName:self.packageName] retain];
     NSArray *versions = [self.package downgrades];
 
-	if (modificationButtons) [modificationButtons release];
-	modificationButtons = [[NSMutableArray alloc] init];
+	if (_modificationButtons) [_modificationButtons release];
+	_modificationButtons = [[NSMutableArray alloc] init];
 
     if (self.package != nil) {
         [(Package *) self.package parse];
 
         if ([self.package mode] != nil)
-            [modificationButtons addObject:@"CLEAR"];
+            [_modificationButtons addObject:@"CLEAR"];
         if ([self.package source] == nil);
         else if ([self.package upgradableAndEssential:NO])
-            [modificationButtons addObject:@"UPGRADE"];
+            [_modificationButtons addObject:@"UPGRADE"];
         else if ([self.package uninstalled])
-            [modificationButtons addObject:@"INSTALL"];
+            [_modificationButtons addObject:@"INSTALL"];
         else
-            [modificationButtons addObject:@"REINSTALL"];
+            [_modificationButtons addObject:@"REINSTALL"];
         if (![self.package uninstalled])
-            [modificationButtons addObject:@"REMOVE"];
+            [_modificationButtons addObject:@"REMOVE"];
         if ([versions count] != 0)
-            [modificationButtons addObject:@"DOWNGRADE"];
+            [_modificationButtons addObject:@"DOWNGRADE"];
     }
-    switch ([modificationButtons count]) {
+    switch ([_modificationButtons count]) {
         case 0: modificationButtonTitle = nil; break;
-        case 1: modificationButtonTitle = modificationButtons[0]; break;
+        case 1: modificationButtonTitle = _modificationButtons[0]; break;
         default: modificationButtonTitle = @"MODIFY"; break;
     }
 	self.getPackageCell.buttonTitle = UCLocalize(modificationButtonTitle);

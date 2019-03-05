@@ -3,7 +3,7 @@
 
 @implementation SmartPackageController
 
-- (void)handleGetButton {
+- (void)handleGetButtonWithButtons:(NSArray *)buttons {
 	NSLog(@"Handling modification button for %@", self.depictionRootView.package);
 	[self.delegate performSelector:@selector(installPackage:) withObject:self.depictionRootView.package];
 }

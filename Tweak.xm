@@ -24,7 +24,7 @@
 					];
 					NSLog(@"Serialized data: %@", JSONDepiction);
 					if (JSONDepiction) {
-						SmartPackageController *newView = [[%c(SmartPackageController) alloc] initWithDepiction:[JSONDepiction copy] database:database packageID:[package id] referrer:referrer];
+						SmartPackageController *newView = [[SmartPackageController alloc] initWithDepiction:[JSONDepiction copy] database:database packageID:[package id] referrer:referrer];
 						if (newView) {
 							newView.delegate = self.delegate;
 							NSLog(@"New view: %@", newView);

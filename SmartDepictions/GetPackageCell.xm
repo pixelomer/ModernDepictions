@@ -1,4 +1,5 @@
 #import "GetPackageCell.h"
+#import "DepictionRootView.h"
 
 @implementation GetPackageCell
 
@@ -42,8 +43,8 @@
 
 - (void)queueButtonTouchUpInside:(id)sender {
 	id pvc = [self _viewControllerForAncestor];
-	if (pvc && [pvc respondsToSelector:@selector(handleGetButton)]) {
-		[pvc performSelector:@selector(handleGetButton)];
+	if (pvc && [pvc respondsToSelector:@selector(handleGetButtonWithButtons:)]) {
+		[pvc performSelector:@selector(handleGetButtonWithButtons:) withObject:[(DepictionRootView *)self.superview modificationButtons]];
 	}
 }
 

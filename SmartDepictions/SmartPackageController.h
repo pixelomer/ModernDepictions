@@ -9,7 +9,6 @@
 	bool isiPad;
 	double origImageWidth;
 	CGFloat navBarLowerY;
-	NSMutableArray *modificationButtons;
 	NSString *modificationButtonTitle;
 }
 @property (nonatomic, readonly) DepictionRootView *depictionRootView;
