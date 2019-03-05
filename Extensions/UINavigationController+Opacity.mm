@@ -8,10 +8,9 @@
 }
 
 - (void)setOpacity:(CGFloat)opacity {
-	UIImage *image = opacity < 1.0 ? [UIImage imageWithColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:opacity]] : nil;
+	UIImage *image = [UIImage imageWithColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:min(opacity, 1.0)]];
 	[self.navigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
-	self.navigationBar.shadowImage = opacity < 1.0 ? image : nil;
-	self.navigationBar.translucent = opacity < 1.0;
+	self.navigationBar.shadowImage = opacity < 0.5 ? image : nil;
 }
 
 @end

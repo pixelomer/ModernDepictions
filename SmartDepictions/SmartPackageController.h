@@ -8,6 +8,7 @@
 	double origImageHeight;
 	bool isiPad;
 	double origImageWidth;
+	CGFloat navBarLowerY;
 	NSMutableArray *modificationButtons;
 	NSString *modificationButtonTitle;
 }

@@ -38,6 +38,8 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	navBarLowerY = 0.0;
+	self.navigationController.navigationBar.translucent = YES;
 	self.navigationController.clear = YES;
 	
 	// Get the header image and show it
@@ -63,9 +65,12 @@
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	imageView.clipsToBounds = YES;
 	[self.view addSubview:imageView];
+	
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	if (navBarLowerY == 0.0)
+		navBarLowerY = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
 	double offsetY = scrollView.contentOffset.y + scrollView.contentInset.top;
 	NSLog(@"Received: %f, Calculated: %f", scrollView.contentOffset.y, offsetY);
 	if (offsetY <= 0.0) {
@@ -73,10 +78,11 @@
 		double WHRatio = (origImageWidth / origImageHeight);
 		double w = origImageWidth + ((h - origImageHeight) * WHRatio);
 		imageView.bounds = CGRectMake(0, 0, w, h);
+		imageView.center = CGPointMake(origImageWidth / 2, imageView.bounds.size.height / 2);
 	}
 	else {
 		imageView.center = CGPointMake(origImageWidth / 2, (origImageHeight / 2) - offsetY);
-		self.navigationController.opacity = min(offsetY / origImageHeight, 1.0);
+		self.navigationController.opacity = min(offsetY / (origImageHeight - navBarLowerY), 1.0);
 	}
 }
 
