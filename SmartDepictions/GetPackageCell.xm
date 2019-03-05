@@ -9,6 +9,7 @@
 	queueButton.backgroundColor = [UIColor blueColor];
 	queueButton.layer.masksToBounds = YES;
 	queueButton.layer.cornerRadius = 16.0;
+	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;
 	UIImage *icon = [package icon];
@@ -37,6 +38,13 @@
 	[self.contentView addSubview:iconView];
 	[self.contentView addSubview:authorLabel];
 	return self;
+}
+
+- (void)queueButtonTouchUpInside:(id)sender {
+	id pvc = [self _viewControllerForAncestor];
+	if (pvc && [pvc respondsToSelector:@selector(handleGetButton)]) {
+		[pvc performSelector:@selector(handleGetButton)];
+	}
 }
 
 - (CGFloat)height {

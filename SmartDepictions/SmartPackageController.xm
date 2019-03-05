@@ -4,8 +4,8 @@
 @implementation SmartPackageController
 
 - (void)handleGetButton {
-	NSLog(@"Handling modification button for %@", self.package);
-	[self.delegate performSelector:@selector(installPackage:) withObject:self.package];
+	NSLog(@"Handling modification button for %@", self.depictionRootView.package);
+	[self.delegate performSelector:@selector(installPackage:) withObject:self.depictionRootView.package];
 }
 
 - (SmartPackageController *)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID referrer:(NSString *)referrer {
@@ -33,6 +33,11 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.navigationController.clear = YES;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	[self.depictionRootView reloadData];
 }
 
 - (void)viewDidLoad {
@@ -90,7 +95,6 @@
 
     }];
 }
-
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	if (navBarLowerY == 0.0)
