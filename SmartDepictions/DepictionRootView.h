@@ -17,5 +17,4 @@
 @property (nonatomic, readonly) GetPackageCell *getPackageCell;
 - (instancetype)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID;
 - (void)reloadData;
-- (UITableViewCellSeparatorStyle)separatorStyle;
 @end

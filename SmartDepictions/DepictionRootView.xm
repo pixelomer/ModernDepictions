@@ -65,14 +65,6 @@
 	self.getPackageCell.buttonTitle = UCLocalize(modificationButtonTitle);
 }
 
-- (UITableViewCellSeparatorStyle)separatorStyle {
-#if DEBUG
-	return [super separatorStyle];
-#else
-	return UITableViewCellSeparatorStyleNone;
-#endif
-}
-
 - (instancetype)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID {
 	[super init];
 	topCells = [[NSMutableArray alloc] init];
@@ -85,6 +77,9 @@
 	self.allowsSelection = NO;
 	_getPackageCell = [[GetPackageCell alloc] initWithPackage:self.package reuseIdentifier:@"getpackagecell"];
 	[topCells addObject:self.getPackageCell];
+#if !DEBUG
+	self.separatorStyle = UITableViewCellSeparatorStyleNone;
+#endif
 	return self;
 }
 
