@@ -24,9 +24,8 @@
 					];
 					NSLog(@"Serialized data: %@", JSONDepiction);
 					if (JSONDepiction) {
-						SmartPackageController *newView = [[SmartPackageController alloc] initWithDepiction:[JSONDepiction copy] database:database packageID:[package id] referrer:referrer];
+						SmartPackageController *newView = [[SmartPackageController alloc] initWithDepiction:[JSONDepiction copy] database:database packageID:[package id]];
 						if (newView) {
-							newView.delegate = self.delegate;
 							NSLog(@"New view: %@", newView);
 							[self release]; // The CYPackageController is useless at this point
 							NSLog(@"Returning...");

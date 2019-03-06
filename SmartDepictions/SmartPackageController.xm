@@ -1,24 +1,27 @@
 #import "SmartPackageController.h"
 #import "../Extensions/UINavigationController+Opacity.h"
+#import "SmartDepictionDelegate.h"
+#import "DepictionRootView.h"
 
 @implementation SmartPackageController
 
-- (void)handleGetButtonWithButtons:(NSArray *)buttons {
-	NSLog(@"Handling modification button for %@", self.depictionRootView.package);
-	[self.delegate performSelector:@selector(installPackage:) withObject:self.depictionRootView.package];
-}
-
-- (SmartPackageController *)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID referrer:(NSString *)referrer {
+- (SmartPackageController *)initWithDepiction:(NSDictionary *)depiction database:(id)database packageID:(NSString *)packageID {
 	[super init];
-	_database = [database retain];
-	_packageName = [packageID copy];
-	depiction = [dict copy];
+	_depictionDelegate = [[SmartDepictionDelegate alloc] initWithPackageController:self
+		depiction:depiction
+		database:database
+		packageID:packageID
+	];
 	isiPad = ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)]
 		&& [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-	_depictionRootView = [[DepictionRootView alloc] initWithDepiction:depiction database:database packageID:packageID];
-	//self.depictionRootView.delegate = (id<UITableViewDelegate>)self;
-	//self.depictionRootView.dataSource = self.depictionRootView;
+	_depictionRootView = [[DepictionRootView alloc] initWithDepictionDelegate:self.depictionDelegate];
+	NSLog(@"Root view: %@", self.depictionRootView);
 	return self;
+}
+
+// This method is called by Cydia itself
+- (void)setDelegate:(Cydia *)delegate {
+	self.depictionDelegate.cydiaDelegate = delegate;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -37,7 +40,8 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	[self.depictionRootView reloadData];
+	NSLog(@"View controller appeared, requesting a reload from %@", self.depictionDelegate);
+	[self.depictionDelegate reloadData];
 }
 
 - (void)viewDidLoad {
@@ -47,12 +51,12 @@
 	self.navigationController.clear = YES;
 	
 	// Get the header image and show it
-	NSData *rawImage = [NSData dataWithContentsOfURL:[NSURL URLWithString:[depiction objectForKey:@"headerImage"]]];
-	NSLog(@"%@: %@", [depiction objectForKey:@"headerImage"], rawImage);
+	NSData *rawImage = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.depictionDelegate.depiction objectForKey:@"headerImage"]]];
+	NSLog(@"%@: %@", [self.depictionDelegate.depiction objectForKey:@"headerImage"], rawImage);
 	if (rawImage) {
 		imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithData:rawImage]];
 	}
-	else imageView = [[UIImageView alloc] init];
+	else imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)]; // TESTING
 
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];

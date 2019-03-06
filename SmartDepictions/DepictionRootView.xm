@@ -1,5 +1,6 @@
 #import "DepictionRootView.h"
 #import "GetPackageCell.h"
+#import "SmartDepictionDelegate.h"
 #import "../Extensions/UINavigationController+Opacity.h"
 
 @implementation DepictionRootView
@@ -28,50 +29,15 @@
 	}
 }
 
-- (void)reloadData {
-	if (_package) [_package release];
-    _package = [[self.database packageWithName:self.packageName] retain];
-    NSArray *versions = [self.package downgrades];
-
-	if (_modificationButtons) [_modificationButtons release];
-	_modificationButtons = [[NSMutableArray alloc] init];
-
-    if (self.package != nil) {
-        [(Package *) self.package parse];
-
-        if ([self.package mode] != nil)
-            [_modificationButtons addObject:@"CLEAR"];
-        if ([self.package source] == nil);
-        else if ([self.package upgradableAndEssential:NO])
-            [_modificationButtons addObject:@"UPGRADE"];
-        else if ([self.package uninstalled])
-            [_modificationButtons addObject:@"INSTALL"];
-        else
-            [_modificationButtons addObject:@"REINSTALL"];
-        if (![self.package uninstalled])
-            [_modificationButtons addObject:@"REMOVE"];
-        if ([versions count] != 0)
-            [_modificationButtons addObject:@"DOWNGRADE"];
-    }
-    switch ([_modificationButtons count]) {
-        case 0: modificationButtonTitle = nil; break;
-        case 1: modificationButtonTitle = _modificationButtons[0]; break;
-        default: modificationButtonTitle = @"MODIFY"; break;
-    }
-	self.getPackageCell.buttonTitle = UCLocalize(modificationButtonTitle);
-}
-
-- (instancetype)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID {
+- (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate {
 	[super init];
 	topCells = [[NSMutableArray alloc] init];
-	_database = [database retain];
-	_packageName = [packageID retain];
-	depiction = [dict retain];
+	_depictionDelegate = [delegate retain];
 	[self reloadData];
 	self.dataSource = self;
 	self.delegate = self;
 	self.allowsSelection = NO;
-	_getPackageCell = [[GetPackageCell alloc] initWithPackage:self.package reuseIdentifier:@"getpackagecell"];
+	_getPackageCell = [[GetPackageCell alloc] initWithDepictionDelegate:self.depictionDelegate reuseIdentifier:@"getpackagecell"];
 	[topCells addObject:self.getPackageCell];
 #if !DEBUG
 	self.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -80,10 +46,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	id pvc = [self _viewControllerForAncestor];
-	if (pvc && [pvc respondsToSelector:@selector(scrollViewDidScroll:)]) {
-		[pvc performSelector:@selector(scrollViewDidScroll:) withObject:scrollView];
-	}
+	[self.depictionDelegate scrollViewDidScroll:scrollView];
 }
 
 @end

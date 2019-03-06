@@ -1,10 +1,12 @@
 #import "GetPackageCell.h"
 #import "DepictionRootView.h"
+#import "SmartDepictionDelegate.h"
 
 @implementation GetPackageCell
 
-- (instancetype _Nullable)initWithPackage:(Package * _Nonnull)package reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
+- (instancetype _Nullable)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
 	[super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+	_depictionDelegate = [delegate retain];
 	queueButton = [[UIButton alloc] init];
 	queueButton.titleLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightBold];
 	queueButton.backgroundColor = [UIColor blueColor];
@@ -13,9 +15,7 @@
 	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;
-	UIImage *icon = [package icon];
-	iconView = [[UIImageView alloc] initWithImage:icon];
-	iconView.frame = CGRectMake(16, 16, 60, 60);
+	iconView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 16, 60, 60)];
 	iconView.layer.masksToBounds = YES;
 	iconView.layer.cornerRadius = 15.0;
 	packageNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(
@@ -25,16 +25,15 @@
 		24
 	)];
 	packageNameLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightBold];
-	packageNameLabel.text = [package name];
 	authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(
 		packageNameLabel.frame.origin.x,
 		packageNameLabel.frame.origin.y + 28,
 		packageNameLabel.frame.size.width,
 		19.5
 	)];
-	authorLabel.text = package.author.name;
 	authorLabel.textColor = [UIColor lightGrayColor];
 	authorLabel.font = [UIFont systemFontOfSize:16];
+	self.package = delegate.package;
 	[self.contentView addSubview:packageNameLabel];
 	[self.contentView addSubview:iconView];
 	[self.contentView addSubview:authorLabel];
@@ -42,17 +41,25 @@
 }
 
 - (void)queueButtonTouchUpInside:(id)sender {
-	id pvc = [self _viewControllerForAncestor];
-	if (pvc && [pvc respondsToSelector:@selector(handleGetButtonWithButtons:)]) {
-		[pvc performSelector:@selector(handleGetButtonWithButtons:) withObject:[(DepictionRootView *)self.superview modificationButtons]];
-	}
+	[self.depictionDelegate handleModifyButton];
 }
 
 - (CGFloat)height {
 	return 92.0;
 }
 
-- (void)setButtonTitle:(NSString * _Nullable)text {
+- (void)setPackage:(Package *)package {
+	if (!package) {
+		packageNameLabel.text = @"?";
+		return;
+	}
+	packageNameLabel.text = package.name;
+	authorLabel.text = package.author.name;
+	iconView.image = package.icon;
+}
+
+- (void)setButtonTitle:(NSString *)text {
+	NSLog(@"setButtonTitle:\"%@\"", text);
 	if (text) {
 		if (![self.contentView.subviews containsObject:queueButton]) {
 			[self.contentView addSubview:queueButton];
@@ -77,6 +84,12 @@
 			packageNameLabel.frame.origin.y,
 			self.contentView.frame.size.width - (self.contentView.frame.size.width - queueButton.frame.origin.x) - packageNameLabel.frame.origin.x,
 			packageNameLabel.frame.size.height
+		);
+		authorLabel.frame = CGRectMake(
+			authorLabel.frame.origin.x,
+			authorLabel.frame.origin.y,
+			packageNameLabel.frame.size.width,
+			authorLabel.frame.size.height
 		);
 
 	}

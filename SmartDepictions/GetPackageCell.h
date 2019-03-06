@@ -9,15 +9,19 @@
 /* the depiction JSON.                          */
 /************************************************/
 
+@class SmartDepictionDelegate;
+
 @interface GetPackageCell : UITableViewCell<SmartCell> {
 	UIImageView *iconView;
 	UILabel *packageNameLabel;
 	UILabel *authorLabel;
 	UIButton *queueButton;
 }
-- (instancetype _Nullable)initWithPackage:(Package * _Nonnull)package reuseIdentifier:(NSString * _Nonnull)reuseIdentifier;
-- (void)setButtonTitle:(NSString * _Nullable)text;
-- (NSString * _Nullable)buttonTitle;
+@property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate;
+- (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
+- (void)setButtonTitle:(NSString *)text;
+- (NSString *)buttonTitle;
+- (void)setPackage:(Package *)package;
 // - (void)setIcon:(UIImage *)icon;
 // - (UIImage *)icon;
 @end
