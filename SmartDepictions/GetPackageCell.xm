@@ -4,7 +4,7 @@
 
 @implementation GetPackageCell
 
-- (instancetype _Nullable)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
+- (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	[super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	_depictionDelegate = [delegate retain];
 	queueButton = [[UIButton alloc] init];
@@ -104,7 +104,7 @@
 	}
 }
 
-- (NSString * _Nullable)buttonTitle {
+- (NSString *)buttonTitle {
 	return queueButton.titleLabel.text;
 }
 
