@@ -1,17 +1,15 @@
 #import "GetPackageCell.h"
 #import "DepictionRootView.h"
 #import "SmartDepictionDelegate.h"
+#import "QueueButton.h"
+#import "AuthorButton.h"
 
 @implementation GetPackageCell
 
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	[super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	_depictionDelegate = [delegate retain];
-	queueButton = [[UIButton alloc] init];
-	queueButton.titleLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightBold];
-	queueButton.backgroundColor = [UIColor blueColor];
-	queueButton.layer.masksToBounds = YES;
-	queueButton.layer.cornerRadius = 16.0;
+	queueButton = [[QueueButton alloc] init];
 	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;
@@ -25,18 +23,17 @@
 		24
 	)];
 	packageNameLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightBold];
-	authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+	authorButton = [[AuthorButton alloc] initWithMIMEAddress:delegate.package.author];
+	authorButton.frame = CGRectMake(
 		packageNameLabel.frame.origin.x,
 		packageNameLabel.frame.origin.y + 28,
 		packageNameLabel.frame.size.width,
 		19.5
-	)];
-	authorLabel.textColor = [UIColor lightGrayColor];
-	authorLabel.font = [UIFont systemFontOfSize:16];
+	);
 	self.package = delegate.package;
 	[self.contentView addSubview:packageNameLabel];
 	[self.contentView addSubview:iconView];
-	[self.contentView addSubview:authorLabel];
+	[self.contentView addSubview:authorButton];
 	return self;
 }
 
@@ -54,7 +51,7 @@
 		return;
 	}
 	packageNameLabel.text = package.name;
-	authorLabel.text = package.author.name;
+	authorButton.MIMEAddress = package.author;
 	iconView.image = package.icon;
 }
 
@@ -85,11 +82,11 @@
 			self.contentView.frame.size.width - (self.contentView.frame.size.width - queueButton.frame.origin.x) - packageNameLabel.frame.origin.x,
 			packageNameLabel.frame.size.height
 		);
-		authorLabel.frame = CGRectMake(
-			authorLabel.frame.origin.x,
-			authorLabel.frame.origin.y,
+		authorButton.frame = CGRectMake(
+			authorButton.frame.origin.x,
+			authorButton.frame.origin.y,
 			packageNameLabel.frame.size.width,
-			authorLabel.frame.size.height
+			authorButton.frame.size.height
 		);
 
 	}

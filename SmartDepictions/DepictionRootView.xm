@@ -33,7 +33,6 @@
 	[super init];
 	topCells = [[NSMutableArray alloc] init];
 	_depictionDelegate = [delegate retain];
-	[self reloadData];
 	self.dataSource = self;
 	self.delegate = self;
 	self.allowsSelection = NO;

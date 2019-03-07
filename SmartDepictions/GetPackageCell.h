@@ -10,12 +10,14 @@
 /************************************************/
 
 @class SmartDepictionDelegate;
+@class QueueButton;
+@class AuthorButton;
 
 @interface GetPackageCell : UITableViewCell<SmartCell> {
 	UIImageView *iconView;
 	UILabel *packageNameLabel;
-	UILabel *authorLabel;
-	UIButton *queueButton;
+	AuthorButton *authorButton;
+	QueueButton *queueButton;
 }
 @property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate;
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
