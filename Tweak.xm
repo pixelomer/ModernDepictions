@@ -41,8 +41,19 @@
 
 %end
 
+%hook Package
+%property (nonatomic, retain) NSString *sileoDepiction;
+
+- (void)parse {
+	%orig;
+	id value = [self getField:@"sileodepiction"];
+	self.sileoDepiction = [value isKindOfClass:[NSNull class]] ? nil : value;
+}
+
+%end
+
 %ctor {
-	if ([%c(Package) respondsToSelector:@selector(isCYSupportAvailable)]) {
+	if (class_getInstanceMethod([%c(Package) class], @selector(getField:)) != NULL) {
 		NSLog(@"init");
 		%init;
 	}

@@ -16,10 +16,9 @@
 - (NSString *)name;
 - (void)install;
 - (MIMEAddress *)author;
+- (NSString *)getField:(NSString *)name;
 @end
 
-@interface Package(CYSupport)
+@interface Package(SmartDepictions)
 @property (nonatomic, copy) NSString *sileoDepiction;
-- (NSString *)valueForTag:(NSString *)tag;
-+ (bool)isCYSupportAvailable;
 @end
