@@ -1,6 +1,6 @@
 Package: com.pixelomer.smartdepictions
 Name: SmartDepictions
-Depends: mobilesubstrate
+Depends: mobilesubstrate, firmware (>=6.0)
 Version: 0.0.1
 Architecture: iphoneos-arm
 Description: Sileo-like Depictions for Cydia

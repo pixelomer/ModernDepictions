@@ -2,6 +2,7 @@
 #import "../Extensions/UINavigationController+Opacity.h"
 #import "SmartDepictionDelegate.h"
 #import "DepictionRootView.h"
+#import "DepictionTabView.h"
 
 @implementation SmartPackageController
 
@@ -15,6 +16,10 @@
 	isiPad = ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)]
 		&& [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 	_depictionRootView = [[DepictionRootView alloc] initWithDepictionDelegate:self.depictionDelegate];
+	self.depictionRootView.translatesAutoresizingMaskIntoConstraints = NO;
+	if (@available(iOS 11.0, *)) self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+	else self.automaticallyAdjustsScrollViewInsets = NO;
+	self.depictionRootView.tabController.tabs = self.depictionDelegate.depiction[@"tabs"];
 	NSLog(@"Root view: %@", self.depictionRootView);
 	return self;
 }
@@ -27,6 +32,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	self.navigationController.clear = NO;
+	self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -36,19 +42,17 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.navigationController.clear = YES;
+	self.navigationController.navigationBar.translucent = YES;
+	[self.depictionDelegate reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	NSLog(@"View controller appeared, requesting a reload from %@", self.depictionDelegate);
-	[self.depictionDelegate reloadData];
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	navBarLowerY = 0.0;
-	self.navigationController.navigationBar.translucent = YES;
-	self.navigationController.clear = YES;
 	
 	// Get the header image and show it
 	NSData *rawImage = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.depictionDelegate.depiction objectForKey:@"headerImage"]]];
@@ -60,50 +64,52 @@
 
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];
+	[self.view addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"H:|[drw]|"
+		options:0
+		metrics:nil
+		views:@{ @"drw" : self.depictionRootView }
+	]];
+	[self.view addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:|[drw]|"
+		options:0
+		metrics:nil
+		views:@{ @"drw" : self.depictionRootView }
+	]];
 
 	// Prepare and show the image view
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	imageView.clipsToBounds = YES;
 	[self.view addSubview:imageView];
 	[self resetViews];
-	[self resetDepictionRootView];
 }
 
 - (void)resetViews {
 	imageView.frame = CGRectMake(0, 0, origImageWidth = UIScreen.mainScreen.bounds.size.width,
 		origImageHeight = UIScreen.mainScreen.bounds.size.width * (imageView.image.size.height / imageView.image.size.width));
-}
-
-- (void)resetDepictionRootView {
-	self.depictionRootView.frame = self.view.frame;
 	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, 0, 0);
-	if (@available(iOS 11.0, *)) self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-	else self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
-    // Code here will execute before the rotation begins.
-    // Equivalent to placing it in the deprecated method -[willRotateToInterfaceOrientation:duration:]
+    // Code to execute before rotation.
 
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 
-        // First reset - Makes the transition smooth.
+        // Code to execute during rotation.
 		[self resetViews];
 
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 
-        // Second reset - Fixes the DepictionRootView.
-		[self resetDepictionRootView];
+        // Code to execute after rotation.
 
     }];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	if (navBarLowerY == 0.0)
-		navBarLowerY = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
+	if (navBarLowerY == 0.0) navBarLowerY = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
 	double offsetY = scrollView.contentOffset.y + scrollView.contentInset.top;
 	NSLog(@"Received: %f, Calculated: %f", scrollView.contentOffset.y, offsetY);
 	if (offsetY <= 0.0) {

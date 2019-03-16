@@ -17,23 +17,61 @@
 	iconView.layer.masksToBounds = YES;
 	iconView.layer.cornerRadius = 15.0;
 	packageNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(
-		iconView.frame.origin.x + iconView.frame.size.width + 10,
-		21,
+		0, 0,
 		self.contentView.frame.size.width - (iconView.frame.origin.x + iconView.frame.size.width + 10),
 		24
 	)];
 	packageNameLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightBold];
 	authorButton = [[AuthorButton alloc] initWithMIMEAddress:delegate.package.author];
 	authorButton.frame = CGRectMake(
-		packageNameLabel.frame.origin.x,
-		packageNameLabel.frame.origin.y + 28,
+		0, 0,
 		packageNameLabel.frame.size.width,
 		19.5
 	);
 	self.package = delegate.package;
+	queueButton.translatesAutoresizingMaskIntoConstraints = NO;
+	packageNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
+	iconView.translatesAutoresizingMaskIntoConstraints = NO;
+	authorButton.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.contentView addSubview:packageNameLabel];
 	[self.contentView addSubview:iconView];
 	[self.contentView addSubview:authorButton];
+	[self.contentView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"H:|-16-[icon(==60)]-10-[pn]"
+		options:0
+		metrics:nil
+		views:@{ @"pn" : packageNameLabel, @"icon" : iconView }
+	]];
+	[self.contentView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:|-21-[pn]-4-[ab(==19.5)]"
+		options:0
+		metrics:nil
+		views:@{ @"pn" : packageNameLabel, @"ab" : authorButton }
+	]];
+	[self.contentView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:|-16-[icon(==60)]"
+		options:0
+		metrics:nil
+		views:@{ @"icon" : iconView }
+	]];
+	[self.contentView addConstraint:[NSLayoutConstraint
+		constraintWithItem:iconView
+      	attribute:NSLayoutAttributeCenterY
+      	relatedBy:NSLayoutRelationEqual
+       	toItem:self.contentView
+       	attribute:NSLayoutAttributeCenterY
+       	multiplier:1.0
+       	constant:0.0
+	]];
+	[self.contentView addConstraint:[NSLayoutConstraint
+		constraintWithItem:packageNameLabel
+      	attribute:NSLayoutAttributeLeading
+      	relatedBy:NSLayoutRelationEqual
+       	toItem:authorButton
+       	attribute:NSLayoutAttributeLeading
+       	multiplier:1.0
+       	constant:0.0
+	]];
 	return self;
 }
 
@@ -60,35 +98,27 @@
 	if (text) {
 		if (![self.contentView.subviews containsObject:queueButton]) {
 			[self.contentView addSubview:queueButton];
+			[self.contentView addConstraints:[NSLayoutConstraint
+				constraintsWithVisualFormat:@"H:[qb]-23-|"
+				options:0
+				metrics:nil
+				views:@{ @"qb" : queueButton }
+			]];
+			[self.contentView addConstraint:[NSLayoutConstraint
+				constraintWithItem:queueButton
+            	attribute:NSLayoutAttributeCenterY
+            	relatedBy:NSLayoutRelationEqual
+            	toItem:self.contentView
+            	attribute:NSLayoutAttributeCenterY
+            	multiplier:1.0
+            	constant:0.0
+			]];
 		}
 		[queueButton
 			setTitle:[NSString stringWithFormat:@"    %@    ", text.uppercaseString]
 			forState:UIControlStateNormal
 		];
 		[queueButton sizeToFit];
-		queueButton.frame = CGRectMake(
-			self.contentView.frame.size.width - queueButton.frame.size.width - 23,
-			0,
-			queueButton.frame.size.width,
-			queueButton.frame.size.height
-		);
-		queueButton.center = CGPointMake(
-			queueButton.center.x,
-			self.contentView.center.y
-		);
-		packageNameLabel.frame = CGRectMake(
-			packageNameLabel.frame.origin.x,
-			packageNameLabel.frame.origin.y,
-			self.contentView.frame.size.width - (self.contentView.frame.size.width - queueButton.frame.origin.x) - packageNameLabel.frame.origin.x,
-			packageNameLabel.frame.size.height
-		);
-		authorButton.frame = CGRectMake(
-			authorButton.frame.origin.x,
-			authorButton.frame.origin.y,
-			packageNameLabel.frame.size.width,
-			authorButton.frame.size.height
-		);
-
 	}
 	else if ([self.contentView.subviews containsObject:queueButton]) {
 		[[queueButton retain] removeFromSuperview];

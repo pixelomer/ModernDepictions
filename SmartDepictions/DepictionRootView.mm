@@ -1,22 +1,22 @@
 #import "DepictionRootView.h"
 #import "GetPackageCell.h"
 #import "SmartDepictionDelegate.h"
+#import "DepictionTabView.h"
 #import "../Extensions/UINavigationController+Opacity.h"
 
 @implementation DepictionRootView
 
 // TESTING
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.row == 0) {
-		NSLog(@"%@", _getPackageCell);
-		return _getPackageCell;
+	if (indexPath.row < topCells.count) {
+		return topCells[indexPath.row];
 	}
-	else return nil;
+	return nil;
 }
 
 // TESTING
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 1;
+	return topCells.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -38,6 +38,8 @@
 	self.allowsSelection = NO;
 	_getPackageCell = [[GetPackageCell alloc] initWithDepictionDelegate:self.depictionDelegate reuseIdentifier:@"getpackagecell"];
 	[topCells addObject:self.getPackageCell];
+	_tabController = [[DepictionTabView alloc] initWithReuseIdentifier:@"tabControl"];
+	if (_tabController) [topCells addObject:_tabController];
 #if !DEBUG
 	self.separatorStyle = UITableViewCellSeparatorStyleNone;
 #endif

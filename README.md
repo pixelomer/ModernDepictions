@@ -6,15 +6,20 @@ Sileo depictions for Cydia.
 
 - [x] Cool header
 - [x] Transparent Navigation Bar
+- [ ] Completely switch to AutoLayout
 - [ ] Create a small portion of every cell
-- [ ] Split classes
+- [x] Split classes
 - [ ] Async web requests
-- [ ] Tab view stuff
+- [x] Tab controller (unusable)
+- [ ] Tab-specific views
 - [ ] Creating cells from the parsed JSON
 - [ ] SmartDepictionController for text-only depictions
 - [ ] SmartDepictionController for web depictions
 
-## Not planned
+## Might be implemented in distant future
 
 - Payment API support
+
+## Not planned
+
 - Ad cell support
