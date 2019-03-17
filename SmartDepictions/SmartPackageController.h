@@ -14,6 +14,8 @@
 }
 @property (nonatomic, readonly) DepictionRootView *depictionRootView;
 @property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate;
-- (instancetype)initWithDepiction:(NSDictionary *)dict database:(id)database packageID:(NSString *)packageID;
+@property (nonatomic, readonly) SmartPackageController *packageController;
+- (instancetype)initWithDepictionURL:(NSURL *)depictionURL database:(id)database packageID:(NSString *)packageID;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
+- (void)loadDepiction;
 @end

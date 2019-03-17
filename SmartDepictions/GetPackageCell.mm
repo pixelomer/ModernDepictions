@@ -7,13 +7,13 @@
 @implementation GetPackageCell
 
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
-	[super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-	_depictionDelegate = [delegate retain];
+	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+	_depictionDelegate = delegate;
 	queueButton = [[QueueButton alloc] init];
 	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;
-	iconView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 16, 60, 60)];
+	iconView = [[UIImageView alloc] init];
 	iconView.layer.masksToBounds = YES;
 	iconView.layer.cornerRadius = 15.0;
 	packageNameLabel = [[UILabel alloc] init];
@@ -73,6 +73,23 @@
 	packageNameLabel.text = package.name;
 	authorButton.MIMEAddress = package.author;
 	iconView.image = package.icon;
+	@autoreleasepool {
+		NSString *rawIconURL = [package getField:@"icon"];
+		if (rawIconURL && ![rawIconURL isKindOfClass:[NSNull class]]) {
+			NSURL *iconURL = [NSURL URLWithString:rawIconURL];
+			if (iconURL && iconURL.scheme && ![iconURL.scheme isEqualToString:@"file"]) {
+				[self.depictionDelegate downloadDataFromURL:iconURL completion:^(NSData *data, NSError *error){
+					if (!error && data) {
+						UIImage *remoteImage = [UIImage imageWithData:data];
+						if (remoteImage) {
+							iconView.image = remoteImage;
+							[iconView setNeedsDisplay];
+						}
+					}
+				}];
+			}
+		}
+	}
 }
 
 - (void)setButtonTitle:(NSString *)text {
@@ -103,7 +120,7 @@
 		}
 	}
 	else if ([self.contentView.subviews containsObject:queueButton]) {
-		[[queueButton retain] removeFromSuperview];
+		[queueButton removeFromSuperview];
 	}
 }
 

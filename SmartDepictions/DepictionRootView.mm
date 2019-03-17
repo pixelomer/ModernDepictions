@@ -30,9 +30,9 @@
 }
 
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate {
-	[super init];
+	self = [super init];
 	topCells = [[NSMutableArray alloc] init];
-	_depictionDelegate = [delegate retain];
+	_depictionDelegate = delegate;
 	self.dataSource = self;
 	self.delegate = self;
 	self.allowsSelection = NO;
@@ -44,6 +44,11 @@
 	self.separatorStyle = UITableViewCellSeparatorStyleNone;
 #endif
 	return self;
+}
+
+- (void)loadDepiction {
+	self.tabController.tabs = self.depictionDelegate.depiction[@"tabs"];
+	[self reloadData];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

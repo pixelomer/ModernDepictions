@@ -4,7 +4,7 @@
 @implementation AuthorButton
 
 - (instancetype)initWithMIMEAddress:(MIMEAddress *)address {
-	[super init];
+	self = [super init];
 	[self addTarget:self action:@selector(touchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	[self setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
 	[self setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];

@@ -1,25 +1,26 @@
 #import "SmartPackageController.h"
 #import "../Extensions/UINavigationController+Opacity.h"
+#import "../Extensions/UIImage+ImageWithColor.h"
 #import "SmartDepictionDelegate.h"
 #import "DepictionRootView.h"
 #import "DepictionTabView.h"
 
 @implementation SmartPackageController
 
-- (SmartPackageController *)initWithDepiction:(NSDictionary *)depiction database:(id)database packageID:(NSString *)packageID {
-	[super init];
+- (SmartPackageController *)initWithDepictionURL:(NSURL *)depictionURL database:(id)database packageID:(NSString *)packageID {
+	self = [super init];
 	_depictionDelegate = [[SmartDepictionDelegate alloc] initWithPackageController:self
-		depiction:depiction
+		depictionURL:depictionURL
 		database:database
 		packageID:packageID
 	];
 	isiPad = ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)]
 		&& [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 	_depictionRootView = [[DepictionRootView alloc] initWithDepictionDelegate:self.depictionDelegate];
+	_packageController = self;
 	self.depictionRootView.translatesAutoresizingMaskIntoConstraints = NO;
 	if (@available(iOS 11.0, *)) self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 	else if (@available(iOS 7.0, *)) self.automaticallyAdjustsScrollViewInsets = NO;
-	self.depictionRootView.tabController.tabs = self.depictionDelegate.depiction[@"tabs"];
 	NSLog(@"Root view: %@", self.depictionRootView);
 	return self;
 }
@@ -54,13 +55,9 @@
 	[super viewDidLoad];
 	navBarLowerY = 0.0;
 	
-	// Get the header image and show it
-	NSData *rawImage = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.depictionDelegate.depiction objectForKey:@"headerImage"]]];
-	NSLog(@"%@: %@", [self.depictionDelegate.depiction objectForKey:@"headerImage"], rawImage);
-	if (rawImage) {
-		imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithData:rawImage]];
-	}
-	else imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)]; // TESTING
+	// The intended image will be shown after the depiction data is downloaded.
+	imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+	imageView.image = [UIImage imageWithColor:[UIColor whiteColor]]; // TESTING
 
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];
@@ -78,16 +75,32 @@
 	]];
 
 	// Prepare and show the image view
-	imageView.contentMode = UIViewContentModeScaleAspectFit;
+	imageView.contentMode = UIViewContentModeScaleAspectFill;
 	imageView.clipsToBounds = YES;
 	[self.view addSubview:imageView];
 	[self resetViews];
+	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, 0, 0);
 }
 
 - (void)resetViews {
-	imageView.frame = CGRectMake(0, 0, origImageWidth = UIScreen.mainScreen.bounds.size.width,
-		origImageHeight = UIScreen.mainScreen.bounds.size.width * (imageView.image.size.height / imageView.image.size.width));
-	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, 0, 0);
+	imageView.frame = CGRectMake(0, 0, origImageWidth = UIScreen.mainScreen.bounds.size.width, origImageHeight = 200);
+}
+
+- (void)loadDepiction {
+	if (!self.depictionDelegate.depiction) return;
+	NSLog(@"Loading the depiction...");
+	NSURL *headerURL = [NSURL URLWithString:self.depictionDelegate.depiction[@"headerImage"]];
+	NSLog(@"Got header URL: %@", headerURL);
+	if (headerURL) [self.depictionDelegate downloadDataFromURL:headerURL completion:^(NSData *data, NSError *error) {
+		if (!data || error) return;
+		UIImage *remoteImage = [UIImage imageWithData:data];
+		if (remoteImage) {
+			imageView.image = remoteImage;
+			[self resetViews];
+			[imageView setNeedsDisplay];
+		}
+	}];
+	[self.depictionRootView loadDepiction];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator

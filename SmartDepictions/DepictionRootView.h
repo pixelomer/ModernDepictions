@@ -14,4 +14,5 @@
 @property (nonatomic, readonly) GetPackageCell *getPackageCell;
 @property (nonatomic, readonly) DepictionTabView *tabController;
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate;
+- (void)loadDepiction;
 @end

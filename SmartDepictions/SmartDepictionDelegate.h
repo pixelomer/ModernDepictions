@@ -13,6 +13,7 @@
 @property (nonatomic, retain) Cydia *cydiaDelegate;
 @property (nonatomic, readonly) NSDictionary *depiction;
 @property (nonatomic, readonly) Database *database;
+@property (nonatomic, readonly) NSURL *depictionURL;
 @property (nonatomic, readonly) NSString *packageID;
 @property (nonatomic, readonly) Package *package;
 @property (nonatomic, readonly) NSDictionary *modificationButtons;
@@ -21,10 +22,11 @@
 - (void)setModificationButtonTitle:(NSString *)newTitle;
 - (void)setPackageWithID:(NSString *)packageID database:(Database *)database;
 - (instancetype)initWithPackageController:(SmartPackageController *)packageController
-	depiction:(NSDictionary *)depictionDict
+	depictionURL:(NSURL *)depictionURL
 	database:(Database *)database
 	packageID:(NSString *)packageID;
 - (void)reloadData;
 - (void)handleModifyButton;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
+- (void)downloadDataFromURL:(NSURL *)url completion:(void (^)(NSData *, NSError *))completionHandler;
 @end

@@ -3,7 +3,7 @@
 @implementation QueueButton
 
 - (instancetype)init {
-	[super init];
+	self = [super init];
 	self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
 	self.backgroundColor = [UIColor blueColor];
 	self.layer.masksToBounds = YES;

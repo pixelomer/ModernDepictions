@@ -2,8 +2,10 @@
 #import "Headers/Headers.h"
 #import "SmartDepictions/SmartPackageController.h"
 
+extern "C" void _CFEnableZombies();
+
 // Dirty function to check if a depiction is valid
-static bool VerifySileoDepiction(NSDictionary *depiction) {
+__unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 	return ([depiction[@"minVersion"] isKindOfClass:[NSString class]] &&
 		[depiction[@"class"] isKindOfClass:[NSString class]] &&
 		NSClassFromString(depiction[@"class"]) && (
@@ -28,24 +30,11 @@ static bool VerifySileoDepiction(NSDictionary *depiction) {
 				NSURL *depictionURL = [NSURL URLWithString:rawDepictionURL];
 				NSLog(@"Depiction URL: %@", depictionURL);
 				if (depictionURL) {
-					NSData *rawJSONDepiction = [NSData dataWithContentsOfURL:depictionURL];
-					NSLog(@"Raw JSON Data: %@", rawJSONDepiction);
-					if (rawJSONDepiction) {
-						NSDictionary *JSONDepiction = [NSJSONSerialization
-							JSONObjectWithData:rawJSONDepiction
-							options:0
-							error:nil
-						];
-						NSLog(@"Serialized data: %@", JSONDepiction);
-						if (JSONDepiction && VerifySileoDepiction(JSONDepiction)) {
-							SmartPackageController *newView = [[SmartPackageController alloc] initWithDepiction:[JSONDepiction copy] database:database packageID:[package id]];
-							if (newView) {
-								NSLog(@"New view: %@", newView);
-								[self release]; // The CYPackageController is useless at this point
-								NSLog(@"Returning...");
-								return (void *)newView;
-							}
-						}
+					SmartPackageController *newView = [[SmartPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
+					if (newView) {
+						NSLog(@"New view: %@", newView);
+						NSLog(@"Returning...");
+						return (__bridge void *)newView;
 					}
 				}
 			}
@@ -70,6 +59,9 @@ static bool VerifySileoDepiction(NSDictionary *depiction) {
 %ctor {
 	if (class_getInstanceMethod([%c(Package) class], @selector(getField:)) != NULL) {
 		NSLog(@"init");
+	#if DEBUG
+		_CFEnableZombies();
+	#endif
 		%init;
 	}
 }
