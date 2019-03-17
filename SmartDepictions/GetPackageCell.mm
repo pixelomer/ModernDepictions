@@ -16,18 +16,9 @@
 	iconView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 16, 60, 60)];
 	iconView.layer.masksToBounds = YES;
 	iconView.layer.cornerRadius = 15.0;
-	packageNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(
-		0, 0,
-		self.contentView.frame.size.width - (iconView.frame.origin.x + iconView.frame.size.width + 10),
-		24
-	)];
+	packageNameLabel = [[UILabel alloc] init];
 	packageNameLabel.font = [UIFont boldSystemFontOfSize:20];
 	authorButton = [[AuthorButton alloc] initWithMIMEAddress:delegate.package.author];
-	authorButton.frame = CGRectMake(
-		0, 0,
-		packageNameLabel.frame.size.width,
-		19.5
-	);
 	self.package = delegate.package;
 	queueButton.translatesAutoresizingMaskIntoConstraints = NO;
 	packageNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -53,15 +44,6 @@
 		options:0
 		metrics:nil
 		views:@{ @"icon" : iconView }
-	]];
-	[self.contentView addConstraint:[NSLayoutConstraint
-		constraintWithItem:iconView
-      	attribute:NSLayoutAttributeCenterY
-      	relatedBy:NSLayoutRelationEqual
-       	toItem:self.contentView
-       	attribute:NSLayoutAttributeCenterY
-       	multiplier:1.0
-       	constant:0.0
 	]];
 	[self.contentView addConstraint:[NSLayoutConstraint
 		constraintWithItem:packageNameLabel
@@ -122,12 +104,6 @@
 	}
 	else if ([self.contentView.subviews containsObject:queueButton]) {
 		[[queueButton retain] removeFromSuperview];
-		packageNameLabel.frame = CGRectMake(
-			packageNameLabel.frame.origin.x,
-			packageNameLabel.frame.origin.y,
-			self.contentView.frame.size.width  - (iconView.frame.origin.x + iconView.frame.size.width + 10),
-			packageNameLabel.frame.size.height
-		);
 	}
 }
 
