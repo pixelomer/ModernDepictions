@@ -18,7 +18,7 @@
 	_depictionRootView = [[DepictionRootView alloc] initWithDepictionDelegate:self.depictionDelegate];
 	self.depictionRootView.translatesAutoresizingMaskIntoConstraints = NO;
 	if (@available(iOS 11.0, *)) self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-	else self.automaticallyAdjustsScrollViewInsets = NO;
+	else if (@available(iOS 7.0, *)) self.automaticallyAdjustsScrollViewInsets = NO;
 	self.depictionRootView.tabController.tabs = self.depictionDelegate.depiction[@"tabs"];
 	NSLog(@"Root view: %@", self.depictionRootView);
 	return self;

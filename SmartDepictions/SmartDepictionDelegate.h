@@ -16,6 +16,7 @@
 @property (nonatomic, readonly) NSString *packageID;
 @property (nonatomic, readonly) Package *package;
 @property (nonatomic, readonly) NSDictionary *modificationButtons;
+@property (nonatomic, readonly) bool iOS6;
 - (NSString *)modificationButtonTitle;
 - (void)setModificationButtonTitle:(NSString *)newTitle;
 - (void)setPackageWithID:(NSString *)packageID database:(Database *)database;

@@ -21,7 +21,7 @@
 		self.contentView.frame.size.width - (iconView.frame.origin.x + iconView.frame.size.width + 10),
 		24
 	)];
-	packageNameLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightBold];
+	packageNameLabel.font = [UIFont boldSystemFontOfSize:20];
 	authorButton = [[AuthorButton alloc] initWithMIMEAddress:delegate.package.author];
 	authorButton.frame = CGRectMake(
 		0, 0,
@@ -96,6 +96,11 @@
 - (void)setButtonTitle:(NSString *)text {
 	NSLog(@"setButtonTitle:\"%@\"", text);
 	if (text) {
+		[queueButton
+			setTitle:[NSString stringWithFormat:(self.depictionDelegate.iOS6 ? @"  %@  " :  @"    %@    "), text.uppercaseString]
+			forState:UIControlStateNormal
+		];
+		[queueButton sizeToFit];
 		if (![self.contentView.subviews containsObject:queueButton]) {
 			[self.contentView addSubview:queueButton];
 			[self.contentView addConstraints:[NSLayoutConstraint
@@ -114,11 +119,6 @@
             	constant:0.0
 			]];
 		}
-		[queueButton
-			setTitle:[NSString stringWithFormat:@"    %@    ", text.uppercaseString]
-			forState:UIControlStateNormal
-		];
-		[queueButton sizeToFit];
 	}
 	else if ([self.contentView.subviews containsObject:queueButton]) {
 		[[queueButton retain] removeFromSuperview];

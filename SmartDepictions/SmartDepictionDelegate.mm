@@ -24,6 +24,8 @@
 	_packageController = [packageController retain];
 	_packageID = [packageID retain];
 	_depiction = [depictionDict retain];
+	if (@available(iOS 7.0, *)) _iOS6 = false;
+	else _iOS6 = true;
 	[self setPackageWithID:packageID database:database];
 	return self;
 }
