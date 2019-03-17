@@ -95,9 +95,11 @@
 		if (!data || error) return;
 		UIImage *remoteImage = [UIImage imageWithData:data];
 		if (remoteImage) {
-			imageView.image = remoteImage;
-			[self resetViews];
-			[imageView setNeedsDisplay];
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				imageView.image = remoteImage;
+				[self resetViews];
+				[imageView setNeedsDisplay];
+			});
 		}
 	}];
 	[self.depictionRootView loadDepiction];

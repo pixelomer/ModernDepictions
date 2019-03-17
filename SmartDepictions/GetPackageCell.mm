@@ -82,8 +82,10 @@
 					if (!error && data) {
 						UIImage *remoteImage = [UIImage imageWithData:data];
 						if (remoteImage) {
-							iconView.image = remoteImage;
-							[iconView setNeedsDisplay];
+							dispatch_sync(dispatch_get_main_queue(), ^{
+								iconView.image = remoteImage;
+								[iconView setNeedsDisplay];
+							});
 						}
 					}
 				}];
