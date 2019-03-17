@@ -118,6 +118,7 @@
 		double w = origImageWidth + ((h - origImageHeight) * WHRatio);
 		imageView.bounds = CGRectMake(0, 0, w, h);
 		imageView.center = CGPointMake(origImageWidth / 2, imageView.bounds.size.height / 2);
+		self.navigationController.opacity = 0.0;
 	}
 	else {
 		imageView.center = CGPointMake(origImageWidth / 2, (origImageHeight / 2) - offsetY);
