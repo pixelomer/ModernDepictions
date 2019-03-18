@@ -9,7 +9,7 @@
 @interface SmartDepictionDelegate : NSObject {
 	NSString *modificationButtonTitle;
 }
-@property (nonatomic, readonly) SmartPackageController *packageController;
+@property (nonatomic, retain) SmartPackageController *packageController;
 @property (nonatomic, retain) Cydia *cydiaDelegate;
 @property (nonatomic, readonly) NSDictionary *depiction;
 @property (nonatomic, readonly) Database *database;

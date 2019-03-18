@@ -17,25 +17,24 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 	);
 }
 
+%group SmartDepictions
 %hook CYPackageController
 
 - (void *)initWithDatabase:(Database *)database forPackage:(NSString *)name withReferrer:(NSString *)referrer {
-	@autoreleasepool {
-		Package *package = [database packageWithName:name];
-		if (package) {
-			[package parse];
-			NSString *rawDepictionURL = [package sileoDepiction];
-			NSLog(@"Raw URL: %@", rawDepictionURL);
-			if (rawDepictionURL) {
-				NSURL *depictionURL = [NSURL URLWithString:rawDepictionURL];
-				NSLog(@"Depiction URL: %@", depictionURL);
-				if (depictionURL) {
-					SmartPackageController *newView = [[SmartPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
-					if (newView) {
-						NSLog(@"New view: %@", newView);
-						NSLog(@"Returning...");
-						return (__bridge void *)newView;
-					}
+	Package *package = [database packageWithName:name];
+	if (package) {
+		[package parse];
+		NSString *rawDepictionURL = [package sileoDepiction];
+		NSLog(@"Raw URL: %@", rawDepictionURL);
+		if (rawDepictionURL) {
+			NSURL *depictionURL = [NSURL URLWithString:rawDepictionURL];
+			NSLog(@"Depiction URL: %@", depictionURL);
+			if (depictionURL) {
+				SmartPackageController *newView = [[SmartPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
+				if (newView) {
+					NSLog(@"New view: %@", newView);
+					NSLog(@"Returning...");
+					return (__bridge void *)newView;
 				}
 			}
 		}
@@ -55,13 +54,14 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 }
 
 %end
+%end
 
 %ctor {
 	if (class_getInstanceMethod([%c(Package) class], @selector(getField:)) != NULL) {
 		NSLog(@"init");
 	#if DEBUG
-		_CFEnableZombies();
+		//_CFEnableZombies();
 	#endif
-		%init;
+		%init(SmartDepictions);
 	}
 }

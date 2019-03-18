@@ -9,6 +9,7 @@
 
 - (SmartPackageController *)initWithDepictionURL:(NSURL *)depictionURL database:(id)database packageID:(NSString *)packageID {
 	self = [super init];
+	_packageController = self;
 	_depictionDelegate = [[SmartDepictionDelegate alloc] initWithPackageController:self
 		depictionURL:depictionURL
 		database:database
@@ -17,7 +18,6 @@
 	isiPad = ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)]
 		&& [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 	_depictionRootView = [[DepictionRootView alloc] initWithDepictionDelegate:self.depictionDelegate];
-	_packageController = self;
 	self.depictionRootView.translatesAutoresizingMaskIntoConstraints = NO;
 	if (@available(iOS 11.0, *)) self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 	else if (@available(iOS 7.0, *)) self.automaticallyAdjustsScrollViewInsets = NO;
@@ -36,19 +36,28 @@
 	self.navigationController.navigationBar.translucent = NO;
 }
 
+- (void)didMoveToParentViewController:(UIViewController *)parent {
+	[super didMoveToParentViewController:parent];
+	if (!parent) {
+		// It's time to deallocate, the view controller has completely disappeared
+		NSLog(@"Package controller disappeared, releasing self...");
+		self.depictionDelegate.packageController = nil;
+	}
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	self.navigationController.clear = YES;
 	self.navigationController.navigationBar.translucent = YES;
 	[self.depictionDelegate reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+	self.navigationController.clear = YES;
 }
 
 - (void)viewDidLoad {
@@ -58,7 +67,7 @@
 	// The intended image will be shown after the depiction data is downloaded.
 	imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
 	imageView.image = [UIImage imageWithColor:[UIColor whiteColor]]; // TESTING
-
+	
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];
 	[self.view addConstraints:[NSLayoutConstraint
@@ -79,11 +88,11 @@
 	imageView.clipsToBounds = YES;
 	[self.view addSubview:imageView];
 	[self resetViews];
-	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, 0, 0);
 }
 
 - (void)resetViews {
 	imageView.frame = CGRectMake(0, 0, origImageWidth = UIScreen.mainScreen.bounds.size.width, origImageHeight = 200);
+	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, self.tabBarController.tabBar.frame.size.height, 0);
 }
 
 - (void)loadDepiction {
@@ -139,6 +148,10 @@
 		imageView.center = CGPointMake(origImageWidth / 2, (origImageHeight / 2) - offsetY);
 		self.navigationController.opacity = min(offsetY / (origImageHeight - navBarLowerY), 1.0);
 	}
+}
+
+- (void)dealloc {
+	NSLog(@"Deallocating package controller...");
 }
 
 @end

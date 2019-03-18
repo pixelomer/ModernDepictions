@@ -4,11 +4,13 @@
 
 @class DepictionTabView;
 @class GetPackageCell;
+@class SmartContentCell;
 @class SmartDepictionDelegate;
 
 @interface DepictionRootView : UITableView<UITableViewDataSource, UITableViewDelegate> {
 	NSMutableArray<__kindof UITableViewCell<SmartCell> *> *topCells;
-	NSMutableDictionary<NSString *, NSArray<__kindof UITableViewCell<SmartCell> *> *> *tabCells;
+	NSDictionary<NSString *, NSArray<__kindof SmartContentCell *> *> *tabCells;
+	NSMutableArray<__kindof UITableViewCell<SmartCell> *> *footerCells;
 }
 @property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate; 
 @property (nonatomic, readonly) GetPackageCell *getPackageCell;

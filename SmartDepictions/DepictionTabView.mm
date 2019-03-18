@@ -7,11 +7,15 @@
 	return 37.0;
 }
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype _Nullable)initWithDelegate:(id<DepictionTabViewDelegate> _Nullable)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.height);
 	self.contentView.frame = self.frame;
 	return self;
+}
+- (NSString *)currentTab {
+	if (!currentTabNames || [currentTabNames count] <= 0) return nil;
+	return currentTab ?: currentTabNames[0];
 }
 
 - (void)setTabs:(NSArray *)tabs {
@@ -32,6 +36,7 @@
 		DepictionTab *tab = [[DepictionTab alloc] init];
 		tab.translatesAutoresizingMaskIntoConstraints = NO;
 		[tab setTitle:tabName forState:UIControlStateNormal];
+		[tab setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
 		[tab sizeToFit];
 		[self.contentView addSubview:tab];
 		if (i > 0) {

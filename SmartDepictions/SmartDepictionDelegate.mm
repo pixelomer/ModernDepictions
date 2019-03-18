@@ -105,4 +105,9 @@
 	}
 }
 
+// Only allows NULL. Used to deallocate the package controller.
+- (void)setPackageController:(SmartPackageController *)newPackageController {
+	if (!newPackageController) _packageController = nil;
+}
+
 @end
