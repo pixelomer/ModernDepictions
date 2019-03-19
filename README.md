@@ -6,13 +6,13 @@ Sileo depictions for Cydia.
 
 - [x] Cool header
 - [x] Transparent Navigation Bar
-- [ ] Completely switch to AutoLayout
+- [x] Completely switch to AutoLayout
 - [ ] Create a small portion of every cell
 - [x] Split classes
-- [ ] Async web requests
+- [x] Async web requests
 - [x] Tab controller (unusable)
 - [ ] Tab-specific views
-- [ ] Creating cells from the parsed JSON
+- [x] Creating cells from the parsed JSON
 - [ ] SmartDepictionController for text-only depictions
 - [ ] SmartDepictionController for web depictions
 
