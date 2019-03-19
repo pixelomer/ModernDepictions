@@ -19,7 +19,7 @@
 		NSString *string = components[j];
 		NSMutableString *prefix = [NSMutableString stringWithCapacity:6];
 		[prefix setString:@" "];
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 6; i++) {
 			[prefix insertString:@"#" atIndex:0];
 			if ([string hasPrefix:prefix]) {
 				NSMutableString *mstring = [string mutableCopy];
