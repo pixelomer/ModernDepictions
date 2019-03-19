@@ -1,6 +1,6 @@
 THEOS_DEVICE_IP ?= 0
 THEOS_DEVICE_PORT ?= 2222
-TARGET = iphone:clang:10.3:6.0
+TARGET = iphone:clang:11.2:6.0
 ARCHS = arm64 armv7
 CFLAGS = -include macros.h -fobjc-arc -Wno-deprecated-declarations -Wno-unguarded-availability-new
 
