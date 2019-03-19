@@ -1,4 +1,5 @@
 #import "DepictionMarkdownView.h"
+#import "../Extensions/NSMutableString+RegEx.h"
 
 @implementation DepictionMarkdownView
 
@@ -7,7 +8,10 @@
 }
 
 - (void)setMarkdown:(NSString *)newText {
-	self.label.text = newText;
+	// \[(.*?)\]\(.*?\)
+	NSMutableString *mutableText = [newText mutableCopy];
+	[mutableText findAndReplaceWithPattern:@"\\[(.*?)\\]\\(.*?\\)" template:@"$1" error:nil];
+	self.label.text = [mutableText copy];
 	[self.label sizeToFit];
 	_markdown = newText;
 }
