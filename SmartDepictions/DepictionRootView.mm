@@ -22,7 +22,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell<SmartCell> * _Nullable cell;
+	UITableViewCell<SmartCell> * _Nullable cell = nil;
 	if (indexPath.row < topCells.count)
 		cell = topCells[indexPath.row];
 	else if (indexPath.row < tabCells[self.tabController.currentTab].count + topCells.count)

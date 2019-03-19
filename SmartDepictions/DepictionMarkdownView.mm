@@ -17,17 +17,14 @@
 	_label = [[UILabel alloc] init];
 	self.label.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.contentView addSubview:self.label];
-	//NSDictionary *views = @{ @"label" : self.label };
+	NSDictionary *views = @{ @"label" : self.label };
+	[self.contentView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"H:|-15-[label]-15-|"
+		options:0
+		metrics:nil
+		views:views
+	]];
 	[self.contentView addConstraints:@[
-		[NSLayoutConstraint
-			constraintWithItem:self.label
-			attribute:NSLayoutAttributeWidth
-			relatedBy:NSLayoutRelationEqual
-			toItem:self.contentView
-			attribute:NSLayoutAttributeWidth
-			multiplier:1.0
-			constant:-30.0
-		],
 		[NSLayoutConstraint
 			constraintWithItem:self.label
 			attribute:NSLayoutAttributeHeight
@@ -36,24 +33,6 @@
 			attribute:0
 			multiplier:1.0
 			constant:0.0
-		],
-		[NSLayoutConstraint
-			constraintWithItem:self.label
-			attribute:NSLayoutAttributeLeading
-			relatedBy:NSLayoutRelationEqual
-			toItem:self.contentView
-			attribute:NSLayoutAttributeLeading
-			multiplier:1.0
-			constant:15.0
-		],
-		[NSLayoutConstraint
-			constraintWithItem:self.label
-			attribute:NSLayoutAttributeTrailing
-			relatedBy:NSLayoutRelationEqual
-			toItem:self.contentView
-			attribute:NSLayoutAttributeTrailing
-			multiplier:1.0
-			constant:-15.0
 		],
 		[NSLayoutConstraint
 			constraintWithItem:self.label
