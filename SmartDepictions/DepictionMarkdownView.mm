@@ -1,5 +1,6 @@
 #import "DepictionMarkdownView.h"
 #import "../Extensions/NSMutableString+RegEx.h"
+#import "../Extensions/NSAttributedString+Markdown.h"
 
 @implementation DepictionMarkdownView
 
@@ -8,10 +9,8 @@
 }
 
 - (void)setMarkdown:(NSString *)newText {
-	// \[(.*?)\]\(.*?\)
-	NSMutableString *mutableText = [newText mutableCopy];
-	[mutableText findAndReplaceWithPattern:@"\\[(.*?)\\]\\(.*?\\)" template:@"$1" error:nil];
-	self.label.text = [mutableText copy];
+	NSAttributedString *attributedString = [NSAttributedString attributedStringWithMarkdown:newText];
+	self.label.attributedText = attributedString;
 	[self.label sizeToFit];
 	_markdown = newText;
 }
@@ -45,7 +44,7 @@
 			toItem:self.contentView
 			attribute:NSLayoutAttributeTop
 			multiplier:1.0
-			constant:15.0
+			constant:7.5
 		],
 		[NSLayoutConstraint
 			constraintWithItem:self.label
@@ -54,7 +53,7 @@
 			toItem:self.contentView
 			attribute:NSLayoutAttributeBottom
 			multiplier:1.0
-			constant:-15.0
+			constant:-7.5
 		]
 	]];
 	self.label.numberOfLines = 0;
