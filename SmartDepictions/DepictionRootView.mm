@@ -47,7 +47,20 @@
 	_getPackageCell = [[GetPackageCell alloc] initWithDepictionDelegate:self.depictionDelegate reuseIdentifier:@"getpackagecell"];
 	[topCells addObject:self.getPackageCell];
 	_tabController = [[DepictionTabView alloc] initWithDelegate:self reuseIdentifier:@"tabControl"];
-	if (_tabController) [topCells addObject:_tabController];
+	[topCells addObject:_tabController];
+	NSArray *dummyTabs = @[
+		@{
+			@"tabname" : @"Details",
+			@"views" : @[
+				@{
+					@"class" : @"SmartContentCell",
+					@"labelText" : self.depictionDelegate.package.longDescription ?: self.depictionDelegate.package.shortDescription ?: @""
+				}
+			]
+		}
+	];
+	self.tabController.tabs = dummyTabs;
+	tabCells = [ContentCellFactory createCellsFromTabArray:dummyTabs delegate:self.depictionDelegate];
 #if !DEBUG
 	self.separatorStyle = UITableViewCellSeparatorStyleNone;
 #endif

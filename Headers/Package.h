@@ -17,6 +17,8 @@
 - (void)install;
 - (MIMEAddress *)author;
 - (NSString *)getField:(NSString *)name;
+- (NSString *)longDescription;
+- (NSString *)shortDescription;
 @end
 
 @interface Package(SmartDepictions)

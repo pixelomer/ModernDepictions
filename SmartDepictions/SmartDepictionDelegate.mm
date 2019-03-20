@@ -26,7 +26,17 @@
 	if (@available(iOS 7.0, *)) _iOS6 = false;
 	else _iOS6 = true;
 	[self setPackageWithID:packageID database:database];
-	[self downloadDataFromURL:depictionURL completion:^(NSData *data, NSError *error){
+	return self;
+}
+
+- (void)handleModifyButton {
+	// TESTING
+	[self.cydiaDelegate installPackage:self.package];
+}
+
+- (void)downloadDepiction {
+	if (!_depictionURL) return;
+	[self downloadDataFromURL:_depictionURL completion:^(NSData *data, NSError *error){
 		if (!data) return;
 		_depiction = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 		NSLog(@"Depiction: %@", _depiction);
@@ -37,12 +47,6 @@
 			});
 		}
 	}];
-	return self;
-}
-
-- (void)handleModifyButton {
-	// TESTING
-	[self.cydiaDelegate installPackage:self.package];
 }
 
 - (void)setPackageWithID:(NSString *)packageID database:(Database *)database {

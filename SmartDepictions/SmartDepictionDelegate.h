@@ -21,6 +21,7 @@
 - (NSString *)modificationButtonTitle;
 - (void)setModificationButtonTitle:(NSString *)newTitle;
 - (void)setPackageWithID:(NSString *)packageID database:(Database *)database;
+- (void)downloadDepiction;
 - (instancetype)initWithPackageController:(SmartPackageController *)packageController
 	depictionURL:(NSURL *)depictionURL
 	database:(Database *)database

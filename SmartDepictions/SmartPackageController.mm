@@ -22,6 +22,7 @@
 	if (@available(iOS 11.0, *)) self.depictionRootView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 	else if (@available(iOS 7.0, *)) self.automaticallyAdjustsScrollViewInsets = NO;
 	NSLog(@"Root view: %@", self.depictionRootView);
+	[self.depictionDelegate downloadDepiction];
 	return self;
 }
 
@@ -66,7 +67,7 @@
 	
 	// The intended image will be shown after the depiction data is downloaded.
 	imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
-	imageView.image = [UIImage imageWithColor:[UIColor whiteColor]]; // TESTING
+	imageView.image = [UIImage imageWithColor:[UIColor cyanColor]];
 	
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];
@@ -91,7 +92,7 @@
 }
 
 - (void)resetViews {
-	imageView.frame = CGRectMake(0, 0, origImageWidth = UIScreen.mainScreen.bounds.size.width, origImageHeight = 200);
+	imageView.frame = CGRectMake(0, imageView.frame.origin.y, origImageWidth = UIScreen.mainScreen.bounds.size.width, origImageHeight = 200);
 	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, self.tabBarController.tabBar.frame.size.height, 0);
 }
 

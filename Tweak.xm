@@ -25,18 +25,19 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 	if (package) {
 		[package parse];
 		NSString *rawDepictionURL = [package sileoDepiction];
-		NSLog(@"Raw URL: %@", rawDepictionURL);
-		if (rawDepictionURL) {
-			NSURL *depictionURL = [NSURL URLWithString:rawDepictionURL];
-			NSLog(@"Depiction URL: %@", depictionURL);
-			if (depictionURL) {
-				SmartPackageController *newView = [[SmartPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
-				if (newView) {
-					NSLog(@"New view: %@", newView);
-					NSLog(@"Returning...");
-					return (__bridge void *)newView;
-				}
-			}
+		NSString *rawHTMLDepictionURL = [package depiction];
+		NSURL *depictionURL = nil;
+		if ([rawDepictionURL isKindOfClass:[NSString class]]) {
+			depictionURL = [NSURL URLWithString:rawDepictionURL];
+		}
+		else if (![rawHTMLDepictionURL isKindOfClass:[NSString class]]);
+		else return %orig;
+		NSLog(@"Depiction URL: %@", depictionURL);
+		SmartPackageController *newView = [[SmartPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
+		if (newView) {
+			NSLog(@"New view: %@", newView);
+			NSLog(@"Returning...");
+			return (__bridge void *)newView;
 		}
 	}
 	return %orig;
