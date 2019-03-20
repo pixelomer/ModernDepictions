@@ -14,6 +14,8 @@
 	NSMutableArray<NSString *> *currentTabNames;
 	NSMutableArray<DepictionTab *> *currentTabs;
 	NSString *currentTab;
+	UIView *underline;
+	NSArray<NSLayoutConstraint *> *lineConstraints;
 }
 @property (nonatomic, setter=setTabs:, assign) NSArray<NSDictionary *> * _Nonnull tabs;
 @property (nonatomic, readonly, getter=currentTab) NSString * _Nullable currentTab;

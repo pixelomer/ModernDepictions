@@ -10,6 +10,9 @@
 - (instancetype _Nullable)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> * _Nullable)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	_tabViewDelegate = delegate;
+	underline = [[UIView alloc] init];
+	underline.backgroundColor = [UIColor blueColor];
+	underline.translatesAutoresizingMaskIntoConstraints = NO;
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.height);
 	self.contentView.frame = self.frame;
 	return self;
@@ -21,6 +24,10 @@
 
 - (void)setTabs:(NSArray *)tabs {
 	NSLog(@"Setting tabs to %@ for %@", tabs, self.description);
+	if (lineConstraints) {
+		[self.contentView removeConstraints:lineConstraints];
+		lineConstraints = nil;
+	}
 	currentTabNames = [[NSMutableArray alloc] init];
 	for (NSDictionary *tabDict in tabs) {
 		NSString *tabName = tabDict[@"tabname"];
@@ -98,17 +105,60 @@
 		[tab addTarget:self action:@selector(didSelectTab:) forControlEvents:UIControlEventTouchUpInside];
 		[currentTabs addObject:tab];
 	}
+	if (currentTabs.count > 0) {
+		[self.contentView addSubview:underline];
+		[self.contentView addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"V:[line(==2)]|"
+			options:0
+			metrics:nil
+			views:@{ @"line" : underline }
+		]];
+		[self didSelectTab:currentTabs[0]];
+	}
+	else if ([self.contentView.subviews containsObject:underline]) {
+		[underline removeFromSuperview];
+	}
 	_tabs = tabs;
 }
 
 - (void)didSelectTab:(DepictionTab *)sender {
 	NSString *newTab = sender.currentTitle;
 	if (!newTab || ![currentTabNames containsObject:newTab]) return;
-	bool shouldNotifyDelegate = (currentTab && ![newTab isEqualToString:currentTab]) || (!currentTab && [currentTabNames count] > 0 && ![newTab isEqualToString:currentTabNames[0]]);
+	bool shouldNotifyDelegate = (currentTab && ![newTab isEqualToString:currentTab]) || (!currentTab && ![newTab isEqualToString:currentTabNames[0]]);
 	currentTab = newTab;
 	if (shouldNotifyDelegate && self.tabViewDelegate && [self.tabViewDelegate respondsToSelector:@selector(didSelectTabNamed:)]) {
 		[self.tabViewDelegate didSelectTabNamed:currentTab];
 	}
+	[self layoutIfNeeded];
+	CGFloat duration = 0.0;
+	if (lineConstraints) {
+		[self.contentView removeConstraints:lineConstraints];
+		duration = 0.25;
+	}
+	[UIView animateWithDuration:duration animations:^{
+		lineConstraints = @[
+			[NSLayoutConstraint
+				constraintWithItem:underline
+				attribute:NSLayoutAttributeWidth
+				relatedBy:NSLayoutRelationEqual
+				toItem:sender.titleLabel
+				attribute:NSLayoutAttributeWidth
+				multiplier:1.0
+				constant:0.0
+			],
+			[NSLayoutConstraint
+				constraintWithItem:underline
+				attribute:NSLayoutAttributeTrailing
+				relatedBy:NSLayoutRelationEqual
+				toItem:sender.titleLabel
+				attribute:NSLayoutAttributeTrailing
+				multiplier:1.0
+				constant:0.0
+			]
+		];
+		[self.contentView addConstraints:lineConstraints];
+		[self layoutIfNeeded];
+	}];
 }
 
 @end
