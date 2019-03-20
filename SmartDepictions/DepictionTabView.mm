@@ -7,8 +7,9 @@
 	return 37.0;
 }
 
-- (instancetype _Nullable)initWithDelegate:(id<DepictionTabViewDelegate> _Nullable)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
+- (instancetype _Nullable)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> * _Nullable)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+	_tabViewDelegate = delegate;
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.height);
 	self.contentView.frame = self.frame;
 	return self;
@@ -94,9 +95,20 @@
 				constant:0.0
 			]];
 		}
+		[tab addTarget:self action:@selector(didSelectTab:) forControlEvents:UIControlEventTouchUpInside];
 		[currentTabs addObject:tab];
 	}
 	_tabs = tabs;
+}
+
+- (void)didSelectTab:(DepictionTab *)sender {
+	NSString *newTab = sender.currentTitle;
+	if (!newTab || ![currentTabNames containsObject:newTab]) return;
+	bool shouldNotifyDelegate = (currentTab && ![newTab isEqualToString:currentTab]) || (!currentTab && [currentTabNames count] > 0 && ![newTab isEqualToString:currentTabNames[0]]);
+	currentTab = newTab;
+	if (shouldNotifyDelegate && self.tabViewDelegate && [self.tabViewDelegate respondsToSelector:@selector(didSelectTabNamed:)]) {
+		[self.tabViewDelegate didSelectTabNamed:currentTab];
+	}
 }
 
 @end

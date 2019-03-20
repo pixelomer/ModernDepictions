@@ -17,6 +17,10 @@
 	return nil;
 }
 
+- (void)didSelectTabNamed:(NSString *)name {
+	[self reloadData];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return topCells.count + tabCells[self.tabController.currentTab].count;
 }
@@ -42,7 +46,7 @@
 	self.allowsSelection = NO;
 	_getPackageCell = [[GetPackageCell alloc] initWithDepictionDelegate:self.depictionDelegate reuseIdentifier:@"getpackagecell"];
 	[topCells addObject:self.getPackageCell];
-	_tabController = [[DepictionTabView alloc] initWithDelegate:nil reuseIdentifier:@"tabControl"];
+	_tabController = [[DepictionTabView alloc] initWithDelegate:self reuseIdentifier:@"tabControl"];
 	if (_tabController) [topCells addObject:_tabController];
 #if !DEBUG
 	self.separatorStyle = UITableViewCellSeparatorStyleNone;
