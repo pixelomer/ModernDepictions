@@ -23,7 +23,7 @@
 			[prefix insertString:@"#" atIndex:0];
 			if ([string hasPrefix:prefix]) {
 				NSMutableString *mstring = [string mutableCopy];
-				[mstring replaceCharactersInRange:NSMakeRange(0, prefix.length) withString:[NSString stringWithFormat:@"<br/><h%d>", i]];
+				[mstring replaceCharactersInRange:NSMakeRange(0, prefix.length) withString:[NSString stringWithFormat:@"<h%d>", i]];
 				[mstring appendString:[NSString stringWithFormat:@"</h%d>", i]];
 				components[j] = [mstring copy];
 				break;
