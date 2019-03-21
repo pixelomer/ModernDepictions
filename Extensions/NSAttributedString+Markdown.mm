@@ -30,7 +30,7 @@
 			}
 		}
 	}
-	NSString *finalString = [@"<meta charset=\"UTF-8\"><style> body { font-family: 'HelveticaNeue'; font-size: 16px; } b {font-family: 'MarkerFelt-Wide'; }</style>" stringByAppendingString:[components componentsJoinedByString:@"\n"]];
+	NSString *finalString = [@"<meta charset=\"UTF-8\"><style> body { font-family: 'HelveticaNeue'; font-size: 16px; }</style>" stringByAppendingString:[components componentsJoinedByString:@"\n"]];
 	return [[self alloc] initWithData:[finalString dataUsingEncoding:NSUTF8StringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
 }
 
