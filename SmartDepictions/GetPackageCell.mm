@@ -27,23 +27,24 @@
 	[self.contentView addSubview:packageNameLabel];
 	[self.contentView addSubview:iconView];
 	[self.contentView addSubview:authorButton];
+	NSDictionary *views = @{ @"pn" : packageNameLabel, @"icon" : iconView, @"ab" : authorButton};
 	[self.contentView addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"H:|-16-[icon(==60)]-10-[pn]"
 		options:0
 		metrics:nil
-		views:@{ @"pn" : packageNameLabel, @"icon" : iconView }
+		views:views
 	]];
 	[self.contentView addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"V:|-21-[pn]-4-[ab(==19.5)]"
 		options:0
 		metrics:nil
-		views:@{ @"pn" : packageNameLabel, @"ab" : authorButton }
+		views:views
 	]];
 	[self.contentView addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"V:|-16-[icon(==60)]"
 		options:0
 		metrics:nil
-		views:@{ @"icon" : iconView }
+		views:views
 	]];
 	[self.contentView addConstraint:[NSLayoutConstraint
 		constraintWithItem:packageNameLabel

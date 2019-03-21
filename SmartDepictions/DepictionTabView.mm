@@ -12,6 +12,23 @@
 	_tabViewDelegate = delegate;
 	underline = [[UIView alloc] init];
 	underline.backgroundColor = [UIColor blueColor];
+	UIView *separatorView = [[UIView alloc] init];
+	separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+	separatorView.backgroundColor = [UIColor colorWithRed:0.918 green:0.918 blue:0.925 alpha:1.0];
+	[self.contentView addSubview:separatorView];
+	NSDictionary *views = @{ @"separator" : separatorView };
+	[self.contentView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:[separator(==1)]|"
+		options:0
+		metrics:nil
+		views:views
+	]];
+	[self.contentView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"H:|[separator]|"
+		options:0
+		metrics:nil
+		views:views
+	]];
 	underline.translatesAutoresizingMaskIntoConstraints = NO;
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.height);
 	self.contentView.frame = self.frame;

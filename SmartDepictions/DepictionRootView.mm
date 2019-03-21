@@ -22,7 +22,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return topCells.count + tabCells[self.tabController.currentTab].count;
+	return topCells.count + tabCells[self.tabController.currentTab].count + footerCells.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -59,6 +59,17 @@
 			]
 		}
 	];
+	NSString *versionString = [self.depictionDelegate.package getField:@"version"];
+	if (![versionString isKindOfClass:[NSString class]]) {
+		versionString = @"?";
+	}
+	NSArray *footerCellDict = @[
+		@{
+		 @"markdown" : [NSString stringWithFormat:@"<small style=\"color: #aaa;\">%@ (%@)</small><style>body { text-align: center; }</style>", self.depictionDelegate.package.id, versionString],
+		 @"class" : @"DepictionMarkdownView"
+		}
+	];
+	footerCells = [[ContentCellFactory createCellsFromArray:footerCellDict delegate:self.depictionDelegate reuseIdentifierPrefix:@"footer"] copy];
 	self.tabController.tabs = dummyTabs;
 	tabCells = [ContentCellFactory createCellsFromTabArray:dummyTabs delegate:self.depictionDelegate];
 #if !DEBUG
