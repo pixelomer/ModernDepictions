@@ -21,6 +21,12 @@
 		if (!(cellClass = NSClassFromString(cellInfo[@"class"])))
 	#if DEBUG
 		cell = [[SmartErrorCell alloc] initWithErrorMessage:[NSString stringWithFormat:@"(?) %@", cellInfo[@"class"]]];
+	#else
+		continue;
+	#endif
+		else if (![cellClass isSubclassOfClass:[SmartContentCell class]])
+	#if DEBUG
+		cell = [[SmartErrorCell alloc] initWithErrorMessage:[NSString stringWithFormat:@"(!) %@", cellInfo[@"class"]]];
 		if (!cell) {
 	#else
 		continue;

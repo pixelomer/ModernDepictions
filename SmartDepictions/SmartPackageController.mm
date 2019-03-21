@@ -71,17 +71,18 @@
 	
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];
+	NSDictionary *views = @{ @"drw" : self.depictionRootView };
 	[self.view addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"H:|[drw]|"
 		options:0
 		metrics:nil
-		views:@{ @"drw" : self.depictionRootView }
+		views:views
 	]];
 	[self.view addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"V:|[drw]|"
 		options:0
 		metrics:nil
-		views:@{ @"drw" : self.depictionRootView }
+		views:views
 	]];
 
 	// Prepare and show the image view
