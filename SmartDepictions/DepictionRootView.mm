@@ -66,6 +66,7 @@
 	NSArray *footerCellDict = @[
 		@{
 		 @"markdown" : [NSString stringWithFormat:@"<small style=\"color: #aaa;\">%@ (%@)</small><style>body { text-align: center; }</style>", self.depictionDelegate.package.id, versionString],
+		 @"useRawFormat" : @YES,
 		 @"class" : @"DepictionMarkdownView"
 		}
 	];
