@@ -10,6 +10,7 @@
 	NSString *modificationButtonTitle;
 }
 @property (nonatomic, retain) SmartPackageController *packageController;
+@property (nonatomic, readonly) NSOperationQueue *operationQueue;
 @property (nonatomic, retain) Cydia *cydiaDelegate;
 @property (nonatomic, readonly) NSDictionary *depiction;
 @property (nonatomic, readonly) Database *database;

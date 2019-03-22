@@ -23,6 +23,7 @@
 	_packageController = packageController;
 	_packageID = packageID;
 	_depictionURL = depictionURL;
+	_operationQueue = [[NSOperationQueue alloc] init];
 	if (@available(iOS 7.0, *)) _iOS6 = false;
 	else _iOS6 = true;
 	[self setPackageWithID:packageID database:database];
@@ -97,11 +98,10 @@
 - (void)downloadDataFromURL:(NSURL *)url completion:(void (^)(NSData *, NSError *))completionHandler {
 	if (!url) return;
 	@autoreleasepool {
-		NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 		NSURLRequest *request = [NSURLRequest requestWithURL:url];
 		NSLog(@"Asynchronously downloading data from URL: %@", url);
 		[NSURLConnection sendAsynchronousRequest:request
-			queue:queue
+			queue:self.operationQueue
 			completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
 				completionHandler(data, error);
 			}
