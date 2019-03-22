@@ -5,14 +5,16 @@
 
 + (instancetype)attributedStringWithMarkdown:(NSString *)rawMarkdown {
 	NSMutableString *markdown = [rawMarkdown mutableCopy];
-	NSDictionary *replacements = @{
-		@"\\[(.*?)\\]\\(.*?\\)" : @"$1",
-		@"\\*\\*(.*?)\\*\\*" : @"<b>$1</b>",
-		@"\\*(.*?)\\*" : @"<i>$1</i>",
-		@"\\<a.*?\\>(.?*)\\<\\/a\\>" : @"$1"
-	};
-	for (NSString *pattern in replacements) {
-		[markdown findAndReplaceWithPattern:pattern template:replacements[pattern] error:nil];
+	NSArray *replacements = @[
+		@"\\[(.*?)\\]\\(.*?\\);$1",
+		@"\\*\\*(.*?)\\*\\*;<b>$1</b>",
+		@"\\*(.*?)\\*;<i>$1</i>",
+		@"\\_\\_(.*?)\\_\\_;<b>$1</b>",
+		@"\\_(.*?)\\_;<i>$1</i>"
+	];
+	for (NSString *replacement in replacements) {
+		NSArray *components = [replacement componentsSeparatedByString:@";"];
+		[markdown findAndReplaceWithPattern:components[0] template:components[1] error:nil];
 	}
 	NSMutableArray *components = [[markdown componentsSeparatedByString:@"\n"] mutableCopy];
 	for (int j = 0; j < components.count; j++) {
