@@ -8,8 +8,13 @@
 	return UITableViewAutomaticDimension;
 }
 
+- (void)setUseRawFormat:(bool)shouldUseRawFormat {
+	_useRawFormat = shouldUseRawFormat;
+	if (_markdown) [self setMarkdown:_markdown];
+}
+
 - (void)setMarkdown:(NSString *)newText {
-	NSAttributedString *attributedString = [NSAttributedString attributedStringWithMarkdown:newText];
+	NSAttributedString *attributedString = self.useRawFormat ? [NSAttributedString attributedStringWithHTML:newText] : [NSAttributedString attributedStringWithMarkdown:newText];
 	self.label.attributedText = attributedString;
 	[self.label sizeToFit];
 	_markdown = newText;

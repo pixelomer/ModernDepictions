@@ -15,6 +15,11 @@
 	_itemCornerRadius = newRadius;
 }
 
+- (void)layoutSubviews {
+	[self resetConstraints];
+	[super layoutSubviews];
+}
+
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithDepictionDelegate:delegate reuseIdentifier:reuseIdentifier];
 	_screenshotsView = [[UIScrollView alloc] init];
@@ -42,7 +47,6 @@
 	_height = itemSizeStruct.height + 32;
 	_itemSize = itemSize;
 	_screenshotsView.contentSize = CGSizeMake(16 * (_imageViews.count + 1) + itemSizeStruct.width * _imageViews.count, 0);
-	[self resetConstraints];
 }
 
 - (void)resetConstraints {
@@ -109,8 +113,8 @@
 		[_imageViews addObject:newImage];
 		[_screenshotsView addSubview:newImage];
 	}
-	[self resetConstraints];
 	_screenshots = newScreenshots;
+	self.itemCornerRadius = _itemCornerRadius;
 }
 
 @end
