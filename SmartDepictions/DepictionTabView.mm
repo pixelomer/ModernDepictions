@@ -60,7 +60,7 @@
 		NSString *tabName = currentTabNames[i];
 		DepictionTab *tab = [[DepictionTab alloc] init];
 		tab.translatesAutoresizingMaskIntoConstraints = NO;
-		[tab setTitle:tabName forState:UIControlStateNormal];
+		tab.tabName = tabName;
 		[tab setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
 		[tab sizeToFit];
 		[self.contentView addSubview:tab];
@@ -139,7 +139,7 @@
 }
 
 - (void)didSelectTab:(DepictionTab *)sender {
-	NSString *newTab = sender.currentTitle;
+	NSString *newTab = sender.tabName;
 	if (!newTab || ![currentTabNames containsObject:newTab]) return;
 	bool shouldNotifyDelegate = (currentTab && ![newTab isEqualToString:currentTab]) || (!currentTab && ![newTab isEqualToString:currentTabNames[0]]);
 	currentTab = newTab;
