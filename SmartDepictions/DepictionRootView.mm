@@ -4,6 +4,7 @@
 #import "DepictionTabView.h"
 #import "ContentCellFactory.h"
 #import "../Extensions/UINavigationController+Opacity.h"
+#import "../Extensions/UIColor+HexString.h"
 
 @implementation DepictionRootView
 
@@ -11,17 +12,17 @@
 	return topCells.count + tabCells[self.tabController.currentTab].count + footerCells.count;
 }
 
-- (UITableViewCell *)cellForRow:(NSInteger)row {
+- (id)cellForRow:(NSInteger)row {
 	if (row < topCells.count)
-		return (UITableViewCell *)topCells[row];
+		return topCells[row];
 	else if (row < tabCells[self.tabController.currentTab].count + topCells.count)
-		return (UITableViewCell *)tabCells[self.tabController.currentTab][row - topCells.count];
+		return tabCells[self.tabController.currentTab][row - topCells.count];
 	else if (row < tabCells[self.tabController.currentTab].count + topCells.count + footerCells.count)
-		return (UITableViewCell *)footerCells[row - topCells.count - tabCells[self.tabController.currentTab].count];
+		return footerCells[row - topCells.count - tabCells[self.tabController.currentTab].count];
 	return nil;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell<SmartCell> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	return [self cellForRow:indexPath.row];
 }
 
@@ -47,7 +48,8 @@
 	self.delegate = self;
 	_getPackageCell = [[GetPackageCell alloc] initWithDepictionDelegate:self.depictionDelegate reuseIdentifier:@"getpackagecell"];
 	[topCells addObject:self.getPackageCell];
-	_tabController = [[DepictionTabView alloc] initWithDelegate:self reuseIdentifier:@"tabControl"];
+	_tabController = [[DepictionTabView alloc] initWithDepictionDelegate:delegate reuseIdentifier:@"tabControl"];
+	_tabController.tabViewDelegate = self;
 	[topCells addObject:_tabController];
 	NSArray *dummyTabs = @[
 		@{
@@ -84,6 +86,14 @@
 	self.tabController.tabs = self.depictionDelegate.depiction[@"tabs"];
 	tabCells = [ContentCellFactory createCellsFromTabArray:self.depictionDelegate.depiction[@"tabs"] delegate:self.depictionDelegate];
 	NSLog(@"Tab Cells: %@", tabCells);
+	if (self.depictionDelegate.tintColor) {
+		for (int i = 0; i < self.numberOfCells; i++) {
+			UITableViewCell<SmartCell> *cell = [self cellForRow:i];
+			if ([cell respondsToSelector:@selector(setDepictionTintColor:)]) {
+				[cell setDepictionTintColor:self.depictionDelegate.tintColor];
+			}
+		}
+	}
 	[self reloadData];
 }
 

@@ -96,6 +96,10 @@
 	}
 }
 
+- (void)setDepictionTintColor:(UIColor *)color {
+	queueButton.backgroundColor = color;
+}
+
 - (void)setButtonTitle:(NSString *)text {
 	NSLog(@"setButtonTitle:\"%@\"", text);
 	if (text) {

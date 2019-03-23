@@ -19,6 +19,7 @@
 @property (nonatomic, readonly) Package *package;
 @property (nonatomic, readonly) NSDictionary *modificationButtons;
 @property (nonatomic, readonly) bool iOS6;
+@property (nonatomic, readonly) UIColor *tintColor;
 - (NSString *)modificationButtonTitle;
 - (void)setModificationButtonTitle:(NSString *)newTitle;
 - (void)setPackageWithID:(NSString *)packageID database:(Database *)database;

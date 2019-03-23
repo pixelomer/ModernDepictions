@@ -2,6 +2,7 @@
 #import "DepictionRootView.h"
 #import "SmartPackageController.h"
 #import "GetPackageCell.h"
+#import "../Extensions/UIColor+HexString.h"
 
 @implementation SmartDepictionDelegate
 
@@ -20,6 +21,7 @@
 	packageID:(NSString *)packageID
 {
 	self = [super init];
+	_tintColor = [UIColor blueColor];
 	_packageController = packageController;
 	_packageID = packageID;
 	_depictionURL = depictionURL;
@@ -41,8 +43,11 @@
 		if (!data) return;
 		_depiction = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 		NSLog(@"Depiction: %@", _depiction);
-		if (_depiction) {
+		if ([_depiction isKindOfClass:[NSDictionary class]]) {
 			NSLog(@"-[%@ loadDepiction]", self.packageController);
+			if (_depiction[@"tintColor"]) {
+				_tintColor = [UIColor colorWithHexString:_depiction[@"tintColor"]];
+			}
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[self.packageController loadDepiction];
 			});

@@ -5,4 +5,5 @@
 - (CGFloat)height;
 @optional
 - (void)didSelectCell;
+- (void)setDepictionTintColor:(UIColor *)newColor;
 @end

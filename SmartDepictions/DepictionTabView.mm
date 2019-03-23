@@ -1,5 +1,8 @@
 #import "DepictionTabView.h"
 #import "DepictionTab.h"
+#import "SmartDepictionDelegate.h"
+
+static UIColor *notHighlightedColor;
 
 @implementation DepictionTabView
 
@@ -7,12 +10,18 @@
 	return 37.0;
 }
 
-- (instancetype)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
-	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
++ (void)initialize {
+	if (self == [DepictionTabView self]) {
+		notHighlightedColor = [UIColor colorWithRed:0.586 green:0.557 blue:0.502 alpha:1.0];
+	}
+}
+
+- (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
+	self = [super initWithDepictionDelegate:delegate reuseIdentifier:reuseIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
-	_tabViewDelegate = delegate;
+	selectedIndex = 0;
 	underline = [[UIView alloc] init];
-	underline.backgroundColor = [UIColor blueColor];
+	underline.backgroundColor = self.depictionDelegate.tintColor;
 	UIView *separatorView = [[UIView alloc] init];
 	separatorView.translatesAutoresizingMaskIntoConstraints = NO;
 	separatorView.backgroundColor = [UIColor colorWithRed:0.918 green:0.918 blue:0.925 alpha:1.0];
@@ -37,7 +46,8 @@
 }
 
 - (void)setDepictionTintColor:(UIColor *)newTintColor {
-	_depictionTintColor = newTintColor;
+	[currentTabs[selectedIndex] setTitleColor:newTintColor forState:UIControlStateNormal];
+	underline.backgroundColor = newTintColor;
 }
 
 - (NSString *)currentTab {
@@ -47,6 +57,7 @@
 
 - (void)setTabs:(NSArray *)tabs {
 	NSLog(@"Setting tabs to %@ for %@", tabs, self.description);
+	selectedIndex = 0;
 	if (lineConstraints) {
 		[self.contentView removeConstraints:lineConstraints];
 		lineConstraints = nil;
@@ -67,7 +78,7 @@
 		DepictionTab *tab = [[DepictionTab alloc] init];
 		tab.translatesAutoresizingMaskIntoConstraints = NO;
 		tab.tabName = tabName;
-		[tab setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+		[tab setTitleColor:notHighlightedColor forState:UIControlStateNormal];
 		[tab sizeToFit];
 		[self.contentView addSubview:tab];
 		if (i > 0) {
@@ -146,7 +157,11 @@
 
 - (void)didSelectTab:(DepictionTab *)sender {
 	NSString *newTab = sender.tabName;
-	if (!newTab || ![currentTabNames containsObject:newTab]) return;
+	NSUInteger newIndex = [currentTabs indexOfObjectIdenticalTo:sender];
+	if (!newTab || ![currentTabNames containsObject:newTab] || newIndex == NSNotFound) return;
+	[currentTabs[selectedIndex] setTitleColor:notHighlightedColor forState:UIControlStateNormal];
+	selectedIndex = newIndex;
+	[currentTabs[selectedIndex] setTitleColor:self.depictionDelegate.tintColor forState:UIControlStateNormal];
 	bool shouldNotifyDelegate = (currentTab && ![newTab isEqualToString:currentTab]) || (!currentTab && ![newTab isEqualToString:currentTabNames[0]]);
 	currentTab = newTab;
 	if (shouldNotifyDelegate && self.tabViewDelegate && [self.tabViewDelegate respondsToSelector:@selector(didSelectTabNamed:)]) {
