@@ -1,13 +1,17 @@
 THEOS_DEVICE_IP ?= 0
 THEOS_DEVICE_PORT ?= 2222
-TARGET = iphone:clang:11.2:6.0
+TARGET = iphone:clang:11.2:7.0
 ARCHS = arm64 armv7
 CFLAGS = -include macros.h -fobjc-arc -Wno-deprecated-declarations -Wno-unguarded-availability-new -Wno-non-literal-null-conversion
+LDFLAGS = -ObjC
 
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = SmartDepictions
 $(TWEAK_NAME)_FILES = Tweak.xm $(wildcard MMMarkdown/*.m) $(wildcard SmartDepictions/*.xm) $(wildcard SmartDepictions/*.mm) $(wildcard Extensions/*.mm)
+$(TWEAK_NAME)_FRAMEWORKS = WebKit
+$(TWEAK_NAME)_LIBRARIES = GoogleMobileAds
+$(TWEAK_NAME)_EXTRA_FRAMEWORKS = nanopb GoogleUtilities GoogleMobileAds GoogleAppMeasurement
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

@@ -2,6 +2,7 @@
 #import "Headers/Headers.h"
 #import "SmartDepictions/SmartPackageController.h"
 #import "Extensions/UIColor+HexString.h"
+@import GoogleMobileAds;
 
 extern "C" void _CFEnableZombies();
 
@@ -66,6 +67,15 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 	else if ([newColor isKindOfClass:[UIColor class]]) color = newColor;
 	else @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid type for a color" userInfo:nil];
 	%orig(color);
+}
+
+%end
+
+%hook Cydia
+
+- (void)applicationDidFinishLaunching:(id)unused {
+	%orig;
+	[[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
 }
 
 %end
