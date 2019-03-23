@@ -72,7 +72,7 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 %end
 
 %ctor {
-	if (class_getInstanceMethod([%c(Package) class], @selector(getField:)) != NULL) {
+	if ([%c(Package) instancesRespondToSelector:@selector(getField:)]) {
 		NSLog(@"init");
 	#if DEBUG
 		//_CFEnableZombies();

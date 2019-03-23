@@ -8,7 +8,6 @@
 @interface SmartPackageController : UIViewController {
 	UIImageView *imageView;
 	double origImageHeight;
-	bool isiPad;
 	double origImageWidth;
 	CGFloat navBarLowerY;
 }

@@ -2,7 +2,7 @@
 
 @interface DepictionScreenshotsView : SmartContentCell {
 	CGFloat _height;
-	UIScrollView *_screenshotsView;
+	UIView *_screenshotsView;
 	NSMutableArray<UIImageView *> *_imageViews;
 	NSMutableArray<NSLayoutConstraint *> *currentConstraints;
 	CGSize itemSizeStruct;

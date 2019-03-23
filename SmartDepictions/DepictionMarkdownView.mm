@@ -38,7 +38,7 @@
 			attribute:NSLayoutAttributeHeight
 			relatedBy:NSLayoutRelationGreaterThanOrEqual
 			toItem:nil
-			attribute:0
+			attribute:NSLayoutAttributeNotAnAttribute
 			multiplier:1.0
 			constant:0.0
 		],

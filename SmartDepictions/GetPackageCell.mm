@@ -8,6 +8,7 @@
 
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	_depictionDelegate = delegate;
 	queueButton = [[QueueButton alloc] init];
 	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];

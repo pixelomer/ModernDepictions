@@ -9,6 +9,7 @@
 
 - (instancetype)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	_tabViewDelegate = delegate;
 	underline = [[UIView alloc] init];
 	underline.backgroundColor = [UIColor blueColor];

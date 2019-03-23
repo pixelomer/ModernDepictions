@@ -22,22 +22,30 @@
 
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithDepictionDelegate:delegate reuseIdentifier:reuseIdentifier];
-	_screenshotsView = [[UIScrollView alloc] init];
+	UIScrollView *screenshotsScrollView = [[UIScrollView alloc] init];
+	screenshotsScrollView.translatesAutoresizingMaskIntoConstraints = NO;
+	_screenshotsView = [[UIView alloc] init];
 	_screenshotsView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.contentView addSubview:_screenshotsView];
-	NSDictionary *views = @{ @"sssView" : _screenshotsView };
-	[self.contentView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"H:|[sssView]|"
-		options:0
-		metrics:nil
-		views:views
-	]];
-	[self.contentView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"V:|[sssView]|"
-		options:0
-		metrics:nil
-		views:views
-	]];
+	[self.contentView addSubview:screenshotsScrollView];
+	[screenshotsScrollView addSubview:_screenshotsView];
+	NSArray *views = @[
+		_screenshotsView,
+		screenshotsScrollView
+	];
+	for (UIView *view in views) {
+		[view.superview addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"H:|[view]|"
+			options:0
+			metrics:nil
+			views:@{ @"view" : view }
+		]];
+		[view.superview addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"V:|[view]|"
+			options:0
+			metrics:nil
+			views:@{ @"view" : view }
+		]];
+	}
 	_height = 32.0;
 	return self;
 }
@@ -46,7 +54,6 @@
 	itemSizeStruct = CGSizeFromString(itemSize);
 	_height = itemSizeStruct.height + 32;
 	_itemSize = itemSize;
-	_screenshotsView.contentSize = CGSizeMake(16 * (_imageViews.count + 1) + itemSizeStruct.width * _imageViews.count, 0);
 }
 
 - (void)resetConstraints {
@@ -54,25 +61,32 @@
 		[_screenshotsView removeConstraints:currentConstraints];
 	}
 	currentConstraints = [[NSMutableArray alloc] init];
-	for (int i = 0; i < 
-	_imageViews.count; i++) {
-		UIImageView *imageView = _imageViews[i];
-		NSDictionary *views = @{
-			@"curr" : imageView,
-			@"prev" : (i ? _imageViews[i-1] : NSNull.null)
-		};
+	if (_imageViews.count > 0) {
 		[currentConstraints addObjectsFromArray:[NSLayoutConstraint
-			constraintsWithVisualFormat:[NSString stringWithFormat:@"H:%@-16-[curr(==%f)]", i ? @"[prev]" : @"|", itemSizeStruct.width]
+			constraintsWithVisualFormat:@"H:[last]-16-|"
 			options:0
 			metrics:nil
-			views:views
+			views:@{ @"last" : _imageViews[_imageViews.count - 1] }
 		]];
-		[currentConstraints addObjectsFromArray:[NSLayoutConstraint
-			constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-16-[curr(==%f)]", itemSizeStruct.height]
-			options:0
-			metrics:nil
-			views:views
-		]];
+		for (int i = 0; i < _imageViews.count; i++) {
+			UIImageView *imageView = _imageViews[i];
+			NSDictionary *views = @{
+				@"curr" : imageView,
+				@"prev" : (i ? _imageViews[i-1] : NSNull.null)
+			};
+			[currentConstraints addObjectsFromArray:[NSLayoutConstraint
+				constraintsWithVisualFormat:[NSString stringWithFormat:@"H:%@-16-[curr(==%f)]", i ? @"[prev]" : @"|", itemSizeStruct.width]
+				options:0
+				metrics:nil
+				views:views
+			]];
+			[currentConstraints addObjectsFromArray:[NSLayoutConstraint
+				constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-16-[curr(==%f)]", itemSizeStruct.height]
+				options:0
+				metrics:nil
+				views:views
+			]];
+		}
 	}
 	[_screenshotsView addConstraints:currentConstraints];
 }
