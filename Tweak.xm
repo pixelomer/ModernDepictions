@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "Headers/Headers.h"
 #import "SmartDepictions/SmartPackageController.h"
+#import "Extensions/UIColor+HexString.h"
 
 extern "C" void _CFEnableZombies();
 
@@ -52,6 +53,19 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 	%orig;
 	id value = [self getField:@"sileodepiction"];
 	self.sileoDepiction = [value isKindOfClass:[NSNull class]] ? nil : value;
+}
+
+%end
+
+%hook UIView
+
+- (void)setBackgroundColor:(id)newColor {
+	UIColor *color = [UIColor clearColor];
+	if (!newColor);
+	else if ([newColor isKindOfClass:[NSString class]]) color = [UIColor colorWithHexString:newColor];
+	else if ([newColor isKindOfClass:[UIColor class]]) color = newColor;
+	else @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid type for a color" userInfo:nil];
+	%orig(color);
 }
 
 %end

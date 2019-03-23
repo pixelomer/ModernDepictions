@@ -3,4 +3,6 @@
 @protocol SmartCell
 @required
 - (CGFloat)height;
+@optional
+- (void)didSelectCell;
 @end

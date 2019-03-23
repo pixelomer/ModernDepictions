@@ -43,6 +43,7 @@
 	#if DEBUG
 		}
 	#endif
+		cell.selectionStyle = [cell respondsToSelector:@selector(didSelectCell)] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
 		[mutableResult addObject:cell];
 	}
 	NSArray *result = [mutableResult copy];

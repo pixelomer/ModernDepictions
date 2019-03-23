@@ -2,6 +2,6 @@
 
 @implementation DepictionSpacerView
 
-- (CGFloat)height { return 20.0; }
+- (CGFloat)height { return _spacing; }
 
 @end

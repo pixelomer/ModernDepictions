@@ -1,4 +1,5 @@
 #import "SmartContentCell.h"
+#import "../Extensions/UIColor+HexString.h"
 
 @implementation SmartContentCell
 
@@ -10,6 +11,8 @@
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	_depictionDelegate = delegate;
 	self.textLabel.numberOfLines = 0;
+	self.contentView.backgroundColor = nil;
+	self.backgroundColor = nil;
 	return self;
 }
 

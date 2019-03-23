@@ -7,14 +7,22 @@
 
 @implementation DepictionRootView
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.row < topCells.count)
-		return (UITableViewCell *)topCells[indexPath.row];
-	else if (indexPath.row < tabCells[self.tabController.currentTab].count + topCells.count)
-		return (UITableViewCell *)tabCells[self.tabController.currentTab][indexPath.row - topCells.count];
-	else if (indexPath.row < tabCells[self.tabController.currentTab].count + topCells.count + footerCells.count)
-		return (UITableViewCell *)footerCells[indexPath.row - topCells.count - tabCells[self.tabController.currentTab].count];
+- (NSInteger)numberOfCells {
+	return topCells.count + tabCells[self.tabController.currentTab].count + footerCells.count;
+}
+
+- (UITableViewCell *)cellForRow:(NSInteger)row {
+	if (row < topCells.count)
+		return (UITableViewCell *)topCells[row];
+	else if (row < tabCells[self.tabController.currentTab].count + topCells.count)
+		return (UITableViewCell *)tabCells[self.tabController.currentTab][row - topCells.count];
+	else if (row < tabCells[self.tabController.currentTab].count + topCells.count + footerCells.count)
+		return (UITableViewCell *)footerCells[row - topCells.count - tabCells[self.tabController.currentTab].count];
 	return nil;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return [self cellForRow:indexPath.row];
 }
 
 - (void)didSelectTabNamed:(NSString *)name {
@@ -22,17 +30,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return topCells.count + tabCells[self.tabController.currentTab].count + footerCells.count;
+	return self.numberOfCells;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell<SmartCell> * _Nullable cell = nil;
-	if (indexPath.row < topCells.count)
-		cell = topCells[indexPath.row];
-	else if (indexPath.row < tabCells[self.tabController.currentTab].count + topCells.count)
-		cell = (UITableViewCell<SmartCell> *)tabCells[self.tabController.currentTab][indexPath.row - topCells.count];
-	else if (indexPath.row < tabCells[self.tabController.currentTab].count + topCells.count + footerCells.count)
-		cell = (UITableViewCell<SmartCell> *)footerCells[indexPath.row - topCells.count - tabCells[self.tabController.currentTab].count];
+	UITableViewCell<SmartCell> * _Nullable cell = (UITableViewCell<SmartCell> *)[self cellForRow:indexPath.row];
 	return cell ? [cell height] : 44.0;
 }
 
@@ -43,7 +45,6 @@
 	_depictionDelegate = delegate;
 	self.dataSource = self;
 	self.delegate = self;
-	self.allowsSelection = NO;
 	_getPackageCell = [[GetPackageCell alloc] initWithDepictionDelegate:self.depictionDelegate reuseIdentifier:@"getpackagecell"];
 	[topCells addObject:self.getPackageCell];
 	_tabController = [[DepictionTabView alloc] initWithDelegate:self reuseIdentifier:@"tabControl"];
