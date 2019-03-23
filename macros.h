@@ -15,7 +15,7 @@
 #define max(a, b) (a > b ? a : b)
 
 // Macro to disable availability checks. Replace 1 with 0 if you aren't having issues with it. The resulting build will only work on newer versions of iOS when the availability checks are disabled.
-#if 1
+#if 0
 #define available(args...) (YES).boolValue
 #endif
 
