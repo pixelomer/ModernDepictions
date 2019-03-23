@@ -7,7 +7,7 @@
 
 @protocol DepictionTabViewDelegate
 @required
-- (void)didSelectTabNamed:(NSString * _Nonnull)name;
+- (void)didSelectTabNamed:(NSString *)name;
 @end
 
 @interface DepictionTabView : UITableViewCell<SmartCell> {
@@ -17,10 +17,11 @@
 	UIView *underline;
 	NSArray<NSLayoutConstraint *> *lineConstraints;
 }
-@property (nonatomic, setter=setTabs:, assign) NSArray<NSDictionary *> * _Nonnull tabs;
-@property (nonatomic, readonly, getter=currentTab) NSString * _Nullable currentTab;
-@property (nonatomic, readonly) __kindof NSObject<DepictionTabViewDelegate> * _Nullable tabViewDelegate;
+@property (nonatomic, retain) UIColor *depictionTintColor;
+@property (nonatomic, setter=setTabs:, assign) NSArray<NSDictionary *> * tabs;
+@property (nonatomic, readonly, getter=currentTab) NSString *currentTab;
+@property (nonatomic, readonly) __kindof NSObject<DepictionTabViewDelegate> *tabViewDelegate;
 - (CGFloat)height;
-- (instancetype _Nullable)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> * _Nullable)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier;
-- (void)setTabs:(NSArray<NSDictionary *> * _Nonnull)tabs;
+- (instancetype)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
+- (void)setTabs:(NSArray<NSDictionary *> *)tabs;
 @end

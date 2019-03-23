@@ -7,7 +7,7 @@
 	return 37.0;
 }
 
-- (instancetype _Nullable)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> * _Nullable)delegate reuseIdentifier:(NSString * _Nonnull)reuseIdentifier {
+- (instancetype)initWithDelegate:(__kindof NSObject<DepictionTabViewDelegate> *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	_tabViewDelegate = delegate;
 	underline = [[UIView alloc] init];
@@ -34,6 +34,11 @@
 	self.contentView.frame = self.frame;
 	return self;
 }
+
+- (void)setDepictionTintColor:(UIColor *)newTintColor {
+	_depictionTintColor = newTintColor;
+}
+
 - (NSString *)currentTab {
 	if (!currentTabNames || [currentTabNames count] <= 0) return nil;
 	return currentTab ?: currentTabNames[0];
