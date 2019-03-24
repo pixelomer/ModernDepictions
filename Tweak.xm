@@ -73,9 +73,20 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 
 %hook Cydia
 
-- (void)applicationDidFinishLaunching:(id)unused {
+- (void)applicationDidFinishLaunching:(id)application {
 	%orig;
+	NSLog(@"Starting GADMobileAds...");
 	[[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
+}
+
+// For some reason Cydia forgets its superclass when I start GADMobileAds
+- (Class)superclass {
+	return %c(CyteApplication);
+}
+
+- (void)applicationWillResignActive:(id)application {
+	NSLog(@"Application will resign active");
+	%orig;
 }
 
 %end

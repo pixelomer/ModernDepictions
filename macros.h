@@ -7,7 +7,7 @@
 #if DEBUG
 #define NSLog(value...) NSLog(@"[BetterDepictions] "value)
 #else
-#define NSLog(...);
+#define NSLog(...); {}
 #endif
 
 // Macros to find the highest/lowest of two numbers

@@ -1,9 +1,13 @@
 #import "SmartContentCell.h"
+@import GoogleMobileAds;
 
 @class GADBannerView;
 
-@interface DepictionAdmobView : SmartContentCell {
+@interface DepictionAdmobView : SmartContentCell<GADBannerViewDelegate> {
 	GADBannerView *banner;
+	CGFloat height;
+	GADRequest *request;
+	bool adLoaded;
 }
 @property (nonatomic, retain, setter=setAdSize:) NSString *adSize;
 @property (nonatomic, retain, setter=setAdUnitID:) NSString *adUnitID;
