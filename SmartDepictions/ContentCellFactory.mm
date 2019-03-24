@@ -35,20 +35,14 @@
 		#else
 			break;
 		#endif
-			if (cellClass == [DepictionScreenshotsView class]) {
-				if (UIDevice.currentDevice.isiPad && cellInfo[@"ipad"]) {
-					cellInfo = cellInfo[@"ipad"];
-					continue;
-				}
-				else if (!UIDevice.currentDevice.isiPad && cellInfo[@"iphone"]) {
-					cellInfo = cellInfo[@"iphone"];
-					continue;
-				}
-			}
 			cell = [(DepictionBaseView *)[cellClass alloc]
 				initWithDepictionDelegate:delegate
 				reuseIdentifier:[NSString stringWithFormat:@"%@%d", reuseIdentifierPrefix, i++]
 			];
+			if (cellClass == [DepictionScreenshotsView class]) {
+				if (UIDevice.currentDevice.isiPad && cellInfo[@"ipad"]) cellInfo = cellInfo[@"ipad"];
+				else if (!UIDevice.currentDevice.isiPad && cellInfo[@"iphone"]) cellInfo = cellInfo[@"iphone"];
+			}
 			for (NSString *propertyKey in cellInfo) {
 				if ([propertyKey isEqualToString:@"class"] || ![cell respondsToSelector:NSSelectorFromString(propertyKey)]) continue;
 				id property = cellInfo[propertyKey];
