@@ -11,10 +11,10 @@ Sileo depictions for Cydia.
 - [x] Split classes
 - [x] Async web requests
 - [x] Tab controller (unusable)
-- [ ] Tab-specific views
+- [x] Tab-specific views
 - [x] Creating cells from the parsed JSON
-- [ ] SmartDepictionController for text-only depictions
-- [ ] SmartDepictionController for web depictions
+- [x] SmartPackageController for text-only depictions
+- [ ] SmartPackagenController for web depictions
 
 ## Might be implemented in distant future
 
