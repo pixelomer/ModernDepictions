@@ -98,6 +98,7 @@
 
 - (void)setDepictionTintColor:(UIColor *)color {
 	queueButton.backgroundColor = color;
+	[queueButton setNeedsDisplay];
 }
 
 - (void)setButtonTitle:(NSString *)text {

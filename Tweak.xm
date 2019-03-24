@@ -90,6 +90,20 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 }
 
 %end
+
+@interface GADNUIKitWebViewController : UIView
+- (UIWebView *)webView;
+@end
+
+%hook GADNUIKitWebViewController
+
+- (UIWebView *)webView {
+	UIWebView *orig = %orig;
+	orig.scrollView.scrollEnabled = NO;
+	return orig;
+}
+
+%end
 %end
 
 %ctor {

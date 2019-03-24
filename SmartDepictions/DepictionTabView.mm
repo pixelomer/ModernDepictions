@@ -48,6 +48,7 @@ static UIColor *notHighlightedColor;
 - (void)setDepictionTintColor:(UIColor *)newTintColor {
 	[currentTabs[selectedIndex] setTitleColor:newTintColor forState:UIControlStateNormal];
 	underline.backgroundColor = newTintColor;
+	[underline setNeedsDisplay];
 }
 
 - (NSString *)currentTab {
@@ -81,7 +82,8 @@ static UIColor *notHighlightedColor;
 		[tab setTitleColor:notHighlightedColor forState:UIControlStateNormal];
 		[tab sizeToFit];
 		[self.contentView addSubview:tab];
-		if (i > 0) {
+		NSDictionary *views = @{ @"tab" : tab };
+		if (i) {
 			[self.contentView addConstraints:@[
 				[NSLayoutConstraint
 					constraintWithItem:tab
@@ -113,13 +115,6 @@ static UIColor *notHighlightedColor;
 			]];
 		}
 		else {
-			NSDictionary *views = @{ @"tab" : tab };
-			[self.contentView addConstraints:[NSLayoutConstraint
-				constraintsWithVisualFormat:@"V:|[tab]|"
-				options:0
-				metrics:nil
-				views:views
-			]];
 			[self.contentView addConstraints:[NSLayoutConstraint
 				constraintsWithVisualFormat:@"H:|[tab]"
 				options:0
@@ -136,6 +131,12 @@ static UIColor *notHighlightedColor;
 				constant:0.0
 			]];
 		}
+		[self.contentView addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"V:|[tab]|"
+			options:0
+			metrics:nil
+			views:views
+		]];
 		[tab addTarget:self action:@selector(didSelectTab:) forControlEvents:UIControlEventTouchUpInside];
 		[currentTabs addObject:tab];
 	}

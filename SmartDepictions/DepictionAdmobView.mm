@@ -63,7 +63,7 @@
 	else newSize = kGADAdSizeMediumRectangle;
 	height = newSize.size.height;
 	banner.adSize = newSize;
-	NSLog(@"New height: %f, expected height: %f", height, newSize.size.height);
+	NSLog(@"New height: %f, expected height: %f", banner.adSize.size.height, newSize.size.height);
 	_adSize = adSize;
 }
 
