@@ -3,6 +3,12 @@
 
 @class SmartDepictionDelegate;
 
+typedef NS_ENUM(NSUInteger, AlignEnum) {
+	AlignEnumLeft = 0,
+	AlignEnumCenter = 1,
+	AlignEnumRight = 2
+};
+
 @interface DepictionBaseView : UITableViewCell<SmartCell>
 @property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate;
 @property (nonatomic, retain, setter=setLabelText:, getter=labelText) NSString *labelText;

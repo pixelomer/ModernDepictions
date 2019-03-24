@@ -93,6 +93,7 @@
 - (void)resetViews {
 	imageView.frame = CGRectMake(0, imageView.frame.origin.y, origImageWidth = UIScreen.mainScreen.bounds.size.width, origImageHeight = 200);
 	self.depictionRootView.contentInset = UIEdgeInsetsMake(origImageHeight, 0, self.tabBarController.tabBar.frame.size.height, 0);
+	[self.depictionRootView reloadResizableCells];
 }
 
 - (void)loadDepiction {

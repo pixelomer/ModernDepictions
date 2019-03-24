@@ -3,10 +3,19 @@
 #import "SmartDepictionDelegate.h"
 #import "DepictionTabView.h"
 #import "ContentCellFactory.h"
+#import "DepictionImageView.h"
 #import "../Extensions/UINavigationController+Opacity.h"
 #import "../Extensions/UIColor+HexString.h"
 
 @implementation DepictionRootView
+
+NSArray *resizableCellClasses;
+
++ (void)initialize {
+	resizableCellClasses = @[
+		[DepictionImageView class]
+	];
+}
 
 - (NSInteger)numberOfCells {
 	return topCells.count + tabCells[self.tabController.currentTab].count + footerCells.count;
@@ -37,6 +46,19 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell<SmartCell> * _Nullable cell = (UITableViewCell<SmartCell> *)[self cellForRow:indexPath.row];
 	return cell ? [cell height] : 44.0;
+}
+
+- (void)reloadResizableCells {
+	NSMutableArray *cellsToReload = [[NSMutableArray alloc] init];
+	for (int i = 0, cellCount = self.numberOfCells; i < cellCount; i++) {
+		Class cellClass = [(NSObject *)[self cellForRow:i] class];
+		if ([resizableCellClasses containsObject:cellClass]) {
+			[cellsToReload addObject:[NSIndexPath indexPathWithIndex:i]];
+		}
+	}
+	if (cellsToReload.count > 0) {
+		[self reloadRowsAtIndexPaths:cellsToReload withRowAnimation:UITableViewRowAnimationNone];
+	}
 }
 
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate {
