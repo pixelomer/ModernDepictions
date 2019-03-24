@@ -1,6 +1,6 @@
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
-@interface DepictionHeaderView : SmartContentCell {
+@interface DepictionHeaderView : DepictionBaseView {
 	@private
 	UILabel *headerLabel;
 	

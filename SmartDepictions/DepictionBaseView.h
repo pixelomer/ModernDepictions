@@ -3,7 +3,7 @@
 
 @class SmartDepictionDelegate;
 
-@interface SmartContentCell : UITableViewCell<SmartCell>
+@interface DepictionBaseView : UITableViewCell<SmartCell>
 @property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate;
 @property (nonatomic, retain, setter=setLabelText:, getter=labelText) NSString *labelText;
 - (CGFloat)height;

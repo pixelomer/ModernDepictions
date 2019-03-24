@@ -1,6 +1,6 @@
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
-@interface DepictionSpacerView : SmartContentCell
+@interface DepictionSpacerView : DepictionBaseView
 @property (assign) double spacing;
 - (CGFloat)height;
 @end

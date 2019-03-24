@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
-@interface DepictionTableTextView : SmartContentCell {
+@interface DepictionTableTextView : DepictionBaseView {
 	UILabel *textLabel;
 	UILabel *titleLabel;
 }

@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "../Headers/Headers.h"
 #import "SmartCell.h"
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
 @class SmartDepictionDelegate;
 @class DepictionTab;
@@ -11,7 +11,7 @@
 - (void)didSelectTabNamed:(NSString *)name;
 @end
 
-@interface DepictionTabView : SmartContentCell {
+@interface DepictionTabView : DepictionBaseView {
 	NSMutableArray<NSString *> *currentTabNames;
 	NSMutableArray<DepictionTab *> *currentTabs;
 	NSUInteger selectedIndex;

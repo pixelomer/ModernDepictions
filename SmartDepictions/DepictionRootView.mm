@@ -56,7 +56,7 @@
 			@"tabname" : @"Details",
 			@"views" : @[
 				@{
-					@"class" : @"SmartContentCell",
+					@"class" : @"DepictionBaseView",
 					@"labelText" : self.depictionDelegate.package.longDescription ?: self.depictionDelegate.package.shortDescription ?: @""
 				}
 			]

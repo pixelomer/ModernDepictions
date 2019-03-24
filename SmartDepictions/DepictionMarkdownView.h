@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
-@interface DepictionMarkdownView : SmartContentCell
+@interface DepictionMarkdownView : DepictionBaseView
 @property (nonatomic, readonly) UILabel *label;
 @property (nonatomic, retain, setter=setMarkdown:) NSString *markdown;
 @property (assign) bool useSpacing;

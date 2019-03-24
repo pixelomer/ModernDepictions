@@ -1,8 +1,8 @@
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
 @class SubDepictionTableView;
 
-@interface DepictionStackView : SmartContentCell {
+@interface DepictionStackView : DepictionBaseView {
 	SubDepictionTableView *tableView;
 	NSArray *cells;
 }

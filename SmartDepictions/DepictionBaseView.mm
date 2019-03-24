@@ -1,7 +1,7 @@
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 #import "../Extensions/UIColor+HexString.h"
 
-@implementation SmartContentCell
+@implementation DepictionBaseView
 
 - (CGFloat)height {
 	return UITableViewAutomaticDimension;

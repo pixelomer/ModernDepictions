@@ -1,9 +1,9 @@
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 @import GoogleMobileAds;
 
 @class GADBannerView;
 
-@interface DepictionAdmobView : SmartContentCell<GADBannerViewDelegate> {
+@interface DepictionAdmobView : DepictionBaseView<GADBannerViewDelegate> {
 	GADBannerView *banner;
 	CGFloat height;
 	GADRequest *request;

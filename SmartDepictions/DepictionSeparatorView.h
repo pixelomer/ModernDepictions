@@ -1,6 +1,6 @@
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
-@interface DepictionSeparatorView : SmartContentCell
+@interface DepictionSeparatorView : DepictionBaseView
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
 - (CGFloat)height;
 @end

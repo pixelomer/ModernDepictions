@@ -1,12 +1,12 @@
 #import "ContentCellFactory.h"
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 #import "DepictionScreenshotsView.h"
 #import "SmartErrorCell.h"
 #import "../Extensions/UIDevice+isiPad.h"
 
 @implementation ContentCellFactory
 
-+ (NSArray<__kindof SmartContentCell *> *)createCellsFromArray:(NSArray<NSDictionary<NSString *, id> *> *)sourceArray
++ (NSArray<__kindof DepictionBaseView *> *)createCellsFromArray:(NSArray<NSDictionary<NSString *, id> *> *)sourceArray
 	delegate:(SmartDepictionDelegate *)delegate
 	reuseIdentifierPrefix:(NSString *)reuseIdentifierPrefix
 {
@@ -21,14 +21,14 @@
 			if (!cellInfo[@"class"] ||
 				![cellInfo[@"class"] isKindOfClass:[NSString class]]
 			) break;
-			SmartContentCell *cell = NULL;
+			DepictionBaseView *cell = NULL;
 			if (!(cellClass = NSClassFromString(cellInfo[@"class"])))
 		#if DEBUG
 			cell = [[SmartErrorCell alloc] initWithErrorMessage:[NSString stringWithFormat:@"(?) %@", cellInfo[@"class"]]];
 		#else
 			break;
 		#endif
-			else if (![cellClass isSubclassOfClass:[SmartContentCell class]])
+			else if (![cellClass isSubclassOfClass:[DepictionBaseView class]])
 		#if DEBUG
 			cell = [[SmartErrorCell alloc] initWithErrorMessage:[NSString stringWithFormat:@"(!) %@", cellInfo[@"class"]]];
 			if (!cell) {
@@ -45,7 +45,7 @@
 					continue;
 				}
 			}
-			cell = [(SmartContentCell *)[cellClass alloc]
+			cell = [(DepictionBaseView *)[cellClass alloc]
 				initWithDepictionDelegate:delegate
 				reuseIdentifier:[NSString stringWithFormat:@"%@%d", reuseIdentifierPrefix, i++]
 			];
@@ -67,7 +67,7 @@
 	return result;
 }
 
-+ (NSDictionary<NSString *, NSArray<__kindof SmartContentCell *> *> *)createCellsFromTabArray:(NSArray<NSDictionary<NSString *, id> *> *)tabArray
++ (NSDictionary<NSString *, NSArray<__kindof DepictionBaseView *> *> *)createCellsFromTabArray:(NSArray<NSDictionary<NSString *, id> *> *)tabArray
 	delegate:(SmartDepictionDelegate *)delegate
 {
 	if (!tabArray || !delegate) return nil;

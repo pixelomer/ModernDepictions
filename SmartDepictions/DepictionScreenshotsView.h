@@ -1,6 +1,6 @@
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
-@interface DepictionScreenshotsView : SmartContentCell {
+@interface DepictionScreenshotsView : DepictionBaseView {
 	CGFloat _height;
 	UIView *_screenshotsView;
 	NSMutableArray<UIImageView *> *_imageViews;

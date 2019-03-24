@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
-#import "SmartContentCell.h"
+#import "DepictionBaseView.h"
 
 // WARNING: Normal content cells must NOT create a custom init method.
-@interface SmartErrorCell : SmartContentCell
+@interface SmartErrorCell : DepictionBaseView
 - (instancetype)initWithErrorMessage:(NSString *)errorMessage;
 @end
