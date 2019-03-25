@@ -24,6 +24,7 @@
 	self = [super initWithDepictionDelegate:delegate reuseIdentifier:reuseIdentifier];
 	UIScrollView *screenshotsScrollView = [[UIScrollView alloc] init];
 	screenshotsScrollView.translatesAutoresizingMaskIntoConstraints = NO;
+	screenshotsScrollView.showsHorizontalScrollIndicator = NO;
 	_screenshotsView = [[UIView alloc] init];
 	_screenshotsView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.contentView addSubview:screenshotsScrollView];

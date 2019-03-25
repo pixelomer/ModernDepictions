@@ -51,7 +51,7 @@
 		#if DEBUG
 			}
 		#endif
-			cell.selectionStyle = [cell respondsToSelector:@selector(didSelectCell)] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+			cell.selectionStyle = [cell respondsToSelector:@selector(didGetSelected)] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
 			[mutableResult addObject:cell];
 			break;
 		}

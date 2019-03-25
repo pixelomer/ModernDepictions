@@ -10,7 +10,7 @@
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	_depictionDelegate = delegate;
-	self.textLabel.numberOfLines = 0;
+	self.textLabel.numberOfLines = 1;
 	self.contentView.backgroundColor = nil;
 	self.backgroundColor = nil;
 	return self;

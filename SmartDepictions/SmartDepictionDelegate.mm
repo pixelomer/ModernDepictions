@@ -2,9 +2,37 @@
 #import "DepictionRootView.h"
 #import "SmartPackageController.h"
 #import "GetPackageCell.h"
+#import "DepictionImageView.h"
+#import "DepictionStackView.h"
 #import "../Extensions/UIColor+HexString.h"
 
 @implementation SmartDepictionDelegate
+
+NSArray *resizableCellClasses;
+UIColor *defaultTintColor;
+
++ (UIColor *)defaultTintColor {
+	return defaultTintColor;
+}
+
++ (void)initialize {
+	if ([self class] == [SmartDepictionDelegate class]) {
+		resizableCellClasses = @[
+			[DepictionImageView class],
+			[DepictionStackView class]
+		];
+		defaultTintColor = [UIColor colorWithRed:0.173 green:0.694 blue:0.745 alpha:1.0];
+	}
+}
+
+- (void)updateCells {
+	[self.packageController.depictionRootView beginUpdates];
+	[self.packageController.depictionRootView endUpdates];
+}
+
+- (void)handleRotation {
+	[self updateCells];
+}
 
 - (NSString *)modificationButtonTitle {
 	return modificationButtonTitle;
@@ -21,7 +49,7 @@
 	packageID:(NSString *)packageID
 {
 	self = [super init];
-	_tintColor = [UIColor blueColor];
+	_tintColor = self.class.defaultTintColor;
 	_packageController = packageController;
 	_packageID = packageID;
 	_depictionURL = depictionURL;

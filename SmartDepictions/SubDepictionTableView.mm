@@ -19,6 +19,13 @@
 	return cells.count > indexPath.row ? cells[indexPath.row] : nil;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	UITableViewCell<SmartCell> *cell = cells[indexPath.row];
+	if ([cell respondsToSelector:@selector(didGetSelected)]) {
+		[cell didGetSelected];
+	}
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return cells.count;
 }

@@ -11,6 +11,7 @@
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	_depictionDelegate = delegate;
 	queueButton = [[QueueButton alloc] init];
+	queueButton.backgroundColor = delegate.tintColor;
 	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;

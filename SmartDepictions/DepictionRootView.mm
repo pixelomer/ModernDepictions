@@ -9,14 +9,6 @@
 
 @implementation DepictionRootView
 
-NSArray *resizableCellClasses;
-
-+ (void)initialize {
-	resizableCellClasses = @[
-		[DepictionImageView class]
-	];
-}
-
 - (NSInteger)numberOfCells {
 	return topCells.count + tabCells[self.tabController.currentTab].count + footerCells.count;
 }
@@ -29,6 +21,13 @@ NSArray *resizableCellClasses;
 	else if (row < tabCells[self.tabController.currentTab].count + topCells.count + footerCells.count)
 		return footerCells[row - topCells.count - tabCells[self.tabController.currentTab].count];
 	return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	UITableViewCell<SmartCell> *cell = [self cellForRow:indexPath.row];
+	if ([cell respondsToSelector:@selector(didGetSelected)]) {
+		[cell didGetSelected];
+	}
 }
 
 - (UITableViewCell<SmartCell> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -46,19 +45,6 @@ NSArray *resizableCellClasses;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell<SmartCell> * _Nullable cell = (UITableViewCell<SmartCell> *)[self cellForRow:indexPath.row];
 	return cell ? [cell height] : 44.0;
-}
-
-- (void)reloadResizableCells {
-	NSMutableArray *cellsToReload = [[NSMutableArray alloc] init];
-	for (int i = 0, cellCount = self.numberOfCells; i < cellCount; i++) {
-		Class cellClass = [(NSObject *)[self cellForRow:i] class];
-		if ([resizableCellClasses containsObject:cellClass]) {
-			[cellsToReload addObject:[NSIndexPath indexPathWithIndex:i]];
-		}
-	}
-	if (cellsToReload.count > 0) {
-		[self reloadRowsAtIndexPaths:cellsToReload withRowAnimation:UITableViewRowAnimationNone];
-	}
 }
 
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate {

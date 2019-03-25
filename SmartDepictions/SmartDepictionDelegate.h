@@ -20,10 +20,12 @@
 @property (nonatomic, readonly) NSDictionary *modificationButtons;
 @property (nonatomic, readonly) bool iOS6;
 @property (nonatomic, readonly) UIColor *tintColor;
+- (void)handleRotation;
 - (NSString *)modificationButtonTitle;
 - (void)setModificationButtonTitle:(NSString *)newTitle;
 - (void)setPackageWithID:(NSString *)packageID database:(Database *)database;
 - (void)downloadDepiction;
++ (UIColor *)defaultTintColor;
 - (instancetype)initWithPackageController:(SmartPackageController *)packageController
 	depictionURL:(NSURL *)depictionURL
 	database:(Database *)database

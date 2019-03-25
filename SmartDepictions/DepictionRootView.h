@@ -19,5 +19,4 @@
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate;
 - (void)loadDepiction;
 - (void)didSelectTabNamed:(NSString *)name;
-- (void)reloadResizableCells;
 @end
