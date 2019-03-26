@@ -28,6 +28,10 @@
 	return nil;
 }
 
+- (void)setViews:(NSArray *)views delegate:(SmartDepictionDelegate *)delegate {
+	// This method does nothing.
+}
+
 - (void)didSelectTabNamed:(NSString *)name {
 	[self reloadData];
 }
