@@ -1,6 +1,4 @@
-#import "DepictionBaseView.h"
+#import "DepictionBaseButtonView.h"
 
-@interface DepictionTableButtonView : DepictionBaseView
-@property (nonatomic, retain, setter=setTitle:) NSString *title;
-- (void)setTitle:(NSString *)newTitle;
+@interface DepictionTableButtonView : DepictionBaseButtonView
 @end
