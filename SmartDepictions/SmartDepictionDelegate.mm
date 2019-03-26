@@ -136,6 +136,7 @@ UIColor *defaultTintColor;
 		[NSURLConnection sendAsynchronousRequest:request
 			queue:self.operationQueue
 			completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+				NSLog(@"Downloaded completed for \"%@\" with error: %@", url, error);
 				completionHandler(data, error);
 			}
 		];

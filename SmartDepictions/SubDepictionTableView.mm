@@ -7,6 +7,9 @@
 	self = [super init];
 	self.dataSource = self;
 	self.delegate = self;
+#if !DEBUG
+	self.separatorStyle = UITableViewCellSeparatorStyleNone;
+#endif
 	return self;
 }
 

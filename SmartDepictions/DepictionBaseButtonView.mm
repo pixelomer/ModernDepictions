@@ -1,5 +1,7 @@
 #import "DepictionBaseButtonView.h"
+#import "SubDepictionViewController.h"
 #import "SmartDepictionDelegate.h"
+#import "SmartPackageController.h"
 #import "../Extensions/UIColor+HexString.h"
 
 @implementation DepictionBaseButtonView
@@ -10,8 +12,27 @@
 }
 
 - (void)didGetSelected {
-	if (defaultButtonAction == DepictionButtonActionOpenURL) {
-		[UIApplication.sharedApplication openURL:defaultURL];
+	NSURL *URL = defaultURL ?: backupURL;
+	DepictionButtonAction action = defaultURL ? defaultButtonAction : backupButtonAction;
+
+	if (!URL) {
+#		if DEBUG
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"DEBUG" message:@"No valid URL to use." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+#		endif
+		return;
+	}
+	if (action == DepictionButtonActionOpenURL) {
+		[UIApplication.sharedApplication openURL:URL];
+	}
+	else if (action == DepictionButtonActionShowDepiction) {
+		SubDepictionViewController *vc = [[SubDepictionViewController alloc] initWithDepictionDelegate:self.depictionDelegate];
+		vc.depictionURL = URL;
+		[self.depictionDelegate.packageController.navigationController pushViewController:vc animated:YES];
+	}
+	else if (action == DepictionButtonActionShowForm) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:UCLocalize(@"Error") message:UCLocalize(@"SmartDepictions doesn't support forms yet.") delegate:self cancelButtonTitle:UCLocalize(@"OK") otherButtonTitles:nil];
+		[alert show];
 	}
 }
 
