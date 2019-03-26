@@ -20,6 +20,11 @@
 	return nil;
 }
 
+- (void)setNumberOfLines:(NSInteger)numberOfLines {
+	self.textLabel.numberOfLines = numberOfLines;
+	_numberOfLines = numberOfLines;
+}
+
 - (void)setLabelText:(NSString *)text {
 	self.textLabel.text = text;
 }

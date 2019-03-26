@@ -54,7 +54,8 @@
 			@"views" : @[
 				@{
 					@"class" : @"DepictionBaseView",
-					@"labelText" : self.depictionDelegate.package.longDescription ?: self.depictionDelegate.package.shortDescription ?: @""
+					@"labelText" : self.depictionDelegate.package.longDescription ?: self.depictionDelegate.package.shortDescription ?: @"",
+					@"numberOfLines" : @(0)
 				}
 			]
 		}
