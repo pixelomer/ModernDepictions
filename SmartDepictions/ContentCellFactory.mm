@@ -39,9 +39,13 @@
 				initWithDepictionDelegate:delegate
 				reuseIdentifier:[NSString stringWithFormat:@"%@%d", reuseIdentifierPrefix, i++]
 			];
+			if (!cell) break;
 			if (cellClass == [DepictionScreenshotsView class]) {
 				if (UIDevice.currentDevice.isiPad && cellInfo[@"ipad"]) cellInfo = cellInfo[@"ipad"];
 				else if (!UIDevice.currentDevice.isiPad && cellInfo[@"iphone"]) cellInfo = cellInfo[@"iphone"];
+				if (!([cellInfo[@"class"] isEqualToString:@"DepictionScreenshotsView"] ||
+					[cellInfo[@"class"] isEqualToString:@"DepictionScreenshotView"])
+				) continue;
 			}
 			for (NSString *propertyKey in cellInfo) {
 				if ([propertyKey isEqualToString:@"class"] || ![cell respondsToSelector:NSSelectorFromString(propertyKey)]) continue;
