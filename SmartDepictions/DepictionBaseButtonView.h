@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, DepictionButtonAction) {
 @property (nonatomic, assign, setter=setYPadding:) CGFloat yPadding;
 - (void)setTitle:(NSString *)newTitle;
 - (void)setAction:(NSString *)newAction;
+- (void)didGetSelected;
 - (void)setBackupAction:(NSString *)newAction;
 - (void)setOpenExternal:(BOOL)openExternal;
 - (void)setYPadding:(CGFloat)yPadding;
