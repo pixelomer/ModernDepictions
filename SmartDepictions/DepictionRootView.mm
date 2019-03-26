@@ -23,32 +23,17 @@
 	return nil;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell<SmartCell> *cell = [self cellForRow:indexPath.row];
-	if ([cell respondsToSelector:@selector(didGetSelected)]) {
-		[cell didGetSelected];
-	}
-}
-
-- (UITableViewCell<SmartCell> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [self cellForRow:indexPath.row];
+- (instancetype)init {
+	@throw [NSException exceptionWithName:NSGenericException reason:@"You have to use -[initWithDepictionDelegate:] for this class." userInfo:nil];
+	return nil;
 }
 
 - (void)didSelectTabNamed:(NSString *)name {
 	[self reloadData];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return self.numberOfCells;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell<SmartCell> * _Nullable cell = (UITableViewCell<SmartCell> *)[self cellForRow:indexPath.row];
-	return cell ? [cell height] : 44.0;
-}
-
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate {
-	self = [super init];
+	self = PerformSelector(UITableView, self, @selector(init));
 	topCells = [[NSMutableArray alloc] init];
 	footerCells = [[NSMutableArray alloc] init];
 	_depictionDelegate = delegate;
@@ -76,7 +61,7 @@
 	}
 	NSArray *footerCellDict = @[
 		@{
-		 @"markdown" : [NSString stringWithFormat:@"<small style=\"color: #aaa;\">%@ (%@)</small><style>body { text-align: center; }</style>", self.depictionDelegate.package.id, versionString],
+		 @"markdown" : [NSString stringWithFormat:@"<br/><small style=\"color: #aaa;\">%@ (%@)</small><style>body { text-align: center; }</style><br/>", self.depictionDelegate.package.id, versionString],
 		 @"useRawFormat" : @YES,
 		 @"class" : @"DepictionMarkdownView"
 		}

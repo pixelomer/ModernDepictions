@@ -5,6 +5,7 @@
 @class SmartDepictionDelegate;
 
 @interface SubDepictionTableView : UITableView<UITableViewDataSource, UITableViewDelegate> {
+	@private
 	NSArray *cells;
 }
 - (void)setViews:(NSArray *)views delegate:(SmartDepictionDelegate *)delegate;
