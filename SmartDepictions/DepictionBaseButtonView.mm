@@ -10,7 +10,9 @@
 }
 
 - (void)didGetSelected {
-	
+	if (defaultButtonAction == DepictionButtonActionOpenURL) {
+		[UIApplication.sharedApplication openURL:defaultURL];
+	}
 }
 
 - (CGFloat)height {
