@@ -4,7 +4,7 @@
 
 @implementation NSAttributedString(Markdown)
 
-+ (instancetype)attributedStringWithHTML:(NSString *)rawHTML newlines:(NSString *)newlineString allowMarkdown:(bool)allowMarkdown {
++ (instancetype)attributedStringWithHTML:(NSString *)rawHTML newlines:(NSString *)newlineString allowMarkdown:(bool)allowMarkdown extraCSS:(NSString *)css {
 	NSString *finalString = nil;
 	if (@available(iOS 8.0, *)) {
 		finalString = (allowMarkdown ?
@@ -17,8 +17,9 @@
 	else {
 		NSMutableString *markdown = [rawHTML mutableCopy];
 		if (allowMarkdown) {
+			// This is an NSArray because the changes have to be done in a specific order
 			NSArray *replacements = @[
-				@"\\[(.*?)\\]\\(.*?\\);$1",
+				@"\\[(.*?)\\]\\((.*?)\\);<a href=\"$2\">$1</a>",
 				@"\\*\\*(.*?)\\*\\*;<b>$1</b>",
 				@"\\*(.*?)\\*;<i>$1</i>",
 				@"\\_\\_(.*?)\\_\\_;<b>$1</b>",
@@ -49,16 +50,22 @@
 		}
 		finalString = [components componentsJoinedByString:newlineString];
 	}
-	finalString = [@"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: 16px; }</style>" stringByAppendingString:finalString];
-	return [[self alloc] initWithData:[finalString dataUsingEncoding:NSUTF8StringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-}
-
-+ (instancetype)attributedStringWithMarkdown:(NSString *)rawMarkdown {
-	return [self attributedStringWithHTML:rawMarkdown newlines:@"<br/>" allowMarkdown:true];
-}
-
-+ (instancetype)attributedStringWithHTML:(NSString *)rawHTML {
-	return [self attributedStringWithHTML:rawHTML newlines:@"\n" allowMarkdown:false];
+	NSString *htmlPrefix = [NSString stringWithFormat:
+		@"<meta charset=\"UTF-8\">"
+		"<style>"
+		"body {"
+		"	font-family: '-apple-system', 'HelveticaNeue';"
+		"	font-size: 16px;"
+		"}"
+		"%@"
+		"</style>", css ?: @""
+	];
+	finalString = [htmlPrefix stringByAppendingString:finalString];
+	NSMutableAttributedString *finalObject = [[[self alloc] initWithData:[finalString dataUsingEncoding:NSUTF8StringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil] mutableCopy];
+	if ([finalObject.mutableString characterAtIndex:finalObject.mutableString.length - 1] == '\n') {
+		[finalObject deleteCharactersInRange:NSMakeRange(finalObject.mutableString.length - 1, 1)];
+	}
+	return [finalObject copy];
 }
 
 @end

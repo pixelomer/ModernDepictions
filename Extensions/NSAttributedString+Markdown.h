@@ -2,7 +2,6 @@
 
 @interface NSAttributedString(Markdown)
 
-+ (instancetype)attributedStringWithMarkdown:(NSString *)rawMarkdown;
-+ (instancetype)attributedStringWithHTML:(NSString *)rawHTML;
++ (instancetype)attributedStringWithHTML:(NSString *)rawHTML newlines:(NSString *)newlineString allowMarkdown:(bool)allowMarkdown extraCSS:(NSString *)css;
 
 @end

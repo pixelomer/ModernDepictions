@@ -1,8 +1,9 @@
 #import <UIKit/UIKit.h>
 #import "DepictionBaseView.h"
 
-@interface DepictionMarkdownView : DepictionBaseView
-@property (nonatomic, readonly) UILabel *label;
+@interface DepictionMarkdownView : DepictionBaseView {
+	UITextView *textView;
+}
 @property (nonatomic, retain, setter=setMarkdown:) NSString *markdown;
 @property (assign) bool useSpacing;
 @property (assign) bool useMargins;
