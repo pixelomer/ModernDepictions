@@ -137,6 +137,14 @@ UIColor *defaultTintColor;
 			queue:self.operationQueue
 			completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
 				NSLog(@"Downloaded completed for \"%@\" with error: %@", url, error);
+			#if DEBUG
+				if (data) {
+					NSLog(@"String data (first 64 bytes): %@", [[NSString alloc] initWithBytes:data.bytes length:min(65, data.length) encoding:NSUTF8StringEncoding]);
+					NSError *jsonError = nil;
+					id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+					NSLog(@"JSON Error: %@, JSON: %@", jsonError, json);
+				}
+			#endif
 				completionHandler(data, error);
 			}
 		];
