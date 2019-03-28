@@ -66,9 +66,9 @@
 	}
 	NSArray *footerCellDict = @[
 		@{
-		 @"markdown" : [NSString stringWithFormat:@"<br/><small style=\"color: #aaa;\">%@ (%@)</small><style>body { text-align: center; }</style><br/>", self.depictionDelegate.package.id, versionString],
-		 @"useRawFormat" : @YES,
-		 @"class" : @"DepictionMarkdownView"
+			@"markdown" : [NSString stringWithFormat:@"<style>body { text-align: center; }</style><small style=\"color: #aaa;\">%@ (%@)</small>", self.depictionDelegate.package.id, versionString],
+			@"useRawFormat" : @YES,
+			@"class" : @"DepictionMarkdownView"
 		}
 	];
 	footerCells = [[ContentCellFactory createCellsFromArray:footerCellDict delegate:self.depictionDelegate reuseIdentifierPrefix:@"footer"] copy];
