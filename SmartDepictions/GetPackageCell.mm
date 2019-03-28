@@ -12,6 +12,7 @@
 	_depictionDelegate = delegate;
 	queueButton = [[QueueButton alloc] init];
 	queueButton.backgroundColor = delegate.tintColor;
+	queueButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 20.0, 0.0, 20.0);
 	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;
@@ -106,7 +107,7 @@
 	NSLog(@"setButtonTitle:\"%@\"", text);
 	if (text) {
 		[queueButton
-			setTitle:[NSString stringWithFormat:(self.depictionDelegate.iOS6 ? @"  %@  " :  @"    %@    "), text.uppercaseString]
+			setTitle:text.uppercaseString
 			forState:UIControlStateNormal
 		];
 		[queueButton sizeToFit];
@@ -118,14 +119,25 @@
 				metrics:nil
 				views:@{ @"qb" : queueButton }
 			]];
-			[self.contentView addConstraint:[NSLayoutConstraint
-				constraintWithItem:queueButton
-            	attribute:NSLayoutAttributeCenterY
-            	relatedBy:NSLayoutRelationEqual
-            	toItem:self.contentView
-            	attribute:NSLayoutAttributeCenterY
-            	multiplier:1.0
-            	constant:0.0
+			[self.contentView addConstraints:@[
+				[NSLayoutConstraint
+					constraintWithItem:queueButton
+					attribute:NSLayoutAttributeCenterY
+					relatedBy:NSLayoutRelationEqual
+					toItem:self.contentView
+					attribute:NSLayoutAttributeCenterY
+					multiplier:1.0
+					constant:0.0
+				],
+				[NSLayoutConstraint
+					constraintWithItem:queueButton
+					attribute:NSLayoutAttributeHeight
+					relatedBy:NSLayoutRelationEqual
+					toItem:nil
+					attribute:NSLayoutAttributeNotAnAttribute
+					multiplier:0.0
+					constant:32.0
+				]
 			]];
 		}
 	}
