@@ -55,7 +55,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	self.navigationController.clear = YES;
+	[self scrollViewDidScroll:self.depictionRootView];
 }
 
 - (void)viewDidLoad {
