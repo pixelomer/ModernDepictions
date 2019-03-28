@@ -2,7 +2,7 @@ THEOS_DEVICE_IP ?= 0
 THEOS_DEVICE_PORT ?= 2222
 TARGET = iphone:clang:11.2:8.0
 ARCHS = arm64 armv7
-CFLAGS = -include macros.h -fobjc-arc -Wno-deprecated-declarations -Wno-unguarded-availability-new -Wno-non-literal-null-conversion
+CFLAGS = -include macros.h -fobjc-arc -Wno-deprecated-declarations -Wno-unguarded-availability-new -Wno-non-literal-null-conversion -Wno-comment
 LDFLAGS = -ObjC
 
 include $(THEOS)/makefiles/common.mk

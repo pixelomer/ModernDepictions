@@ -32,7 +32,6 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	self.navigationController.clear = NO;
-	self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {

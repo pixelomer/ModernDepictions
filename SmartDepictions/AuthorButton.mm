@@ -31,11 +31,9 @@
 	// - Create a new email for the author with logs
 	// - Show other packages from this developer
 	
-	/*
 	if (!mailURL) return;
 	NSLog(@"%@", mailURL);
-	if (@available(iOS 10.0, *)) [UIApplication.sharedApplication openURL:mailURL options:@{} completionHandler:nil];
-	*/
+	[UIApplication.sharedApplication openURL:mailURL];
 }
 
 @end

@@ -60,10 +60,31 @@ UIColor *defaultTintColor;
 	return self;
 }
 
+#pragma GCC diagnostic ignored "-Warc-performSelector-leaks"
+#pragma GCC diagnostic push
+
 - (void)handleModifyButton {
-	// TESTING
-	[self.cydiaDelegate installPackage:self.package];
+	if (_modificationButtons.count == 1) {
+		[_cydiaDelegate performSelector:NSSelectorFromString(_modificationButtons.allValues[0]) withObject:_package];
+	}
+	else if (_modificationButtons.count > 1) {
+		UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+		for (NSString *buttonTitle in _modificationButtons) {
+			UIAlertAction *action = [UIAlertAction actionWithTitle:UCLocalize(buttonTitle) style:UIAlertActionStyleDefault handler:^(UIAlertAction *sender){
+				[_cydiaDelegate performSelector:NSSelectorFromString(_modificationButtons[buttonTitle]) withObject:_package];
+			}];
+			[actionSheet addAction:action];
+		}
+		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:UCLocalize(@"CANCEL") style:UIAlertActionStyleCancel handler:nil];
+		[actionSheet addAction:cancelAction];
+		actionSheet.view.tintColor = self.class.defaultTintColor;
+		[_packageController presentViewController:actionSheet animated:YES completion:^{
+			actionSheet.view.tintColor = self.class.defaultTintColor;
+		}];
+	}
 }
+
+#pragma GCC diagnostic pop
 
 - (void)downloadDepiction {
 	if (!_depictionURL) return;
@@ -92,29 +113,33 @@ UIColor *defaultTintColor;
 - (void)reloadData {
 	NSLog(@"Reloading data");
 	_package = [self.database packageWithName:self.packageID];
-	NSArray *versions = [self.package downgrades];
+	__unused NSArray *versions = [self.package downgrades];
 
-	NSMutableArray *modificationButtons = [[NSMutableArray alloc] init];
+	NSMutableDictionary *modificationButtons = [[NSMutableDictionary alloc] init];
 	if (self.package != nil) {
 		[self.package parse];
 
-		if ([self.package mode] != nil)
-			[modificationButtons addObject:@"CLEAR"];
+		/* (Re)installation/Upgrade actions */
 		if ([self.package source] == nil);
-		else if ([self.package upgradableAndEssential:NO])
-			[modificationButtons addObject:@"UPGRADE"];
-		else if ([self.package uninstalled])
-			[modificationButtons addObject:@"INSTALL"];
-		else
-			[modificationButtons addObject:@"REINSTALL"];
-		if (![self.package uninstalled])
-			[modificationButtons addObject:@"REMOVE"];
-		if ([versions count] != 0)
+		else if ([self.package upgradableAndEssential:NO]) modificationButtons[@"UPGRADE"] = @"installPackage:";
+		else if ([self.package uninstalled]) modificationButtons[@"INSTALL"] = @"installPackage:";
+		else modificationButtons[@"REINSTALL"] = @"installPackage:";
+		/* End */
+
+		/* Removal actions */
+		if (![self.package uninstalled]) modificationButtons[@"REMOVE"] = @"removePackage:";
+		if ([self.package mode] != nil) modificationButtons[@"CLEAR"] = @"clearPackage:";
+		/* End */
+
+		/* Downgrade actions *
+		if ([versions count] != 0) {
 			[modificationButtons addObject:@"DOWNGRADE"];
+		}
+		/* End */
 	}
 	switch ([modificationButtons count]) {
 		case 0: modificationButtonTitle = nil; break;
-		case 1: modificationButtonTitle = modificationButtons[0]; break;
+		case 1: modificationButtonTitle = modificationButtons.allKeys[0]; break;
 		default: modificationButtonTitle = @"MODIFY"; break;
 	}
 	NSLog(@"Package Controller: %@\nRoot view: %@\nGet Package Cell: %@", self.packageController, self.packageController.depictionRootView, self.packageController.depictionRootView);
