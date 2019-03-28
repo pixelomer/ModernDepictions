@@ -12,9 +12,9 @@
 			]
 		},
 		{
-			"label": "Clean, build tweak and install package",
+			"label": "Build tweak and install package",
 			"type": "shell",
-			"command": "make clean all package install",
+			"command": "make all package install",
 			"problemMatcher": [
 				"$gcc"
 			],
