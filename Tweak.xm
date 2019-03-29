@@ -20,6 +20,9 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 }
 
 %group SmartDepictions
+
+#pragma mark - Necessary hooks
+
 %hook CYPackageController
 
 - (void *)initWithDatabase:(Database *)database forPackage:(NSString *)name withReferrer:(NSString *)referrer {
@@ -58,19 +61,6 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 
 %end
 
-%hook UIView
-
-- (void)setBackgroundColor:(id)newColor {
-	UIColor *color = [UIColor clearColor];
-	if (!newColor);
-	else if ([newColor isKindOfClass:[NSString class]]) color = [UIColor colorWithHexString:newColor];
-	else if ([newColor isKindOfClass:[UIColor class]]) color = newColor;
-	else @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid type for a color" userInfo:nil];
-	%orig(color);
-}
-
-%end
-
 %hook Cydia
 
 - (void)applicationDidFinishLaunching:(id)application {
@@ -101,6 +91,21 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 	UIWebView *orig = %orig;
 	orig.scrollView.scrollEnabled = NO;
 	return orig;
+}
+
+%end
+
+#pragma mark - Convenience hooks
+
+%hook UIView
+
+- (void)setBackgroundColor:(id)newColor {
+	UIColor *color = [UIColor clearColor];
+	if (!newColor);
+	else if ([newColor isKindOfClass:[NSString class]]) color = [UIColor colorWithHexString:newColor];
+	else if ([newColor isKindOfClass:[UIColor class]]) color = newColor;
+	else @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid type for a color" userInfo:nil];
+	%orig(color);
 }
 
 %end
