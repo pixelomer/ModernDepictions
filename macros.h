@@ -10,6 +10,8 @@
 #define NSLog(...); {}
 #endif
 
+#define NSTextAlignmentNaturalInverse (NSTextAlignment)10
+
 // Macros to find the highest/lowest of two numbers
 #define min(a, b) (a > b ? b : a)
 #define max(a, b) (a > b ? a : b)

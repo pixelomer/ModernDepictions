@@ -16,8 +16,10 @@
 @interface GetPackageCell : UITableViewCell<SmartCell> {
 	UIImageView *iconView;
 	UILabel *packageNameLabel;
+	UIView *textContainerView;
 	AuthorButton *authorButton;
 	QueueButton *queueButton;
+	NSArray *textContainerConstraints;
 }
 @property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate;
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;

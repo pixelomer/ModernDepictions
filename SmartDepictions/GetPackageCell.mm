@@ -10,6 +10,7 @@
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	_depictionDelegate = delegate;
+	textContainerView = [[UIView alloc] init];
 	queueButton = [[QueueButton alloc] init];
 	queueButton.backgroundColor = delegate.tintColor;
 	queueButton.contentEdgeInsets = UIEdgeInsetsMake(5.0, 20.0, 5.0, 20.0);
@@ -21,24 +22,28 @@
 	iconView.layer.cornerRadius = 15.0;
 	packageNameLabel = [[UILabel alloc] init];
 	packageNameLabel.font = [UIFont boldSystemFontOfSize:20];
+	packageNameLabel.textAlignment = NSTextAlignmentNatural;
 	authorButton = [[AuthorButton alloc] initWithMIMEAddress:delegate.package.author];
+	authorButton.titleLabel.textAlignment = NSTextAlignmentNatural;
 	self.package = delegate.package;
+	textContainerView.translatesAutoresizingMaskIntoConstraints = NO;
 	queueButton.translatesAutoresizingMaskIntoConstraints = NO;
 	packageNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	iconView.translatesAutoresizingMaskIntoConstraints = NO;
 	authorButton.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.contentView addSubview:packageNameLabel];
+	[textContainerView addSubview:authorButton];
+	[textContainerView addSubview:packageNameLabel];
+	[self.contentView addSubview:textContainerView];
 	[self.contentView addSubview:iconView];
-	[self.contentView addSubview:authorButton];
-	NSDictionary *views = @{ @"pn" : packageNameLabel, @"icon" : iconView, @"ab" : authorButton};
+	NSDictionary *views = @{ @"textContainer" : textContainerView, @"icon" : iconView, @"pn" : packageNameLabel, @"ab" : authorButton };
 	[self.contentView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"H:|-16-[icon(==60)]-10-[pn]"
+		constraintsWithVisualFormat:@"H:|-16-[icon(==60)]-10-[textContainer]"
 		options:0
 		metrics:nil
 		views:views
 	]];
 	[self.contentView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"V:|-21-[pn]-4-[ab(==19.5)]"
+		constraintsWithVisualFormat:@"V:|-21-[textContainer]"
 		options:0
 		metrics:nil
 		views:views
@@ -49,14 +54,49 @@
 		metrics:nil
 		views:views
 	]];
-	[self.contentView addConstraint:[NSLayoutConstraint
-		constraintWithItem:packageNameLabel
-      	attribute:NSLayoutAttributeLeading
-      	relatedBy:NSLayoutRelationEqual
-       	toItem:authorButton
-       	attribute:NSLayoutAttributeLeading
-       	multiplier:1.0
-       	constant:0.0
+	[textContainerView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:|[pn(==24.0)]-4-[ab(==19.5)]|"
+		options:0
+		metrics:nil
+		views:views
+	]];
+	[textContainerView addConstraints:@[
+		[NSLayoutConstraint
+			constraintWithItem:authorButton
+			attribute:NSLayoutAttributeLeading
+			relatedBy:NSLayoutRelationEqual
+			toItem:textContainerView
+			attribute:NSLayoutAttributeLeading
+			multiplier:1.0
+			constant:0.0
+		],
+		[NSLayoutConstraint
+			constraintWithItem:packageNameLabel
+			attribute:NSLayoutAttributeLeading
+			relatedBy:NSLayoutRelationEqual
+			toItem:textContainerView
+			attribute:NSLayoutAttributeLeading
+			multiplier:1.0
+			constant:0.0
+		],
+		[NSLayoutConstraint
+			constraintWithItem:authorButton
+			attribute:NSLayoutAttributeTrailing
+			relatedBy:NSLayoutRelationEqual
+			toItem:textContainerView
+			attribute:NSLayoutAttributeTrailing
+			multiplier:1.0
+			constant:0.0
+		],
+		[NSLayoutConstraint
+			constraintWithItem:packageNameLabel
+			attribute:NSLayoutAttributeTrailing
+			relatedBy:NSLayoutRelationEqual
+			toItem:textContainerView
+			attribute:NSLayoutAttributeTrailing
+			multiplier:1.0
+			constant:0.0
+		]
 	]];
 	return self;
 }
@@ -105,6 +145,7 @@
 
 - (void)setButtonTitle:(NSString *)text {
 	NSLog(@"setButtonTitle:\"%@\"", text);
+	if (textContainerConstraints) [self.contentView removeConstraints:textContainerConstraints];
 	if (text) {
 		[queueButton
 			setTitle:text.uppercaseString
@@ -114,7 +155,7 @@
 		if (![self.contentView.subviews containsObject:queueButton]) {
 			[self.contentView addSubview:queueButton];
 			[self.contentView addConstraints:[NSLayoutConstraint
-				constraintsWithVisualFormat:@"H:[qb]-23-|"
+				constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[qb(==%f)]-23-|", queueButton.frame.size.width]
 				options:0
 				metrics:nil
 				views:@{ @"qb" : queueButton }
@@ -129,10 +170,35 @@
 				constant:0.0
 			]];
 		}
+		textContainerConstraints = @[
+			[NSLayoutConstraint
+				constraintWithItem:textContainerView
+				attribute:NSLayoutAttributeTrailing
+				relatedBy:NSLayoutRelationEqual
+				toItem:queueButton
+				attribute:NSLayoutAttributeLeading
+				multiplier:1.0
+				constant:0.0
+			]
+		];
 	}
-	else if ([self.contentView.subviews containsObject:queueButton]) {
-		[queueButton removeFromSuperview];
+	else {
+		textContainerConstraints = @[
+			[NSLayoutConstraint
+				constraintWithItem:textContainerView
+				attribute:NSLayoutAttributeTrailing
+				relatedBy:NSLayoutRelationEqual
+				toItem:self.contentView
+				attribute:NSLayoutAttributeTrailing
+				multiplier:1.0
+				constant:0.0
+			]
+		];
+		if ([self.contentView.subviews containsObject:queueButton]) {
+			[queueButton removeFromSuperview];
+		}
 	}
+	[self.contentView addConstraints:textContainerConstraints];
 }
 
 - (NSString *)buttonTitle {

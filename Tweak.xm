@@ -104,6 +104,22 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 }
 
 %end
+
+%hook UILabel
+
+- (void)setTextAlignment:(NSTextAlignment)alignment {
+	NSTextAlignment finalAlignment = alignment;
+	if (alignment == NSTextAlignmentNaturalInverse) {
+		finalAlignment = (
+			UIApplication.sharedApplication.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft ?
+			NSTextAlignmentLeft :
+			NSTextAlignmentRight
+		);
+	}
+	%orig(finalAlignment);
+}
+
+%end
 %end
 
 %ctor {
