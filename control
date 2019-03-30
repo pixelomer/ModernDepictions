@@ -6,7 +6,6 @@ Architecture: iphoneos-arm
 Description: Sileo-like Depictions for Cydia
   Allows viewing Sileo depictions within Cydia. Supports iOS 7.0 and higher.
   WARNING: If you are not using iOS 8.0 or higher, the text might not look as expected.
-SileoDepiction: https://coolstar.moe/sileoassets/depictionoverride.php?package=org.coolstar.sileo
 Maintainer: PixelOmer
 Author: PixelOmer
 Section: Tweaks
