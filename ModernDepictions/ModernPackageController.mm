@@ -72,7 +72,7 @@
 	
 	// The intended image will be shown after the depiction data is downloaded.
 	imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
-	imageView.image = [UIImage imageWithColor:[UIColor cyanColor]];
+	imageView.image = [UIImage imageWithColor:ModernDepictionDelegate.defaultTintColor];
 	
 	// Show the DepictionRootView
 	[self.view addSubview:self.depictionRootView];

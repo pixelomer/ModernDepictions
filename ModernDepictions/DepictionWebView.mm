@@ -1,8 +1,22 @@
 #import "DepictionWebView.h"
+#import "../Headers/Headers.h"
 
 @implementation DepictionWebView
 
+static bool isWebViewCellEnabled;
+
++ (void)initialize {
+	if ([self class] == [DepictionWebView class]) {
+		NSNumber *isEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:@"EnableDepictionWebView" inDomain:@"com.pixelomer.moderndepictions.prefs"];
+		isWebViewCellEnabled = (
+			[isEnabled isKindOfClass:[NSNumber class]] &&
+			[isEnabled isEqual:@YES]
+		);
+	}
+}
+
 - (instancetype)initWithDepictionDelegate:(ModernDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
+	if (!isWebViewCellEnabled) return nil;
 	self = [super initWithDepictionDelegate:delegate reuseIdentifier:reuseIdentifier];
 	_height = 0.0;
 	_width = 0.0;

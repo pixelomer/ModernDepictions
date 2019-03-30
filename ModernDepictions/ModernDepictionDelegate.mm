@@ -5,11 +5,12 @@
 #import "DepictionImageView.h"
 #import "DepictionStackView.h"
 #import "../Extensions/UIColor+HexString.h"
+#import <libcolorpicker.h>
 
 @implementation ModernDepictionDelegate
 
-NSArray *resizableCellClasses;
-UIColor *defaultTintColor;
+static NSArray *resizableCellClasses;
+static UIColor *defaultTintColor;
 
 + (UIColor *)defaultTintColor {
 	return defaultTintColor;
@@ -21,7 +22,8 @@ UIColor *defaultTintColor;
 			[DepictionImageView class],
 			[DepictionStackView class]
 		];
-		defaultTintColor = [UIColor colorWithRed:0.173 green:0.694 blue:0.745 alpha:1.0];
+		NSString *preferredTintColor = [[NSUserDefaults standardUserDefaults] objectForKey:@"PreferredTintColor" inDomain:@"com.pixelomer.moderndepictions.prefs"];
+		defaultTintColor = LCPParseColorString(preferredTintColor, @"#2CB1BE");
 	}
 }
 
