@@ -114,6 +114,14 @@ UIColor *defaultTintColor;
 	NSLog(@"Reloading data");
 	_package = [self.database packageWithName:self.packageID];
 	__unused NSArray *versions = [self.package downgrades];
+	[self.package retrievePaymentInformationWithCompletion:^(Package *package, NSError *error){
+		NSString *price = package.paymentInformation[@"price"];
+		if ([price isKindOfClass:[NSString class]] && ![price isEqualToString:@"$0.00"]) {
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				self.packageController.depictionRootView.getPackageCell.buttonTitle = price;
+			});
+		}
+	}];
 
 	NSMutableDictionary *modificationButtons = [[NSMutableDictionary alloc] init];
 	if (self.package != nil) {

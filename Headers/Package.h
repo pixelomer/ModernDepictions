@@ -22,5 +22,8 @@
 @end
 
 @interface Package(SmartDepictions)
-@property (nonatomic, copy) NSString *sileoDepiction;
+@property (nonatomic, retain) NSDictionary *paymentInformation;
+@property (nonatomic, assign) bool didAttemptBefore;
+@property (nonatomic, retain) NSString *sileoDepiction;
+- (void)retrievePaymentInformationWithCompletion:(void(^)(Package *, NSError *))completionHandler;
 @end

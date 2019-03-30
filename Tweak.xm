@@ -50,8 +50,77 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 
 %end
 
+%hook Database
+
+- (void)reloadDataWithInvocation:(NSInvocation *)invocation {
+	%orig;
+	NSMutableArray *sourceList = MSHookIvar<id>(self, "sourceList_");
+	if (!sourceList) return;
+	for (Source *source in sourceList) {
+		if (!source.didAttemptBefore) {
+			source.didAttemptBefore = true;
+			NSLog(@"Root URI: %@", source.rooturi);
+			NSURL *paymentEndpointSource = [[NSURL URLWithString:source.rooturi] URLByAppendingPathComponent:@"payment_endpoint"];
+			NSLog(@"Payment endpoint source: %@", paymentEndpointSource);
+			if (paymentEndpointSource) {
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+					NSData *rawData = [NSData dataWithContentsOfURL:paymentEndpointSource];
+					NSString *stringURL = [[NSString alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
+					NSLog(@"Payment endpoint: %@", stringURL);
+					if (!(source.paymentEndpoint = [NSURL URLWithString:stringURL])) return;
+					NSURL *infoURL = [source.paymentEndpoint URLByAppendingPathComponent:@"info"];
+					NSLog(@"Info URL: %@", infoURL);
+					if (!infoURL || !(rawData = [NSData dataWithContentsOfURL:infoURL])) return;
+					source.paymentProviderInfo = [NSJSONSerialization JSONObjectWithData:rawData options:0 error:nil];
+					NSLog(@"Payment provider info: %@", source.paymentProviderInfo);
+				});
+			}
+		}
+	}
+}
+
+%end
+
+%hook Source
+%property (nonatomic, assign) bool didAttemptBefore;
+%property (nonatomic, retain) NSDictionary *paymentProviderInfo;
+%property (nonatomic, retain) NSURL *paymentEndpoint;
+%property (nonatomic, retain) NSOperationQueue *operationQueue;
+%end
+
 %hook Package
 %property (nonatomic, retain) NSString *sileoDepiction;
+%property (nonatomic, retain) NSDictionary *paymentInformation;
+
+%new
+- (void)retrievePaymentInformationWithCompletion:(void(^)(Package *, NSError *))completionHandler {
+	if (!self.source.paymentEndpoint) return;
+	if (self.paymentInformation) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completionHandler(self, nil);
+		});
+		return;
+	}
+	if (!self.source.operationQueue) self.source.operationQueue = [NSOperationQueue new];
+	NSURL *url;
+	if (!(url = [self.source.paymentEndpoint URLByAppendingPathComponent:[NSString stringWithFormat:@"package/%@/info", self.id]])) return;
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+	request.HTTPMethod = @"POST";
+	[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+	Package *package = self;
+	[NSURLConnection sendAsynchronousRequest:request
+		queue:self.source.operationQueue
+		completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+			NSError *finalError = error;
+			if (data && !finalError) {
+				NSLog(@"Data: %@", [[NSString alloc] initWithBytes:data.bytes length:65 encoding:NSUTF8StringEncoding]);
+				package.paymentInformation = [NSJSONSerialization JSONObjectWithData:data options:0 error:&finalError];
+				NSLog(@"Payment info for %@: %@", package, package.paymentInformation ?: finalError);
+			}
+			completionHandler(self, finalError);
+		}
+	];
+}
 
 - (void)parse {
 	%orig;

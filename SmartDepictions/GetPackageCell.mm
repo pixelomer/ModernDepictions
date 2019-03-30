@@ -117,23 +117,21 @@
 	packageNameLabel.text = package.name;
 	authorButton.MIMEAddress = package.author;
 	iconView.image = package.icon;
-	@autoreleasepool {
-		NSString *rawIconURL = [package getField:@"icon"];
-		if (rawIconURL && ![rawIconURL isKindOfClass:[NSNull class]]) {
-			NSURL *iconURL = [NSURL URLWithString:rawIconURL];
-			if (iconURL && iconURL.scheme && ![iconURL.scheme isEqualToString:@"file"]) {
-				[self.depictionDelegate downloadDataFromURL:iconURL completion:^(NSData *data, NSError *error){
-					if (!error && data) {
-						UIImage *remoteImage = [UIImage imageWithData:data];
-						if (remoteImage) {
-							dispatch_sync(dispatch_get_main_queue(), ^{
-								iconView.image = remoteImage;
-								[iconView setNeedsDisplay];
-							});
-						}
+	NSString *rawIconURL = [package getField:@"icon"];
+	if (rawIconURL && ![rawIconURL isKindOfClass:[NSNull class]]) {
+		NSURL *iconURL = [NSURL URLWithString:rawIconURL];
+		if (iconURL && iconURL.scheme && ![iconURL.scheme isEqualToString:@"file"]) {
+			[self.depictionDelegate downloadDataFromURL:iconURL completion:^(NSData *data, NSError *error){
+				if (!error && data) {
+					UIImage *remoteImage = [UIImage imageWithData:data];
+					if (remoteImage) {
+						dispatch_sync(dispatch_get_main_queue(), ^{
+							iconView.image = remoteImage;
+							[iconView setNeedsDisplay];
+						});
 					}
-				}];
-			}
+				}
+			}];
 		}
 	}
 }
@@ -155,7 +153,7 @@
 		if (![self.contentView.subviews containsObject:queueButton]) {
 			[self.contentView addSubview:queueButton];
 			[self.contentView addConstraints:[NSLayoutConstraint
-				constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[qb(==%f)]-23-|", queueButton.frame.size.width]
+				constraintsWithVisualFormat:@"H:[qb]-23-|"
 				options:0
 				metrics:nil
 				views:@{ @"qb" : queueButton }
@@ -174,7 +172,7 @@
 			[NSLayoutConstraint
 				constraintWithItem:textContainerView
 				attribute:NSLayoutAttributeTrailing
-				relatedBy:NSLayoutRelationEqual
+				relatedBy:NSLayoutRelationLessThanOrEqual
 				toItem:queueButton
 				attribute:NSLayoutAttributeLeading
 				multiplier:1.0
