@@ -7,11 +7,11 @@ LDFLAGS = -ObjC
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = SmartDepictions
-SmartDepictions_FILES = Tweak.xm $(wildcard MMMarkdown/*.m SmartDepictions/*.mm Extensions/*.mm)
-SmartDepictions_FRAMEWORKS = WebKit
-SmartDepictions_LIBRARIES = GoogleMobileAds
-SmartDepictions_EXTRA_FRAMEWORKS = nanopb GoogleUtilities GoogleMobileAds GoogleAppMeasurement
+TWEAK_NAME = ModernDepictions
+ModernDepictions_FILES = Tweak.xm $(wildcard MMMarkdown/*.m ModernDepictions/*.mm Extensions/*.mm)
+ModernDepictions_FRAMEWORKS = WebKit
+ModernDepictions_LIBRARIES = GoogleMobileAds
+ModernDepictions_EXTRA_FRAMEWORKS = nanopb GoogleUtilities GoogleMobileAds GoogleAppMeasurement
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

@@ -1,13 +1,13 @@
 #import <UIKit/UIKit.h>
 #import "Headers/Headers.h"
-#import "SmartDepictions/SmartPackageController.h"
+#import "ModernDepictions/ModernPackageController.h"
 #import "Extensions/UIColor+HexString.h"
 @import GoogleMobileAds;
 
 extern "C" void _CFEnableZombies();
 static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretained, SEL, Database *__strong, NSString *__strong, NSString *__strong);
 
-%group SmartDepictions
+%group ModernDepictions
 
 #pragma mark - Necessary hooks
 
@@ -32,7 +32,7 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 		else if (![rawHTMLDepictionURL isKindOfClass:[NSString class]]);
 		else return %orig;
 		NSLog(@"Depiction URL: %@", depictionURL);
-		SmartPackageController *newView = [[SmartPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
+		ModernPackageController *newView = [[ModernPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
 		NSInvocation *original = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:_cmd]];
 		original.selector = @selector(___initWithDatabase:forPackage:withReferrer:);
 		[original setArgument:&database atIndex:2];
@@ -210,6 +210,6 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 	#if DEBUG
 		_CFEnableZombies();
 	#endif
-		%init(SmartDepictions);
+		%init(ModernDepictions);
 	}
 }

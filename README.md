@@ -1,4 +1,4 @@
-# SmartDepictions
+# ModernDepictions
 
 Sileo depictions for Cydia.
 
@@ -13,8 +13,8 @@ Sileo depictions for Cydia.
 - [x] Tab controller (unusable)
 - [x] Tab-specific views
 - [x] Creating cells from the parsed JSON
-- [x] SmartPackageController for text-only depictions
-- [ ] SmartPackagenController for web depictions
+- [x] ModernPackageController for text-only depictions
+- [ ] ModernPackagenController for web depictions
 - [ ] Make the package controller as functional as CYPackageController
 
 ## Might be implemented in distant future

@@ -14,8 +14,8 @@
 ## 1. Preparing
 
 - Do one of the following:
-  - Open `SmartDepictions/DepictionAdmobView.mm` and remove the test devices line
-  - Create a file name `SmartDepictions/AdmobTests.h` and create a macro named `AdMobTestDevices` which contains an `NSArray`
+  - Open `ModernDepictions/DepictionAdmobView.mm` and remove the test devices line
+  - Create a file name `ModernDepictions/AdmobTests.h` and create a macro named `AdMobTestDevices` which contains an `NSArray`
 
 ## 2. Compiling and packaging
 

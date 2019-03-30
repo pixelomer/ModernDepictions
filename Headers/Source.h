@@ -5,7 +5,7 @@
 - (NSString *)rooturi;
 @end
 
-@interface Source(SmartDepictions)
+@interface Source(ModernDepictions)
 @property (nonatomic, assign) bool didAttemptBefore;
 @property (nonatomic, retain) NSDictionary *paymentProviderInfo;
 @property (nonatomic, retain) NSURL *paymentEndpoint;

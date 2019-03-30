@@ -21,7 +21,7 @@
 - (NSString *)shortDescription;
 @end
 
-@interface Package(SmartDepictions)
+@interface Package(ModernDepictions)
 @property (nonatomic, retain) NSDictionary *paymentInformation;
 @property (nonatomic, assign) bool didAttemptBefore;
 @property (nonatomic, retain) NSString *sileoDepiction;
