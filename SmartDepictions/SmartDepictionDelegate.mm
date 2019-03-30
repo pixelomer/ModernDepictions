@@ -116,7 +116,7 @@ UIColor *defaultTintColor;
 	__unused NSArray *versions = [self.package downgrades];
 	[self.package retrievePaymentInformationWithCompletion:^(Package *package, NSError *error){
 		NSString *price = package.paymentInformation[@"price"];
-		if ([price isKindOfClass:[NSString class]] && ![price isEqualToString:@"$0.00"]) {
+		if ([price isKindOfClass:[NSString class]] && !(atof([price UTF8String] + 1) <= 0.0)) {
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				self.packageController.depictionRootView.getPackageCell.buttonTitle = price;
 			});
