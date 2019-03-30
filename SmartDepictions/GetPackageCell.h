@@ -20,10 +20,12 @@
 	AuthorButton *authorButton;
 	QueueButton *queueButton;
 	NSArray *textContainerConstraints;
+	bool textLocked;
 }
 @property (nonatomic, readonly) SmartDepictionDelegate *depictionDelegate;
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setButtonTitle:(NSString *)text;
+- (void)lockText;
 - (NSString *)buttonTitle;
 - (void)setPackage:(Package *)package;
 // - (void)setIcon:(UIImage *)icon;

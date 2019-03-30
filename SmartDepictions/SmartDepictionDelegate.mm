@@ -64,7 +64,34 @@ UIColor *defaultTintColor;
 #pragma GCC diagnostic push
 
 - (void)handleModifyButton {
-	if (_modificationButtons.count == 1) {
+	if ([_modificationButtons isKindOfClass:[NSNull class]]) {
+		UIAlertController *alert = [UIAlertController
+			alertControllerWithTitle:UCLocalize(@"Warning")
+			message:UCLocalize(@"Since SmartDepictions doesn't support Sileo's payment API, you'll now be forwarded to the original depiction where you can pay for the package.")
+			preferredStyle:UIAlertControllerStyleAlert
+		];
+		UIAlertAction *action = [UIAlertAction actionWithTitle:UCLocalize(@"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction *sender){
+			CYPackageController *legacyVC = [objc_getClass("CYPackageController") alloc];
+			self.originalInvocation.target = legacyVC;
+			NSString *packageID = self.package.id;
+			[self.originalInvocation setArgument:&packageID atIndex:3];
+			[self.originalInvocation setArgument:&_referrer atIndex:4];
+			for (int i = 2; i < self.originalInvocation.methodSignature.numberOfArguments; i++) {
+				id object = nil;
+				[self.originalInvocation getArgument:&object atIndex:i];
+				NSLog(@"Argument %d: %@", i, object);
+			}
+			[self.originalInvocation invoke];
+			[self.originalInvocation getReturnValue:&legacyVC];
+			NSAssert(legacyVC, @"Failed to initialize the legacy view controller.");
+			legacyVC.delegate = self.cydiaDelegate;
+			[self.packageController.navigationController pushViewController:legacyVC animated:YES];
+		}];
+		[alert addAction:action];
+		[self.packageController presentViewController:alert animated:YES completion:nil];
+		return;
+	}
+	else if (_modificationButtons.count == 1) {
 		[_cydiaDelegate performSelector:NSSelectorFromString(_modificationButtons.allValues[0]) withObject:_package];
 	}
 	else if (_modificationButtons.count > 1) {
@@ -112,21 +139,15 @@ UIColor *defaultTintColor;
 
 - (void)reloadData {
 	NSLog(@"Reloading data");
+
 	_package = [self.database packageWithName:self.packageID];
-	__unused NSArray *versions = [self.package downgrades];
-	[self.package retrievePaymentInformationWithCompletion:^(Package *package, NSError *error){
-		NSString *price = package.paymentInformation[@"price"];
-		if ([price isKindOfClass:[NSString class]] && !(atof([price UTF8String] + 1) <= 0.0)) {
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				self.packageController.depictionRootView.getPackageCell.buttonTitle = price;
-			});
-		}
-	}];
+	[self.package parse];
+	self.packageController.depictionRootView.getPackageCell.package = self.package;
+	
+	if ([_modificationButtons isKindOfClass:[NSNull class]]) return;
 
 	NSMutableDictionary *modificationButtons = [[NSMutableDictionary alloc] init];
 	if (self.package != nil) {
-		[self.package parse];
-
 		/* (Re)installation/Upgrade actions */
 		if ([self.package source] == nil);
 		else if ([self.package upgradableAndEssential:NO]) modificationButtons[@"UPGRADE"] = @"installPackage:";
@@ -139,10 +160,10 @@ UIColor *defaultTintColor;
 		if ([self.package mode] != nil) modificationButtons[@"CLEAR"] = @"clearPackage:";
 		/* End */
 
-		/* Downgrade actions *
-		if ([versions count] != 0) {
-			[modificationButtons addObject:@"DOWNGRADE"];
-		}
+		/* Downgrade actions */
+		//if ([versions count] != 0) {
+		//	[modificationButtons addObject:@"DOWNGRADE"];
+		//}
 		/* End */
 	}
 	switch ([modificationButtons count]) {
@@ -150,11 +171,20 @@ UIColor *defaultTintColor;
 		case 1: modificationButtonTitle = modificationButtons.allKeys[0]; break;
 		default: modificationButtonTitle = @"MODIFY"; break;
 	}
-	NSLog(@"Package Controller: %@\nRoot view: %@\nGet Package Cell: %@", self.packageController, self.packageController.depictionRootView, self.packageController.depictionRootView);
-	self.packageController.depictionRootView.getPackageCell.package = self.package;
 	self.packageController.depictionRootView.getPackageCell.buttonTitle = UCLocalize(modificationButtonTitle);
-	
 	_modificationButtons = [modificationButtons copy];
+
+	[self.package retrievePaymentInformationWithCompletion:^(Package *package, NSError *error){
+		NSString *price = package.paymentInformation[@"price"];
+		// WARNING: atof can cause undefined behaviour
+		if ([price isKindOfClass:[NSString class]] && !(atof([price UTF8String] + 1) <= 0.0)) {
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				self.packageController.depictionRootView.getPackageCell.buttonTitle = price;
+				[self.packageController.depictionRootView.getPackageCell lockText];
+				_modificationButtons = (id)[NSNull null];
+			});
+		}
+	}];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -169,7 +199,7 @@ UIColor *defaultTintColor;
 		[NSURLConnection sendAsynchronousRequest:request
 			queue:self.operationQueue
 			completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-				NSLog(@"Downloaded completed for \"%@\" with error: %@", url, error);
+				NSLog(@"Download completed for \"%@\" with error: %@", url, error);
 			#if DEBUG
 				if (data) {
 					NSLog(@"String data (first 64 bytes): %@", [[NSString alloc] initWithBytes:data.bytes length:min(65, data.length) encoding:NSUTF8StringEncoding]);

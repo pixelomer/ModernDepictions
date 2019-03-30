@@ -142,6 +142,7 @@
 }
 
 - (void)setButtonTitle:(NSString *)text {
+	if (textLocked) return;
 	NSLog(@"setButtonTitle:\"%@\"", text);
 	if (textContainerConstraints) [self.contentView removeConstraints:textContainerConstraints];
 	if (text) {
@@ -197,6 +198,10 @@
 		}
 	}
 	[self.contentView addConstraints:textContainerConstraints];
+}
+
+- (void)lockText {
+	textLocked = true;
 }
 
 - (NSString *)buttonTitle {

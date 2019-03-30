@@ -1,5 +1,6 @@
 #import "SubDepictionTableView.h"
 #import "ContentCellFactory.h"
+#import "DepictionBaseView.h"
 
 @implementation SubDepictionTableView
 
@@ -27,7 +28,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [self cellForRow:indexPath.row];
+	UITableViewCell *cell = [self cellForRow:indexPath.row];
+	if ([cell.class isSubclassOfClass:[DepictionBaseView class]]) {
+		[cell performSelector:@selector(cellWillAppear)];
+	}
+	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

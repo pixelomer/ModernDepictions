@@ -24,6 +24,14 @@
 	return self;
 }
 
+- (void)setOriginalInvocation:(NSInvocation *)originalInvocation {
+	self.depictionDelegate.originalInvocation = originalInvocation;
+}
+
+- (void)setReferrer:(NSString *)referrer {
+	self.depictionDelegate.referrer = referrer;
+}
+
 // This method is called by Cydia itself
 - (void)setDelegate:(Cydia *)delegate {
 	self.depictionDelegate.cydiaDelegate = delegate;

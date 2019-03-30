@@ -17,4 +17,6 @@
 - (instancetype)initWithDepictionURL:(NSURL *)depictionURL database:(id)database packageID:(NSString *)packageID;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)loadDepiction;
+- (void)setReferrer:(NSString *)referrer;
+- (void)setOriginalInvocation:(NSInvocation *)originalInvocation;
 @end

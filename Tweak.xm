@@ -5,19 +5,7 @@
 @import GoogleMobileAds;
 
 extern "C" void _CFEnableZombies();
-
-// Dirty function to check if a depiction is valid
-__unused static bool VerifySileoDepiction(NSDictionary *depiction) {
-	return ([depiction[@"minVersion"] isKindOfClass:[NSString class]] &&
-		[depiction[@"class"] isKindOfClass:[NSString class]] &&
-		NSClassFromString(depiction[@"class"]) && (
-			[(NSString *)depiction[@"class"] isEqualToString:@"DepictionTabView"] && (
-				[depiction[@"tabs"] isKindOfClass:[NSArray class]] &&
-				[(NSArray *)depiction[@"tabs"] count] > 0
-			)
-		)
-	);
-}
+static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretained, SEL, Database *__strong, NSString *__strong, NSString *__strong);
 
 %group SmartDepictions
 
@@ -25,7 +13,13 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 
 %hook CYPackageController
 
+%new
+- (CYPackageController *)___initWithDatabase:(Database *)database forPackage:(NSString *)name withReferrer:(NSString *)referrer {
+	return (__bridge id)origPVCInitializer(self, _cmd, database, name, referrer);
+}
+
 - (void *)initWithDatabase:(Database *)database forPackage:(NSString *)name withReferrer:(NSString *)referrer {
+	origPVCInitializer = &%orig;
 	Package *package = [database packageWithName:name];
 	if (package) {
 		[package parse];
@@ -39,13 +33,27 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 		else return %orig;
 		NSLog(@"Depiction URL: %@", depictionURL);
 		SmartPackageController *newView = [[SmartPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
+		NSInvocation *original = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:_cmd]];
+		original.selector = @selector(___initWithDatabase:forPackage:withReferrer:);
+		[original setArgument:&database atIndex:2];
+		[original setArgument:&name atIndex:3];
+		[original setArgument:&referrer atIndex:4];
+		[original retainArguments];
+		newView.originalInvocation = original;
+		newView.referrer = referrer;
 		if (newView) {
 			NSLog(@"New view: %@", newView);
+			if (self) objc_msgSend(self, NSSelectorFromString(@"release")); // Cydia isn't built with ARC
 			NSLog(@"Returning...");
 			return (__bridge void *)newView;
 		}
 	}
 	return %orig;
+}
+
+- (void)dealloc {
+	NSLog(@"A CYPackageController is being deallocated...");
+	%orig;
 }
 
 %end
@@ -200,7 +208,7 @@ __unused static bool VerifySileoDepiction(NSDictionary *depiction) {
 	if ([%c(Package) instancesRespondToSelector:@selector(getField:)]) {
 		NSLog(@"init");
 	#if DEBUG
-		//_CFEnableZombies();
+		_CFEnableZombies();
 	#endif
 		%init(SmartDepictions);
 	}

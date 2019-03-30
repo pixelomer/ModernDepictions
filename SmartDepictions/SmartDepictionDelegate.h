@@ -17,9 +17,11 @@
 @property (nonatomic, readonly) NSURL *depictionURL;
 @property (nonatomic, readonly) NSString *packageID;
 @property (nonatomic, readonly) Package *package;
+@property (nonatomic, copy) NSString *referrer;
 @property (nonatomic, readonly) NSDictionary *modificationButtons;
 @property (nonatomic, readonly) bool iOS6;
 @property (nonatomic, readonly) UIColor *tintColor;
+@property (nonatomic, retain) NSInvocation *originalInvocation;
 - (void)handleRotation;
 - (NSString *)modificationButtonTitle;
 - (void)setModificationButtonTitle:(NSString *)newTitle;
