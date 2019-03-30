@@ -16,6 +16,7 @@ typedef NS_ENUM(NSUInteger, AlignEnum) {
 - (void)setNumberOfLines:(NSInteger)numberOfLines;
 - (CGFloat)height;
 - (instancetype)initWithDepictionDelegate:(SmartDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
+- (void)cellWillAppear;
 - (instancetype)init __attribute__((deprecated("Use initWithDepictionDelegate: instead.")));
 - (void)setLabelText:(NSString *)text;
 - (NSString *)labelText;

@@ -29,6 +29,10 @@
 	self.textLabel.text = text;
 }
 
+- (void)cellWillAppear {
+
+}
+
 - (NSString *)labelText {
 	return self.textLabel.text;
 }
