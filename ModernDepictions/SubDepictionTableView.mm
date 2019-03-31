@@ -8,6 +8,7 @@
 	self = [super init];
 	self.dataSource = self;
 	self.delegate = self;
+	if (@available(iOS 9.0, *)) self.cellLayoutMarginsFollowReadableWidth = NO;
 #if !DEBUG
 	self.separatorStyle = UITableViewCellSeparatorStyleNone;
 #endif
