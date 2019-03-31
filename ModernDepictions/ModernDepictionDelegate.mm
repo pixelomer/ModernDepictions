@@ -78,11 +78,13 @@ static UIColor *defaultTintColor;
 			NSString *packageID = self.package.id;
 			[self.originalInvocation setArgument:&packageID atIndex:3];
 			[self.originalInvocation setArgument:&_referrer atIndex:4];
+		#if DEBUG
 			for (int i = 2; i < self.originalInvocation.methodSignature.numberOfArguments; i++) {
 				id object = nil;
 				[self.originalInvocation getArgument:&object atIndex:i];
 				NSLog(@"Argument %d: %@", i, object);
 			}
+		#endif
 			[self.originalInvocation invoke];
 			[self.originalInvocation getReturnValue:&legacyVC];
 			NSAssert(legacyVC, @"Failed to initialize the legacy view controller.");

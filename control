@@ -1,10 +1,11 @@
 Package: com.pixelomer.moderndepictions
 Name: ModernDepictions
 Depends: mobilesubstrate, firmware (>=8.0), org.thebigboss.libcolorpicker
-Version: 0.0.1
+Version: 0.1
 Architecture: iphoneos-arm
 Description: Sileo-like Depictions for Cydia
   Allows viewing Sileo depictions within Cydia. Supports iOS 8.0 and higher.
+  WARNING: This is a beta version so expect bugs. If you find any, please report them.
 Maintainer: PixelOmer
 Author: PixelOmer
 Section: Tweaks

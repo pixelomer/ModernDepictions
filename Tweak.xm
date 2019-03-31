@@ -208,7 +208,7 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 	if ([%c(Package) instancesRespondToSelector:@selector(getField:)]) {
 		NSLog(@"init");
 	#if DEBUG
-		_CFEnableZombies();
+		//_CFEnableZombies();
 	#endif
 		%init(ModernDepictions);
 	}
