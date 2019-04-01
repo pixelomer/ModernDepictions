@@ -4,6 +4,7 @@
 
 - (instancetype)initWithDepictionDelegate:(ModernDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithDepictionDelegate:delegate reuseIdentifier:reuseIdentifier];
+	if (fontSize == 0.0) fontSize = 22.0;
 	headerLabel = [[UILabel alloc] init];
 	headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	headerLabel.numberOfLines = 0;
@@ -22,12 +23,16 @@
 		metrics:nil
 		views:views
 	]];
-	fontSize = 22.0;
+	self.useBoldText = _useBoldText ?: @YES;
 	return self;
 }
 
-- (void)setUseBoldText:(bool)useBoldText {
-	headerLabel.font = useBoldText ? [UIFont boldSystemFontOfSize:fontSize] : [UIFont systemFontOfSize:fontSize];
+- (NSNumber *)useBoldText {
+	return _useBoldText;
+}
+
+- (void)setUseBoldText:(NSNumber *)useBoldText {
+	headerLabel.font = [useBoldText boolValue] ? [UIFont boldSystemFontOfSize:fontSize] : [UIFont systemFontOfSize:fontSize];
 	_useBoldText = useBoldText;
 }
 

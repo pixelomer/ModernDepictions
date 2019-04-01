@@ -6,10 +6,12 @@
 	
 	@protected
 	CGFloat fontSize;
+	NSNumber *_useBoldText;
 }
 @property (nonatomic, retain, setter=setTitle:) NSString *title;
-@property (nonatomic, assign, setter=setUseBoldText:) bool useBoldText;
+@property (nonatomic, assign, setter=setUseBoldText:, getter=useBoldText) NSNumber *useBoldText;
 - (void)setTitle:(NSString *)title;
 - (instancetype)initWithDepictionDelegate:(ModernDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
-- (void)setUseBoldText:(bool)useBoldText;
+- (void)setUseBoldText:(NSNumber *)useBoldText;
+- (NSNumber *)useBoldText;
 @end
