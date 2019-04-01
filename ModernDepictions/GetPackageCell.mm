@@ -11,9 +11,9 @@
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	_depictionDelegate = delegate;
 	textContainerView = [[UIView alloc] init];
-	queueButton = [[QueueButton alloc] init];
-	queueButton.backgroundColor = delegate.tintColor;
-	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+	_queueButton = [[QueueButton alloc] init];
+	_queueButton.backgroundColor = delegate.tintColor;
+	[_queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;
 	iconView = [[UIImageView alloc] init];
@@ -26,7 +26,7 @@
 	authorButton.titleLabel.textAlignment = NSTextAlignmentNatural;
 	self.package = delegate.package;
 	textContainerView.translatesAutoresizingMaskIntoConstraints = NO;
-	queueButton.translatesAutoresizingMaskIntoConstraints = NO;
+	_queueButton.translatesAutoresizingMaskIntoConstraints = NO;
 	packageNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	iconView.translatesAutoresizingMaskIntoConstraints = NO;
 	authorButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -136,8 +136,8 @@
 }
 
 - (void)setDepictionTintColor:(UIColor *)color {
-	queueButton.backgroundColor = color;
-	[queueButton setNeedsDisplay];
+	_queueButton.backgroundColor = color;
+	[_queueButton setNeedsDisplay];
 }
 
 - (void)setButtonTitle:(NSString *)text {
@@ -145,21 +145,21 @@
 	NSLog(@"setButtonTitle:\"%@\"", text);
 	if (textContainerConstraints) [self.contentView removeConstraints:textContainerConstraints];
 	if (text) {
-		[queueButton
+		[_queueButton
 			setTitle:text.uppercaseString
 			forState:UIControlStateNormal
 		];
-		[queueButton sizeToFit];
-		if (![self.contentView.subviews containsObject:queueButton]) {
-			[self.contentView addSubview:queueButton];
+		[_queueButton sizeToFit];
+		if (![self.contentView.subviews containsObject:_queueButton]) {
+			[self.contentView addSubview:_queueButton];
 			[self.contentView addConstraints:[NSLayoutConstraint
 				constraintsWithVisualFormat:@"H:[qb]-23-|"
 				options:0
 				metrics:nil
-				views:@{ @"qb" : queueButton }
+				views:@{ @"qb" : _queueButton }
 			]];
 			[self.contentView addConstraint:[NSLayoutConstraint
-				constraintWithItem:queueButton
+				constraintWithItem:_queueButton
 				attribute:NSLayoutAttributeCenterY
 				relatedBy:NSLayoutRelationEqual
 				toItem:self.contentView
@@ -173,7 +173,7 @@
 				constraintWithItem:textContainerView
 				attribute:NSLayoutAttributeTrailing
 				relatedBy:NSLayoutRelationLessThanOrEqual
-				toItem:queueButton
+				toItem:_queueButton
 				attribute:NSLayoutAttributeLeading
 				multiplier:1.0
 				constant:0.0
@@ -192,8 +192,8 @@
 				constant:0.0
 			]
 		];
-		if ([self.contentView.subviews containsObject:queueButton]) {
-			[queueButton removeFromSuperview];
+		if ([self.contentView.subviews containsObject:_queueButton]) {
+			[_queueButton removeFromSuperview];
 		}
 	}
 	[self.contentView addConstraints:textContainerConstraints];
@@ -204,7 +204,7 @@
 }
 
 - (NSString *)buttonTitle {
-	return queueButton.titleLabel.text;
+	return _queueButton.titleLabel.text;
 }
 
 @end

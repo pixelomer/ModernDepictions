@@ -4,7 +4,9 @@
 #import "GetPackageCell.h"
 #import "DepictionImageView.h"
 #import "DepictionStackView.h"
+#import "QueueButton.h"
 #import "../Extensions/UIColor+HexString.h"
+#import "../Extensions/UIDevice+isiPad.h"
 #import <libcolorpicker.h>
 
 @implementation ModernDepictionDelegate
@@ -110,8 +112,14 @@ static UIColor *defaultTintColor;
 			}];
 			[actionSheet addAction:action];
 		}
-		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:UCLocalize(@"CANCEL") style:UIAlertActionStyleCancel handler:nil];
-		[actionSheet addAction:cancelAction];
+		if (UIDevice.currentDevice.isiPad) {
+			actionSheet.popoverPresentationController.sourceView = self.packageController.depictionRootView.getPackageCell.queueButton;
+			actionSheet.popoverPresentationController.sourceRect = self.packageController.depictionRootView.getPackageCell.queueButton.bounds;
+		}
+		else {
+			UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:UCLocalize(@"CANCEL") style:UIAlertActionStyleCancel handler:nil];
+			[actionSheet addAction:cancelAction];
+		}
 		actionSheet.view.tintColor = self.class.defaultTintColor;
 		[_packageController presentViewController:actionSheet animated:YES completion:^{
 			actionSheet.view.tintColor = self.class.defaultTintColor;

@@ -18,10 +18,10 @@
 	UILabel *packageNameLabel;
 	UIView *textContainerView;
 	AuthorButton *authorButton;
-	QueueButton *queueButton;
 	NSArray *textContainerConstraints;
 	bool textLocked;
 }
+@property (nonatomic, readonly) QueueButton *queueButton;
 @property (nonatomic, readonly) ModernDepictionDelegate *depictionDelegate;
 - (instancetype)initWithDepictionDelegate:(ModernDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setButtonTitle:(NSString *)text;
