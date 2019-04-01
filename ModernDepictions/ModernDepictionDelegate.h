@@ -8,6 +8,7 @@
 
 @interface ModernDepictionDelegate : NSObject {
 	NSString *modificationButtonTitle;
+	UIColor *_tintColor;
 }
 @property (nonatomic, retain) ModernPackageController *packageController;
 @property (nonatomic, readonly) NSOperationQueue *operationQueue;
@@ -20,8 +21,9 @@
 @property (nonatomic, copy) NSString *referrer;
 @property (nonatomic, readonly) NSDictionary *modificationButtons;
 @property (nonatomic, readonly) bool iOS6;
-@property (nonatomic, readonly) UIColor *tintColor;
+@property (nonatomic, readonly, getter=tintColor) UIColor *tintColor;
 @property (nonatomic, retain) NSInvocation *originalInvocation;
+- (UIColor *)tintColor;
 - (void)handleRotation;
 - (NSString *)modificationButtonTitle;
 - (void)setModificationButtonTitle:(NSString *)newTitle;

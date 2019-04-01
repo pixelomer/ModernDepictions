@@ -62,6 +62,10 @@ static UIColor *defaultTintColor;
 	return self;
 }
 
+- (UIColor *)tintColor {
+	return _tintColor ?: self.class.defaultTintColor;
+}
+
 #pragma GCC diagnostic ignored "-Warc-performSelector-leaks"
 #pragma GCC diagnostic push
 
@@ -126,7 +130,14 @@ static UIColor *defaultTintColor;
 		if ([_depiction isKindOfClass:[NSDictionary class]]) {
 			NSLog(@"-[%@ loadDepiction]", self.packageController);
 			if (_depiction[@"tintColor"]) {
-				_tintColor = [UIColor colorWithHexString:_depiction[@"tintColor"]];
+				// The tint color may not be valid.
+				@try {
+					_tintColor = [UIColor colorWithHexString:_depiction[@"tintColor"]];
+				}
+				@catch (NSException *ex) {
+					NSLog(@"An error occurred while parsing the color: %@", ex);
+					_tintColor = self.class.defaultTintColor;
+				}
 			}
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[self.packageController loadDepiction];
