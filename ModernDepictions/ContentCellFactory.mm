@@ -50,7 +50,8 @@
 			for (NSString *propertyKey in cellInfo) {
 				if ([propertyKey isEqualToString:@"class"] || ![cell respondsToSelector:NSSelectorFromString(propertyKey)]) continue;
 				id property = cellInfo[propertyKey];
-				[cell setValue:property forKey:propertyKey];
+				// A JSON value can be null.
+				if (![property isKindOfClass:[NSNull class]]) [cell setValue:property forKey:propertyKey];
 			}
 		#if DEBUG
 			}
