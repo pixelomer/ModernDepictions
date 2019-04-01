@@ -21,7 +21,3 @@
 
 - Debug build: `make clean package install`
 - Release build: `FINALPACKAGE=1 DEBUG=0 make clean package install`
-
-## 3. Troubleshooting
-
-- If you are having an issue related to `___isOSVersionAtLeast`, open `macros.h` and replace `#if 0` with `#if 1`.
