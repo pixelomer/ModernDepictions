@@ -13,6 +13,12 @@
 	self.textLabel.numberOfLines = 1;
 	self.contentView.backgroundColor = nil;
 	self.backgroundColor = nil;
+	/*
+	if (@available(iOS 9.0, *)) {
+		[self.contentView.leadingAnchor constraintEqualToAnchor:self.readableContentGuide.leadingAnchor constant:0.0].active = YES;
+		[self.contentView.trailingAnchor constraintEqualToAnchor:self.readableContentGuide.trailingAnchor constant:0.0].active = YES;
+	}
+	*/
 	return self;
 }
 

@@ -13,7 +13,6 @@
 	textContainerView = [[UIView alloc] init];
 	queueButton = [[QueueButton alloc] init];
 	queueButton.backgroundColor = delegate.tintColor;
-	queueButton.contentEdgeInsets = UIEdgeInsetsMake(5.0, 20.0, 5.0, 20.0);
 	[queueButton addTarget:self action:@selector(queueButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 	self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 92);
 	self.contentView.frame = self.frame;
