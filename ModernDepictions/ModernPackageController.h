@@ -7,7 +7,6 @@
 
 @interface ModernPackageController : UIViewController {
 	UIImageView *imageView;
-	UIColor *origTintColor;
 	double origImageHeight;
 	double origImageWidth;
 	CGFloat navBarLowerY;

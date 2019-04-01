@@ -8,6 +8,7 @@
 @implementation ModernPackageController
 
 static UIImage *shadowImage;
+static UIColor *origTintColor;
 
 + (void)load {
 	if ([self class] == [ModernPackageController class]) {
@@ -63,7 +64,12 @@ static UIImage *shadowImage;
 			0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82
 		};
 		shadowImage = [UIImage imageWithData:[NSData dataWithBytes:shadowImageBytes length:sizeof(shadowImageBytes)]];
+		origTintColor = nil;
 	}
+}
+
++ (void)setOriginalNavBarTintColor:(UIColor *)newColor {
+	if (!origTintColor) origTintColor = newColor;
 }
 
 - (ModernPackageController *)initWithDepictionURL:(NSURL *)depictionURL database:(id)database packageID:(NSString *)packageID {
@@ -205,7 +211,7 @@ static UIImage *shadowImage;
 	self.navigationController.opacity = 0.0;
 	self.navigationController.navigationBar.translucent = YES;
 	self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-	origTintColor = self.navigationController.navigationBar.tintColor;
+	[self.class setOriginalNavBarTintColor:self.navigationController.navigationBar.tintColor];
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
