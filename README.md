@@ -14,6 +14,7 @@ Sileo depictions for Cydia.
 - [x] Tab-specific views
 - [x] Creating cells from the parsed JSON
 - [x] ModernPackageController for text-only depictions
+- [ ] Some way to convert BigBoss depictions to Sileo depictions either on a server or on the client
 - [ ] ModernPackagenController for web depictions
 - [ ] Make the package controller as functional as CYPackageController
 
