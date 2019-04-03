@@ -47,6 +47,18 @@
 			<key>label</key>
 			<string>Enable DepictionWebView (buggy)</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>EnableiOSRepoUpdatesAPI</string>
+			<key>label</key>
+			<string>Enable depictions for BigBoss (WIP)</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>ModernDepictions</string>

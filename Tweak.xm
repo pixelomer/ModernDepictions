@@ -6,6 +6,7 @@
 
 extern "C" void _CFEnableZombies();
 static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretained, SEL, Database *__strong, NSString *__strong, NSString *__strong);
+static NSArray<NSString *> *iOSRepoUpdatesHosts;
 
 %group ModernDepictions
 
@@ -30,6 +31,14 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 			depictionURL = [NSURL URLWithString:rawDepictionURL];
 		}
 		else if (![rawHTMLDepictionURL isKindOfClass:[NSString class]]);
+		else if (iOSRepoUpdatesHosts) {
+			NSURL *requestedURL;
+			if (!(requestedURL = [NSURL URLWithString:rawHTMLDepictionURL]) || ![iOSRepoUpdatesHosts containsObject:requestedURL.host]) return %orig;
+			NSString *percentEncodedURL = [rawHTMLDepictionURL stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+			depictionURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.ios-repo-updates.com/api/sileo-depiction/?depiction=%@", percentEncodedURL]];
+			if (!depictionURL) return %orig;
+			NSLog(@"Using the iOS Repo Updates API.\nOriginal URL: %@\nEncoded URL: %@\nFinal URL: %@", rawHTMLDepictionURL, percentEncodedURL, depictionURL);
+		}
 		else return %orig;
 		NSLog(@"Depiction URL: %@", depictionURL);
 		ModernPackageController *newView = [[ModernPackageController alloc] initWithDepictionURL:depictionURL database:database packageID:[package id]];
@@ -197,6 +206,12 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 	#if DEBUG
 		//_CFEnableZombies();
 	#endif
+		NSNumber *enableiOSRepoUpdatesAPI = [[NSUserDefaults standardUserDefaults] objectForKey:@"EnableiOSRepoUpdatesAPI" inDomain:@"com.pixelomer.moderndepictions.prefs"];
+		if (enableiOSRepoUpdatesAPI && [enableiOSRepoUpdatesAPI boolValue]) {
+			iOSRepoUpdatesHosts = @[
+				@"moreinfo.thebigboss.org"
+			];
+		}
 		%init(ModernDepictions);
 	}
 }
