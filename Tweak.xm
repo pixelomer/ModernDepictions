@@ -174,19 +174,6 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 
 #pragma mark - Convenience hooks
 
-%hook UIView
-
-- (void)setBackgroundColor:(id)newColor {
-	UIColor *color = [UIColor clearColor];
-	if (!newColor);
-	else if ([newColor isKindOfClass:[NSString class]]) color = [UIColor colorWithHexString:newColor];
-	else if ([newColor isKindOfClass:[UIColor class]]) color = newColor;
-	else @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid type for a color" userInfo:nil];
-	%orig(color);
-}
-
-%end
-
 %hook UILabel
 
 - (void)setTextAlignment:(NSTextAlignment)alignment {

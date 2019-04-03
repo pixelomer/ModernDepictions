@@ -3,6 +3,7 @@
 #import "DepictionScreenshotsView.h"
 #import "ModernErrorCell.h"
 #import "../Extensions/UIDevice+isiPad.h"
+#import "../Extensions/UIColor+HexString.h"
 
 @implementation ContentCellFactory
 
@@ -49,9 +50,28 @@
 			}
 			for (NSString *propertyKey in cellInfo) {
 				if ([propertyKey isEqualToString:@"class"] || ![cell respondsToSelector:NSSelectorFromString(propertyKey)]) continue;
-				id property = cellInfo[propertyKey];
+				__kindof NSObject<NSCopying> *property = cellInfo[propertyKey];
 				// A JSON value can be null.
-				if (![property isKindOfClass:[NSNull class]]) [cell setValue:property forKey:propertyKey];
+				if (![property isKindOfClass:[NSNull class]]) {
+					@try {
+						[cell setValue:property forKey:propertyKey];
+					}
+#define cNSLog(args...) NSLog(@"[ContentCellFactory] "args)
+					@catch (NSException *ex) {
+						cNSLog(@"Failed to set \"%@\" for the following key: \"%@\"", property, propertyKey);
+						cNSLog(@"Exception: %@", ex);
+						if ([property isKindOfClass:[NSString class]] && [ex.name isEqualToString:NSInvalidArgumentException]) {
+							property = [UIColor colorWithHexString:property];
+							cNSLog(@"Retrying with value: %@", property);
+							[cell setValue:property forKey:propertyKey];
+						}
+						else {
+							cNSLog(@"Unable to convert an object with a type of \"%@\" to a color", NSStringFromClass(property.class));
+							@throw ex;
+						}
+					}
+#undef cNSLog
+				}
 			}
 		#if DEBUG
 			}
