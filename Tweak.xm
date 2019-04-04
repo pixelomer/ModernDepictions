@@ -211,7 +211,7 @@ static NSArray<NSString *> *iOSRepoUpdatesHosts;
 			iOSRepoUpdatesHosts = @[
 #if IRU_API_ALLOW_ALL
 				@"repo.packix.com",
-				@"moreinfo.bigboss.org"
+				@"moreinfo.thebigboss.org"
 #endif
 			];
 		}
