@@ -34,8 +34,9 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Experimental</string>
-			<key>footerText</key>
-			<string>Experimental repositories: Packix</string>
+			<!-- This is not available yet -->
+			<!--key>footerText</key>
+			<string>Experimental repositories: Packix</string-->
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -49,7 +50,8 @@
 			<key>label</key>
 			<string>Enable DepictionWebView (buggy)</string>
 		</dict>
-		<dict>
+		<!-- This is not available yet -->
+		<!--dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
@@ -60,7 +62,7 @@
 			<string>EnableiOSRepoUpdatesAPI</string>
 			<key>label</key>
 			<string>Enable experimental repositories</string>
-		</dict>
+		</dict-->
 	</array>
 	<key>title</key>
 	<string>ModernDepictions</string>
