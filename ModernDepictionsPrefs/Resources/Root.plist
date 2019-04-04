@@ -34,6 +34,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Experimental</string>
+			<key>footerText</key>
+			<string>Experimental repositories: Packix</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -57,7 +59,7 @@
 			<key>key</key>
 			<string>EnableiOSRepoUpdatesAPI</string>
 			<key>label</key>
-			<string>Enable depictions for BigBoss (WIP)</string>
+			<string>Enable experimental repositories</string>
 		</dict>
 	</array>
 	<key>title</key>

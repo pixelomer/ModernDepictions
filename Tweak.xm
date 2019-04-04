@@ -209,7 +209,10 @@ static NSArray<NSString *> *iOSRepoUpdatesHosts;
 		NSNumber *enableiOSRepoUpdatesAPI = [[NSUserDefaults standardUserDefaults] objectForKey:@"EnableiOSRepoUpdatesAPI" inDomain:@"com.pixelomer.moderndepictions.prefs"];
 		if (enableiOSRepoUpdatesAPI && [enableiOSRepoUpdatesAPI boolValue]) {
 			iOSRepoUpdatesHosts = @[
-				@"moreinfo.thebigboss.org"
+#if IRU_API_ALLOW_ALL
+				@"repo.packix.com",
+				@"moreinfo.bigboss.org"
+#endif
 			];
 		}
 		%init(ModernDepictions);

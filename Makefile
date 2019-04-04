@@ -2,7 +2,7 @@ THEOS_DEVICE_IP ?= 0
 THEOS_DEVICE_PORT ?= 2222
 TARGET = iphone:clang:11.2:8.0
 ARCHS = arm64 armv7
-CFLAGS = -include macros.h -fobjc-arc -Wno-deprecated-declarations -Wno-unguarded-availability-new -Wno-non-literal-null-conversion -Wno-comment
+CFLAGS = -include macros.h -fobjc-arc -DIRU_API_ALLOW_ALL=0$(IRU_API_ALLOW_ALL) -Wno-deprecated-declarations -Wno-unguarded-availability-new -Wno-non-literal-null-conversion -Wno-comment
 LDFLAGS = -ObjC
 
 include $(THEOS)/makefiles/common.mk
@@ -12,6 +12,9 @@ ModernDepictions_FILES = Tweak.xm $(wildcard MMMarkdown/*.m ModernDepictions/*.m
 ModernDepictions_FRAMEWORKS = WebKit
 ModernDepictions_LIBRARIES = GoogleMobileAds colorpicker
 ModernDepictions_EXTRA_FRAMEWORKS = nanopb GoogleUtilities GoogleMobileAds GoogleAppMeasurement
+
+# Tweak.xm has to be built every time so "IRU_API_ALLOW_ALL" takes effect
+$(shell touch Tweak.xm)
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
