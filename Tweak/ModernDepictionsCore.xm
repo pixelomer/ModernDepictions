@@ -33,6 +33,15 @@
 
 %end
 
+%hook Cydia
+
+- (void)applicationWillResignActive:(id)application {
+	NSLog(@"Application will resign active");
+	%orig;
+}
+
+%end
+
 %hook Source
 %property (nonatomic, assign) bool didAttemptBefore;
 %property (nonatomic, strong) NSDictionary *paymentProviderInfo;

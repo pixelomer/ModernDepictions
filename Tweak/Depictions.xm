@@ -70,16 +70,6 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 	[[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
 }
 
-// For some reason Cydia forgets its superclass when I start GADMobileAds
-- (Class)superclass {
-	return %c(CyteApplication);
-}
-
-- (void)applicationWillResignActive:(id)application {
-	NSLog(@"Application will resign active");
-	%orig;
-}
-
 %end
 
 @interface GADNUIKitWebViewController : UIView

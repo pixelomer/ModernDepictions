@@ -13,8 +13,8 @@ ModernDepictions_FRAMEWORKS = WebKit
 ModernDepictions_LIBRARIES = GoogleMobileAds colorpicker
 ModernDepictions_EXTRA_FRAMEWORKS = nanopb GoogleUtilities GoogleMobileAds GoogleAppMeasurement
 
-# Tweak.xm has to be built every time so "IRU_API_ALLOW_ALL" takes effect
-$(shell touch Tweak.xm)
+# Depictions.xm has to be built every time so "IRU_API_ALLOW_ALL" takes effect
+$(shell touch Tweak/Depictions.xm)
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

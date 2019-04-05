@@ -1,15 +1,26 @@
 #import <Foundation/Foundation.h>
-#import "Tweak/Tweak.h"
+#import <Tweak/Tweak.h>
 
 extern "C" void _CFEnableZombies();
 
+%hook Cydia
+
+// For some reason Cydia forgets its superclass when I start GADMobileAds
+- (Class)superclass {
+	return %c(CyteApplication);
+}
+
+%end
+
 %ctor {
-	if ([%c(Package) instancesRespondToSelector:@selector(getField:)]) {
+	%init;
+	if ([%c(Package) instancesRespondToSelector:@selector(getField:)] &&
+		ModernDepictionsGetPreferenceValue(@"EnableModernDepictions", 1))
+	{
 		NSLog(@"init");
-	#if DEBUG
-		//_CFEnableZombies();
-	#endif
-		ModernDepictionsInitializeDepictions();
 		ModernDepictionsInitializeCore();
+		if (ModernDepictionsGetPreferenceValue(@"EnableSileoDepictions", 1)) {
+			ModernDepictionsInitializeDepictions();
+		}
 	}
 }

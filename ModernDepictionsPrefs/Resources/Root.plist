@@ -6,6 +6,68 @@
 	<array>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>EnableModernDepictions</string>
+			<key>label</key>
+			<string>Enabled</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Sileo Depictions</string>
+			<key>footerText</key>
+			<string>ModernDepictions allows you to view Sileo depictions using Cydia. The result is not completely same as Sileo. However, it is close enough.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>EnableSileoDepictions</string>
+			<key>label</key>
+			<string>Enable Sileo Depictions</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Other</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>EnableModernHomeController</string>
+			<key>label</key>
+			<string>Modern Home</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>EnableModernHomeController</string>
+			<key>label</key>
+			<string>Custom Package Cells</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Customization</string>
