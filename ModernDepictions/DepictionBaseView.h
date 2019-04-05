@@ -11,7 +11,7 @@ typedef NS_ENUM(NSUInteger, AlignEnum) {
 
 @interface DepictionBaseView : UITableViewCell<ModernCell>
 @property (nonatomic, readonly) ModernDepictionDelegate *depictionDelegate;
-@property (nonatomic, retain, setter=setLabelText:, getter=labelText) NSString *labelText;
+@property (nonatomic, strong, setter=setLabelText:, getter=labelText) NSString *labelText;
 @property (nonatomic, assign, setter=setNumberOfLines:) NSInteger numberOfLines;
 - (void)setNumberOfLines:(NSInteger)numberOfLines;
 - (CGFloat)height;

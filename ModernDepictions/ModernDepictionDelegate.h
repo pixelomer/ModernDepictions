@@ -10,9 +10,9 @@
 	NSString *modificationButtonTitle;
 	UIColor *_tintColor;
 }
-@property (nonatomic, retain) ModernPackageController *packageController;
+@property (nonatomic, strong) ModernPackageController *packageController;
 @property (nonatomic, readonly) NSOperationQueue *operationQueue;
-@property (nonatomic, retain) Cydia *cydiaDelegate;
+@property (nonatomic, strong) Cydia *cydiaDelegate;
 @property (nonatomic, readonly) NSDictionary *depiction;
 @property (nonatomic, readonly) Database *database;
 @property (nonatomic, readonly) NSURL *depictionURL;
@@ -22,7 +22,7 @@
 @property (nonatomic, readonly) NSDictionary *modificationButtons;
 @property (nonatomic, readonly) bool iOS6;
 @property (nonatomic, readonly, getter=tintColor) UIColor *tintColor;
-@property (nonatomic, retain) NSInvocation *originalInvocation;
+@property (nonatomic, strong) NSInvocation *originalInvocation;
 - (UIColor *)tintColor;
 - (void)handleRotation;
 - (NSString *)modificationButtonTitle;

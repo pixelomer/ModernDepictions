@@ -285,7 +285,7 @@ static UIColor *origTintColor;
 }
 
 - (void)dealloc {
-	NSLog(@"Deallocating package controller...");
+	NSLog(@"Deallocating %@...", self);
 }
 
 @end

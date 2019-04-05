@@ -21,7 +21,7 @@
 }
 @property (nonatomic, setter=setTabs:, assign) NSArray<NSDictionary *> * tabs;
 @property (nonatomic, readonly, getter=currentTab) NSString *currentTab;
-@property (nonatomic, retain) __kindof NSObject<DepictionTabViewDelegate> *tabViewDelegate;
+@property (nonatomic, strong) __kindof NSObject<DepictionTabViewDelegate> *tabViewDelegate;
 - (CGFloat)height;
 - (instancetype)initWithDepictionDelegate:(ModernDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setTabs:(NSArray<NSDictionary *> *)tabs;

@@ -73,4 +73,8 @@
 	[activityIndicator startAnimating];
 }
 
+- (void)dealloc {
+	NSLog(@"Deallocating %@...", self);
+}
+
 @end

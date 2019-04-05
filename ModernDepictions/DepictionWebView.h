@@ -19,7 +19,7 @@
 }
 @property (nonatomic, assign, setter=setWidth:) CGFloat width;
 @property (nonatomic, assign, setter=setAlignment:) AlignEnum alignment;
-@property (nonatomic, retain, setter=setURL:) NSString *URL;
+@property (nonatomic, strong, setter=setURL:) NSString *URL;
 - (instancetype)initWithDepictionDelegate:(ModernDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setHeight:(CGFloat)height;
 - (CGFloat)height;

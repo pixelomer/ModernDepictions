@@ -7,7 +7,7 @@
 	UIActivityIndicatorView *activityIndicator;
 }
 @property (nonatomic, readonly) ModernDepictionDelegate *depictionDelegate;
-@property (nonatomic, retain, setter=setDepiction:) NSArray *depiction;
+@property (nonatomic, strong, setter=setDepiction:) NSArray *depiction;
 @property (nonatomic, readonly) SubDepictionTableView *tableView;
 - (void)setDepiction:(NSArray *)depiction;
 - (void)setDepictionURL:(NSURL *)depictionURL;

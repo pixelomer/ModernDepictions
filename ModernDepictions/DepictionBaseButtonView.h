@@ -22,9 +22,9 @@ typedef NS_ENUM(NSUInteger, DepictionButtonAction) {
 	DepictionButtonAction backupButtonAction;
 	NSArray *paddingConstraints;
 }
-@property (nonatomic, retain, setter=setTitle:) NSString *title;
-@property (nonatomic, retain, setter=setAction:) NSString *action;
-@property (nonatomic, retain, setter=setBackupAction:) NSString *backupAction;
+@property (nonatomic, strong, setter=setTitle:) NSString *title;
+@property (nonatomic, strong, setter=setAction:) NSString *action;
+@property (nonatomic, strong, setter=setBackupAction:) NSString *backupAction;
 @property (nonatomic, assign) BOOL openExternal;
 @property (nonatomic, assign, setter=setYPadding:) CGFloat yPadding;
 - (void)setTitle:(NSString *)newTitle;

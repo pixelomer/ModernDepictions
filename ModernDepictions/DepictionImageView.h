@@ -10,7 +10,7 @@
 	CGFloat cellHeight;
 	CGFloat imageWidth;
 }
-@property (nonatomic, retain, setter=setURL:) NSString *URL;
+@property (nonatomic, strong, setter=setURL:) NSString *URL;
 @property (nonatomic, assign, setter=setWidth:) CGFloat width;
 @property (nonatomic, assign, getter=height, setter=setHeight:) CGFloat height;
 @property (nonatomic, assign, setter=setCornerRadius:) CGFloat cornerRadius;

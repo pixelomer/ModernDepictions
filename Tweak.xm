@@ -8,7 +8,7 @@ extern "C" void _CFEnableZombies();
 static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretained, SEL, Database *__strong, NSString *__strong, NSString *__strong);
 static NSArray<NSString *> *iOSRepoUpdatesHosts;
 
-%group ModernDepictions
+%group Depictions
 
 #pragma mark - Necessary hooks
 
@@ -100,14 +100,14 @@ static NSArray<NSString *> *iOSRepoUpdatesHosts;
 
 %hook Source
 %property (nonatomic, assign) bool didAttemptBefore;
-%property (nonatomic, retain) NSDictionary *paymentProviderInfo;
-%property (nonatomic, retain) NSURL *paymentEndpoint;
-%property (nonatomic, retain) NSOperationQueue *operationQueue;
+%property (nonatomic, strong) NSDictionary *paymentProviderInfo;
+%property (nonatomic, strong) NSURL *paymentEndpoint;
+%property (nonatomic, strong) NSOperationQueue *operationQueue;
 %end
 
 %hook Package
-%property (nonatomic, retain) NSString *sileoDepiction;
-%property (nonatomic, retain) NSDictionary *paymentInformation;
+%property (nonatomic, strong) NSString *sileoDepiction;
+%property (nonatomic, strong) NSDictionary *paymentInformation;
 
 %new
 - (void)retrievePaymentInformationWithCompletion:(void(^)(Package *, NSError *))completionHandler {
@@ -215,6 +215,6 @@ static NSArray<NSString *> *iOSRepoUpdatesHosts;
 #endif
 			];
 		}
-		%init(ModernDepictions);
+		%init(Depictions);
 	}
 }

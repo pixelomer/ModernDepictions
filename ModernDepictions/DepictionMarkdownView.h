@@ -4,7 +4,7 @@
 @interface DepictionMarkdownView : DepictionBaseView {
 	UITextView *textView;
 }
-@property (nonatomic, retain, setter=setMarkdown:) NSString *markdown;
+@property (nonatomic, strong, setter=setMarkdown:) NSString *markdown;
 @property (assign) bool useSpacing;
 @property (assign) bool useMargins;
 @property (nonatomic, assign, setter=setUseRawFormat:) bool useRawFormat;

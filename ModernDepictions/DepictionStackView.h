@@ -6,7 +6,7 @@
 	SubDepictionTableView *tableView;
 	NSArray *cells;
 }
-@property (nonatomic, retain, setter=setViews:) NSArray *views;
+@property (nonatomic, strong, setter=setViews:) NSArray *views;
 - (void)setViews:(NSArray *)views;
 - (instancetype)initWithDepictionDelegate:(ModernDepictionDelegate *)delegate reuseIdentifier:(NSString *)reuseIdentifier;
 @end

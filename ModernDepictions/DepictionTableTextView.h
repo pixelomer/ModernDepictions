@@ -5,8 +5,8 @@
 	UILabel *textLabel;
 	UILabel *titleLabel;
 }
-@property (nonatomic, retain, setter=setTitle:, getter=title) NSString *title;
-@property (nonatomic, retain, setter=setText:, getter=text) NSString *text;
+@property (nonatomic, strong, setter=setTitle:, getter=title) NSString *title;
+@property (nonatomic, strong, setter=setText:, getter=text) NSString *text;
 - (NSString *)text;
 - (void)setText:(NSString *)text;
 - (CGFloat)height;
