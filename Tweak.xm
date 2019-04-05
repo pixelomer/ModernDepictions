@@ -22,5 +22,11 @@ extern "C" void _CFEnableZombies();
 		if (ModernDepictionsGetPreferenceValue(@"EnableSileoDepictions", 1)) {
 			ModernDepictionsInitializeDepictions();
 		}
+		if (ModernDepictionsGetPreferenceValue(@"EnableModernHomeController", 0)) {
+			ModernDepictionsInitializeHome();
+		}
+		if (ModernDepictionsGetPreferenceValue(@"EnableModernPackageCells", 0)) {
+			ModernDepictionsInitializeCells();
+		}
 	}
 }

@@ -46,25 +46,25 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.pixelomer.moderndepictions.prefs</string>
 			<key>key</key>
 			<string>EnableModernHomeController</string>
 			<key>label</key>
-			<string>Modern Home</string>
+			<string>Enable Modern Home</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.pixelomer.moderndepictions.prefs</string>
 			<key>key</key>
-			<string>EnableModernHomeController</string>
+			<string>EnableModernPackageCells</string>
 			<key>label</key>
-			<string>Custom Package Cells</string>
+			<string>Use Modern Package Cells</string>
 		</dict>
 		<dict>
 			<key>cell</key>
