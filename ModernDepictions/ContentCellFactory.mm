@@ -2,8 +2,8 @@
 #import "DepictionBaseView.h"
 #import "DepictionScreenshotsView.h"
 #import "ModernErrorCell.h"
-#import "../Extensions/UIDevice+isiPad.h"
-#import "../Extensions/UIColor+HexString.h"
+#import <Extensions/UIDevice+isiPad.h>
+#import <Extensions/UIColor+HexString.h>
 
 @implementation ContentCellFactory
 

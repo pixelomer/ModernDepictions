@@ -1,5 +1,5 @@
 #import "AuthorButton.h"
-#import "../Headers/Headers.h"
+#import <Headers/Headers.h>
 
 @implementation AuthorButton
 

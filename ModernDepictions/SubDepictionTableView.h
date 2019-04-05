@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#import "../Headers/Headers.h"
+#import <Headers/Headers.h>
 #import "ModernCell.h"
 
 @class ModernDepictionDelegate;

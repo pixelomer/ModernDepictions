@@ -1,5 +1,5 @@
 #import "DepictionBaseView.h"
-#import "../Extensions/UIColor+HexString.h"
+#import <Extensions/UIColor+HexString.h>
 
 @implementation DepictionBaseView
 

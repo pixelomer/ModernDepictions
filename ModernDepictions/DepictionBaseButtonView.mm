@@ -2,7 +2,7 @@
 #import "SubDepictionViewController.h"
 #import "ModernDepictionDelegate.h"
 #import "ModernPackageController.h"
-#import "../Extensions/UIColor+HexString.h"
+#import <Extensions/UIColor+HexString.h>
 
 @implementation DepictionBaseButtonView
 

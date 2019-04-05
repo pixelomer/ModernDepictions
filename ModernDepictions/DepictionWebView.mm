@@ -1,5 +1,5 @@
 #import "DepictionWebView.h"
-#import "../Headers/Headers.h"
+#import <Headers/Headers.h>
 
 @implementation DepictionWebView
 

@@ -5,8 +5,8 @@
 #import "DepictionImageView.h"
 #import "DepictionStackView.h"
 #import "QueueButton.h"
-#import "../Extensions/UIColor+HexString.h"
-#import "../Extensions/UIDevice+isiPad.h"
+#import <Extensions/UIColor+HexString.h>
+#import <Extensions/UIDevice+isiPad.h>
 #import <libcolorpicker.h>
 
 @implementation ModernDepictionDelegate

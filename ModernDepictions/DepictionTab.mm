@@ -1,5 +1,5 @@
 #import "DepictionTab.h"
-#import "../Headers/Localize.h"
+#import <Headers/Localize.h>
 
 @implementation DepictionTab
 

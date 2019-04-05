@@ -1,0 +1,2 @@
+void ModernDepictionsInitializeCore(void);
+void ModernDepictionsInitializeDepictions(void);

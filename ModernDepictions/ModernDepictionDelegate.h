@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "../Headers/Headers.h"
+#import <Headers/Headers.h>
 
 @class ModernPackageController;
 @class Database;

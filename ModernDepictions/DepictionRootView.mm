@@ -4,8 +4,8 @@
 #import "DepictionTabView.h"
 #import "ContentCellFactory.h"
 #import "DepictionImageView.h"
-#import "../Extensions/UINavigationController+Opacity.h"
-#import "../Extensions/UIColor+HexString.h"
+#import <Extensions/UINavigationController+Opacity.h>
+#import <Extensions/UIColor+HexString.h>
 
 @implementation DepictionRootView
 

@@ -1,6 +1,6 @@
 #import "ModernPackageController.h"
-#import "../Extensions/UINavigationController+Opacity.h"
-#import "../Extensions/UIImage+ImageWithColor.h"
+#import <Extensions/UINavigationController+Opacity.h>
+#import <Extensions/UIImage+ImageWithColor.h>
 #import "ModernDepictionDelegate.h"
 #import "DepictionRootView.h"
 #import "DepictionTabView.h"

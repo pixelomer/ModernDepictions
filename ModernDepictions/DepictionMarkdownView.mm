@@ -1,7 +1,7 @@
 #import "DepictionMarkdownView.h"
 #import "ModernDepictionDelegate.h"
-#import "../Extensions/NSMutableString+RegEx.h"
-#import "../Extensions/NSAttributedString+Markdown.h"
+#import <Extensions/NSMutableString+RegEx.h>
+#import <Extensions/NSAttributedString+Markdown.h>
 
 @implementation DepictionMarkdownView
 
