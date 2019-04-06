@@ -3,7 +3,11 @@
 
 @class Cydia;
 
-@interface ModernHomeController : UITableViewController
-@property (nonatomic, assign) Cydia *delegate;
+@interface ModernHomeController : UITableViewController<UITableViewDelegate, UITableViewDataSource> {
+	Cydia *_cydiaDelegate;
+}
+@property (nonatomic, assign, setter=setDelegate:, getter=delegate) Cydia *cydiaDelegate;
+- (Cydia *)delegate;
+- (void)setDelegate:(Cydia *)newDelegate;
 - (instancetype)init;
 @end
