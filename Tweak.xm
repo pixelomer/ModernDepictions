@@ -5,7 +5,7 @@ extern "C" void _CFEnableZombies();
 
 %hook Cydia
 
-// For some reason Cydia forgets its superclass when I start GADMobileAds
+// For some reason Cydia forgets its superclass when GADMobileAds exists
 - (Class)superclass {
 	return %c(CyteApplication);
 }
@@ -18,6 +18,7 @@ extern "C" void _CFEnableZombies();
 		ModernDepictionsGetPreferenceValue(@"EnableModernDepictions", 1))
 	{
 		NSLog(@"init");
+		_CFEnableZombies();
 		ModernDepictionsInitializeCore();
 		if (ModernDepictionsGetPreferenceValue(@"EnableSileoDepictions", 1)) {
 			ModernDepictionsInitializeDepictions();

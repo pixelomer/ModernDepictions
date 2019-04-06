@@ -137,6 +137,13 @@ static UIColor *defaultTintColor;
 		NSLog(@"Depiction: %@", _depiction);
 		if ([_depiction isKindOfClass:[NSDictionary class]]) {
 			NSLog(@"-[%@ loadDepiction]", self.packageController);
+			NSMutableDictionary *mutableDict = [_depiction mutableCopy];
+			for (NSString *key in _depiction) {
+				if ([[_depiction objectForKey:key] isKindOfClass:[NSNull class]]) {
+					[mutableDict removeObjectForKey:key];
+				}
+			}
+			_depiction = [mutableDict copy];
 			if (_depiction[@"tintColor"]) {
 				// The tint color may not be valid.
 				@try {

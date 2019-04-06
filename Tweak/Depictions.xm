@@ -1,20 +1,20 @@
 #import <UIKit/UIKit.h>
 #import <Headers/Headers.h>
-#import <ModernDepictions/ModernPackageController.h>
+#import <ModernDepictions/SileoDepictions/ModernPackageController.h>
 @import GoogleMobileAds;
 
 static NSArray *iOSRepoUpdatesHosts;
-static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretained, SEL, Database *__strong, NSString *__strong, NSString *__strong);
+static __kindof UIViewController *(*origPVCInitializer)(CYPackageController *const __unsafe_unretained, SEL, Database *__strong, NSString *__strong, NSString *__strong);
 
 %group Depictions
 %hook CYPackageController
 
 %new
 - (CYPackageController *)___initWithDatabase:(Database *)database forPackage:(NSString *)name withReferrer:(NSString *)referrer {
-	return (__bridge id)origPVCInitializer(self, _cmd, database, name, referrer);
+	return origPVCInitializer(self, _cmd, database, name, referrer);
 }
 
-- (void *)initWithDatabase:(Database *)database forPackage:(NSString *)name withReferrer:(NSString *)referrer {
+- (__kindof UIViewController *)initWithDatabase:(Database *)database forPackage:(NSString *)name withReferrer:(NSString *)referrer {
 	origPVCInitializer = &%orig;
 	Package *package = [database packageWithName:name];
 	if (package) {
@@ -47,9 +47,9 @@ static void *(*origPVCInitializer)(CYPackageController *const __unsafe_unretaine
 		newView.referrer = referrer;
 		if (newView) {
 			NSLog(@"New view: %@", newView);
-			if (self) objc_msgSend(self, NSSelectorFromString(@"release")); // Cydia isn't built with ARC
+			if (self) objc_msgSend(self, NSSelectorFromString(@"release"));
 			NSLog(@"Returning...");
-			return (__bridge void *)newView;
+			return newView;
 		}
 	}
 	return %orig;

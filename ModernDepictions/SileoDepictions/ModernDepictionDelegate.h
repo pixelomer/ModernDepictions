@@ -12,7 +12,7 @@
 }
 @property (nonatomic, strong) ModernPackageController *packageController;
 @property (nonatomic, readonly) NSOperationQueue *operationQueue;
-@property (nonatomic, strong) Cydia *cydiaDelegate;
+@property (nonatomic, assign) Cydia *cydiaDelegate;
 @property (nonatomic, readonly) NSDictionary *depiction;
 @property (nonatomic, readonly) Database *database;
 @property (nonatomic, readonly) NSURL *depictionURL;
