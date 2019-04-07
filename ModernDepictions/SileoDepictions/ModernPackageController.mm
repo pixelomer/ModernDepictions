@@ -208,7 +208,7 @@ static UIColor *origTintColor;
 		]
 	]];
 
-	self.navigationController.opacity = 0.0;
+	self.navigationController.clear = NO;
 	self.navigationController.navigationBar.translucent = YES;
 	self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 	[self.class setOriginalNavBarTintColor:self.navigationController.navigationBar.tintColor];
@@ -273,14 +273,14 @@ static UIColor *origTintColor;
 	else {
 		imageView.center = CGPointMake(origImageWidth / 2, (origImageHeight / 2) - offsetY);
 		self.navigationController.opacity = min(offsetY / (origImageHeight - navBarLowerY), 1.0);
-		if (offsetY > (origImageHeight / 3)) {
-			self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
-			self.navigationController.navigationBar.tintColor = origTintColor;
-		}
-		else {
-			self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-			self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-		}
+	}
+	if (offsetY > (origImageHeight / 3)) {
+		self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
+		self.navigationController.navigationBar.tintColor = origTintColor;
+	}
+	else {
+		self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+		self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	}
 }
 
