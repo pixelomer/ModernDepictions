@@ -57,6 +57,7 @@ static UIColor *uninstallQueueColor;
 
 	// Icon setup
 	iconView = [[UIImageView alloc] init];
+	iconView.layer.masksToBounds = YES;
 	iconView.layer.cornerRadius = iconSize / 4.0;
 	iconView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.contentView addSubview:iconView];
