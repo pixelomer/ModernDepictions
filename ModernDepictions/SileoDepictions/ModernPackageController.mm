@@ -208,7 +208,7 @@ static UIColor *origTintColor;
 		]
 	]];
 
-	self.navigationController.clear = NO;
+	self.navigationController.opacity = 0.0;
 	self.navigationController.navigationBar.translucent = YES;
 	self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 	[self.class setOriginalNavBarTintColor:self.navigationController.navigationBar.tintColor];

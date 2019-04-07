@@ -86,18 +86,6 @@ static __kindof UIViewController *(*origPVCInitializer)(CYPackageController *con
 }
 
 %end
-
-%hook UIViewController
-
-- (void)viewDidAppear:(BOOL)animated {
-	%orig;
-	if ([self isKindOfClass:[ModernPackageController class]]) return;
-	self.navigationController.clear = NO;
-	self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
-	self.navigationController.navigationBar.translucent = NO;
-}
-
-%end
 %end
 
 void ModernDepictionsInitializeDepictions(void) {
