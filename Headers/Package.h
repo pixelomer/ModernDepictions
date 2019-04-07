@@ -19,6 +19,7 @@
 - (NSString *)getField:(NSString *)name;
 - (NSString *)longDescription;
 - (NSString *)shortDescription;
+- (void)freeParsedPackage;
 @end
 
 @interface Package(ModernDepictions)

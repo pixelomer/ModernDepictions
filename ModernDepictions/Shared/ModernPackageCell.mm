@@ -6,14 +6,18 @@ static UIFont *authorLabelFont;
 static UIFont *packageNameLabelFont;
 static UIFont *footerLabelFont;
 static UIColor *infoLabelColor;
+static UIColor *installQueueColor;
+static UIColor *uninstallQueueColor;
 
-+ (void)initialize {
++ (void)load {
 	if ([self class] == [ModernPackageCell class]) {
 		authorLabelFont = (
 			[UIFont respondsToSelector:@selector(systemFontOfSize:weight:)] ?
 			[UIFont systemFontOfSize:13 weight:UIFontWeightMedium] :
 			[UIFont fontWithName:@".SFUIText-Medium" size:13]
 		);
+		installQueueColor = [UIColor colorWithRed:0.88f green:1.00f blue:0.88f alpha:1.00f];
+    	uninstallQueueColor = [UIColor colorWithRed:1.00f green:0.88f blue:0.88f alpha:1.00f];
 		packageNameLabelFont = (
 			[UIFont respondsToSelector:@selector(systemFontOfSize:weight:)] ?
 			[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold] :
@@ -26,9 +30,7 @@ static UIColor *infoLabelColor;
 
 - (instancetype)initWithIconSize:(CGFloat)iconSize reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-	self.preservesSuperviewLayoutMargins = NO;
-	self.layoutMargins = UIEdgeInsetsZero;
-	self.separatorInset = UIEdgeInsetsMake(iconSize + 32.0, 0, 0, 0);
+	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
 	// Text container view setup
 	textContainerView = [[UIView alloc] init];
@@ -59,38 +61,77 @@ static UIColor *infoLabelColor;
 	iconView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.contentView addSubview:iconView];
 
+	// Placard setup (I don't know what it stands for but it's the indicator that shows you that the package is installed/queued)
+	placard = [[UIImageView alloc] init];
+	placard.translatesAutoresizingMaskIntoConstraints = NO;
+	[textContainerView addSubview:placard];
+
 	// Text container layout setup
+	NSDictionary *views = @{
+		@"placard" : placard,
+		@"title"   : packageNameLabel,
+		@"author"  : authorLabel,
+		@"footer"  : footerLabel,
+		@"icon"    : iconView,
+		@"text"    : textContainerView
+	};
 	[textContainerView addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"V:|[title(==20.5)]-2-[author(==16)]-4-[footer(==13.5)]|"
 		options:0
 		metrics:nil
-		views:@{ @"title" : packageNameLabel, @"author" : authorLabel, @"footer" : footerLabel }
+		views:views
 	]];
 	for (UILabel *label in @[packageNameLabel, authorLabel, footerLabel]) {
-		[textContainerView addConstraints:@[
-			[NSLayoutConstraint
-				constraintWithItem:label
-				attribute:NSLayoutAttributeLeft
-				relatedBy:NSLayoutRelationEqual
-				toItem:textContainerView
-				attribute:NSLayoutAttributeLeft
-				multiplier:1.0
-				constant:0.0
-			],
-			[NSLayoutConstraint
-				constraintWithItem:label
-				attribute:NSLayoutAttributeRight
-				relatedBy:NSLayoutRelationEqual
-				toItem:textContainerView
-				attribute:NSLayoutAttributeRight
-				multiplier:1.0
-				constant:0.0
-			]
+		[textContainerView addConstraint:[NSLayoutConstraint
+			constraintWithItem:label
+			attribute:NSLayoutAttributeLeading
+			relatedBy:NSLayoutRelationEqual
+			toItem:textContainerView
+			attribute:NSLayoutAttributeLeading
+			multiplier:1.0
+			constant:0.0
 		]];
+		if (label != packageNameLabel) {
+			[textContainerView addConstraint:[NSLayoutConstraint
+				constraintWithItem:label
+				attribute:NSLayoutAttributeTrailing
+				relatedBy:NSLayoutRelationEqual
+				toItem:textContainerView
+				attribute:NSLayoutAttributeTrailing
+				multiplier:1.0
+				constant:0.0
+			]];
+		}
 	}
+	[textContainerView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:|[placard(==20.5)]"
+		options:0
+		metrics:nil
+		views:views
+	]];
+	[textContainerView addConstraints:@[
+		[NSLayoutConstraint
+			constraintWithItem:placard
+			attribute:NSLayoutAttributeLeading
+			relatedBy:NSLayoutRelationEqual
+			toItem:packageNameLabel
+			attribute:NSLayoutAttributeTrailing
+			multiplier:1.0
+			constant:8.0
+		],
+		[NSLayoutConstraint
+			constraintWithItem:placard
+			attribute:NSLayoutAttributeWidth
+			relatedBy:NSLayoutRelationEqual
+			toItem:nil
+			attribute:NSLayoutAttributeNotAnAttribute
+			multiplier:1.0
+			constant:20.5
+		]
+	]];
+
 
 	// Content view layout setup
-	NSDictionary *views = @{ @"icon" : iconView, @"text" : textContainerView };
 	[self.contentView addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-16-[icon(==%f)]-16-[text]-16-|", iconSize]
 		options:0
@@ -98,7 +139,7 @@ static UIColor *infoLabelColor;
 		views:views
 	]];
 	[self.contentView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-8-[icon(==%f)]-8-|", iconSize]
+		constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-8-[icon(==%f)]", iconSize]
 		options:0
 		metrics:nil
 		views:views
@@ -115,6 +156,52 @@ static UIColor *infoLabelColor;
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
 	return [self initWithIconSize:40.0 reuseIdentifier:reuseIdentifier];
+}
+
+- (void)setPackage:(Package *)package {
+	[package parse];
+	if (packageNameLabelTrailingConstraint) {
+		[textContainerView removeConstraint:packageNameLabelTrailingConstraint];
+	}
+	packageNameLabel.text = package.name;
+	NSString *authorName = package.author.name;
+	authorLabel.text = (
+		(authorName && [authorName isKindOfClass:[NSString class]] && ![authorName isEqualToString:@""]) ?
+		authorName : [NSString stringWithFormat:@"(%@)", UCLocalize(@"UNKNOWN")]
+	);
+	NSArray *placardImageInfo = nil;
+	if (NSString *mode = package.mode) {
+		placardImageInfo = (
+			([mode isEqualToString:@"REMOVE"] || [mode isEqualToString:@"PURGE"]) ?
+			@[@"removing", uninstallQueueColor] :
+			@[@"installing", installQueueColor]
+		);
+	}
+	else if (!package.uninstalled) {
+		placardImageInfo = @[@"installed", [UIColor whiteColor]];
+	}
+	placard.image = placardImageInfo ? [UIImage imageNamed:placardImageInfo[0]] : nil;
+	self.backgroundColor = placardImageInfo ? placardImageInfo[1] : [UIColor whiteColor];
+	[placard setNeedsDisplay];
+	[textContainerView addConstraint:(
+		packageNameLabelTrailingConstraint = [NSLayoutConstraint
+			constraintWithItem:packageNameLabel
+			attribute:NSLayoutAttributeTrailing
+			relatedBy:NSLayoutRelationLessThanOrEqual
+			toItem:textContainerView
+			attribute:NSLayoutAttributeTrailing
+			multiplier:1.0
+			constant:(!!placardImageInfo * -36.5)
+		]
+	)];
+	self.footerText = package.shortDescription;
+	iconView.image = package.icon;
+	[iconView setNeedsDisplay];
+	_package = package;
+}
+
+- (void)setPackage:(Package *)package asSummary:(bool)asSummary {
+	[self setPackage:package];
 }
 
 - (instancetype)init {

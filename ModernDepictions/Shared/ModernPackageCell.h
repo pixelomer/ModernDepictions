@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import <Headers/Headers.h>
 
 @interface ModernPackageCell : UITableViewCell {
 	UIImageView *iconView;
@@ -6,7 +7,11 @@
 	UILabel *packageNameLabel;
 	UILabel *authorLabel;
 	UILabel *footerLabel;
+	UIImageView *placard;
+	NSLayoutConstraint *packageNameLabelTrailingConstraint;
 }
+@property (nonatomic, weak, setter=setPackage:) Package *package;
+- (void)setPackage:(Package *)package;
 - (void)setFooterText:(NSString *)newText;
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (instancetype)initWithIconSize:(CGFloat)iconSize reuseIdentifier:(NSString *)reuseIdentifier;

@@ -89,6 +89,15 @@
 	self.sileoDepiction = [value isKindOfClass:[NSNull class]] ? nil : value;
 }
 
+// A failed attempt to free the parsed package, not used anywhere
+%new
+- (void)freeParsedPackage {
+	self.sileoDepiction = nil;
+	void **parsedPackage = &MSHookIvar<void *>(self, "parsed_");
+	if (*parsedPackage) free(*parsedPackage);
+	*parsedPackage = nil;
+}
+
 %end
 
 %hook UILabel

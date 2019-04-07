@@ -19,8 +19,12 @@
 
 // TESTING
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"1"];
-	if (!cell) cell = [[ModernPackageCell alloc] initWithIconSize:65.0 reuseIdentifier:@"1"];
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Package"];
+	if (!cell) cell = [[ModernPackageCell alloc] initWithIconSize:65.0 reuseIdentifier:@"Package"];
+	if (![cell isKindOfClass:[ModernPackageCell class]]) cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	else {
+		
+	}
 	return cell;
 }
 
