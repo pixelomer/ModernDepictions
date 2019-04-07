@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 #import <Headers/Headers.h>
 #import <ModernDepictions/SileoDepictions/ModernPackageController.h>
+#import <Extensions/UINavigationController+Opacity.h>
 @import GoogleMobileAds;
 
 static NSArray *iOSRepoUpdatesHosts;
@@ -82,6 +83,18 @@ static __kindof UIViewController *(*origPVCInitializer)(CYPackageController *con
 	UIWebView *orig = %orig;
 	orig.scrollView.scrollEnabled = NO;
 	return orig;
+}
+
+%end
+
+%hook UIViewController
+
+- (void)viewDidAppear:(BOOL)animated {
+	%orig;
+	if ([self isKindOfClass:[ModernPackageController class]]) return;
+	self.navigationController.clear = NO;
+	self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
+	self.navigationController.navigationBar.translucent = NO;
 }
 
 %end
