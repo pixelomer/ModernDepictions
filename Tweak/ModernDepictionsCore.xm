@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <Headers/Headers.h>
+#import "Tweak.h"
 
 %group ModernDepictionsCore
 %hook Database
@@ -129,4 +130,5 @@
 
 void ModernDepictionsInitializeCore(void) {
 	%init(ModernDepictionsCore);
+	ModernDepictionsInitializeSharedFunctions();
 }

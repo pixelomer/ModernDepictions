@@ -1,13 +1,13 @@
 #import "ModernHomeController.h"
 #import "FeaturedPackageCell.h"
-#import <substrate.h>
+#import "FeaturedBannersView.h"
+#import "FeaturedHeaderView.h"
 
 @implementation ModernHomeController
 
 - (instancetype)init {
 	self = [self initWithStyle:UITableViewStylePlain];
 	database = [objc_getClass("Database") sharedInstance];
-	cellCount = 0;
 	return self;
 }
 
@@ -117,13 +117,13 @@
 					@"title" : bannerInfo[@"title"],
 					@"image" : image,
 					@"hideShadow" : bannerInfo[@"hideShadow"] ?: @NO,
-					@"package" : bannerInfo[@"package"]
+					@"package" : bannerInfo[@"package"],
+					@"preferredSize" : repo[@"itemSize"] ?: @"{263, 148}"
 				}];
 			}
 		}
 	}
 	NSLog(@"Featured packages: %@", featuredPackages);
-	cellCount = min(featuredPackages.count, 9);
 	NSMutableArray *chosenPackages = [NSMutableArray new];
 	for (int i = featuredPackages.count; i > max(0, featuredPackages.count - 9); i--) {
 		NSInteger index = arc4random_uniform(i);
@@ -131,13 +131,27 @@
 		[featuredPackages removeObjectAtIndex:index];
 	}
 	NSLog(@"Chose packages: %@", chosenPackages);
-	cells = [chosenPackages copy];
+	[self createCellsFromPackages:chosenPackages];
 	[self.tableView reloadData];
+}
+
+- (void)createCellsFromPackages:(NSArray<NSDictionary<NSString *, __kindof NSObject *> *> *)packageArray {
+	NSMutableArray *mutableCells = [NSMutableArray new];
+	if (packageArray.count > 0) {
+		FeaturedBannersView *bannersView = [[FeaturedBannersView alloc] initWithPackages:packageArray bannerLimit:4];
+		[mutableCells addObject:bannersView];
+	}
+	if (packageArray.count > 4) {
+		[mutableCells addObject:@"Popular Packages"]; // Will be treated as a FeaturedHeaderView
+		for (int i = 4; i < min(packageArray.count, 9); i++) {
+			[mutableCells addObject:packageArray[i]]; // Will be treated as a FeaturedPackageCell
+		}
+	}
+	cells = [mutableCells copy];
 }
 
 - (void)refreshFeaturedPackages {
 	self.title = @"Refreshing...";
-	cellCount = 0;
 	refreshButton.enabled = NO;
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		usleep(2000000);
@@ -161,7 +175,7 @@
 				error:&error
 			];
 			NSLog(@"Error: %@\nJSON: %@", error, JSON);
-			if (!JSON || error || ![JSON isKindOfClass:[NSDictionary class]] || ![JSON[@"banners"] isKindOfClass:[NSMutableArray class]]) continue;
+			if (!JSON || error || ![JSON isKindOfClass:[NSDictionary class]] || ![JSON[@"class"] isKindOfClass:[NSString class]] || ![JSON[@"class"] isEqualToString:@"FeaturedBannersView"] || ![JSON[@"banners"] isKindOfClass:[NSMutableArray class]]) continue;
 			NSMutableArray *banners = JSON[@"banners"];
 			NSLog(@"Banners: %@", banners);
 			if (banners.count > 0) {
@@ -195,19 +209,35 @@
 
 // TESTING
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	FeaturedPackageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Package"];
-	if (!cell) cell = [[FeaturedPackageCell alloc] initWithIconSize:65.0 centerText:YES reuseIdentifier:@"Package"];
+	NSObject *object = cells[indexPath.row];
+	UITableViewCell *cell = nil;
+	NSLog(@"Object: %@", object);
+	if ([object isKindOfClass:[NSString class]]) {
+		cell = [tableView dequeueReusableCellWithIdentifier:@"Header"];
+		if (!cell) {
+			cell = [[FeaturedHeaderView alloc] initWithReuseIdentifier:@"Header"];
+		}
+		cell.text = (NSString *)object;
+	}
+	else if ([object isKindOfClass:[NSDictionary class]]) {
+		cell = [tableView dequeueReusableCellWithIdentifier:@"Package"];
+		if (!cell) cell = [[FeaturedPackageCell alloc] initWithIconSize:65.0 centerText:YES reuseIdentifier:@"Package"];
+		((FeaturedPackageCell *)cell).package = [database packageWithName:cells[indexPath.row][@"package"]];
+	}
+	else {
+		cell = (UITableViewCell *)object;
+	}
 	if (![cell isKindOfClass:[FeaturedPackageCell class]]) cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	cell.package = [database packageWithName:cells[indexPath.row][@"package"]];
 	return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return cellCount;
+	return cells ? cells.count : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return UITableViewAutomaticDimension;
+	FeaturedBannersView *cell = cells[indexPath.row];
+	return [cell isKindOfClass:[FeaturedBannersView class]] ? cell.height : UITableViewAutomaticDimension;
 }
 
 @end

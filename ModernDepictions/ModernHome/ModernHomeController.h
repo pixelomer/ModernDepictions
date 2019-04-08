@@ -8,7 +8,6 @@
 	Database *database;
 	UIBarButtonItem *refreshButton;
 	NSArray *cells; // Contains both actual cells and dictionaries
-	NSInteger cellCount;
 }
 @property (nonatomic, assign, setter=setDelegate:, getter=delegate) Cydia *cydiaDelegate;
 - (Cydia *)delegate;
