@@ -29,6 +29,10 @@ static UIColor *uninstallQueueColor;
 }
 
 - (instancetype)initWithIconSize:(CGFloat)iconSize reuseIdentifier:(NSString *)reuseIdentifier {
+	return [self initWithIconSize:iconSize centerText:NO reuseIdentifier:reuseIdentifier];
+}
+
+- (instancetype)initWithIconSize:(CGFloat)iconSize centerText:(BOOL)shouldCenterText reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
@@ -134,7 +138,7 @@ static UIColor *uninstallQueueColor;
 
 	// Content view layout setup
 	[self.contentView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-16-[icon(==%f)]-16-[text]-16-|", iconSize]
+		constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-16-[icon(==%f)]-16-[text]|", iconSize]
 		options:0
 		metrics:nil
 		views:views
@@ -145,12 +149,31 @@ static UIColor *uninstallQueueColor;
 		metrics:nil
 		views:views
 	]];
-	[self.contentView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"V:|-8-[text]"
-		options:0
-		metrics:nil
-		views:views
-	]];
+	if (shouldCenterText) {
+		[self.contentView addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"V:[icon]-8-|"
+			options:0
+			metrics:nil
+			views:views
+		]];
+		[self.contentView addConstraint:[NSLayoutConstraint
+			constraintWithItem:textContainerView
+			attribute:NSLayoutAttributeCenterY
+			relatedBy:NSLayoutRelationEqual
+			toItem:iconView
+			attribute:NSLayoutAttributeCenterY
+			multiplier:1.0
+			constant:0.0
+		]];
+	}
+	else {
+		[self.contentView addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"V:|-8-[text]"
+			options:0
+			metrics:nil
+			views:views
+		]];
+	}
 
 	return self;
 }
@@ -160,6 +183,7 @@ static UIColor *uninstallQueueColor;
 }
 
 - (void)setPackage:(Package *)package {
+	if (!package) return;
 	[package parse];
 	if (packageNameLabelTrailingConstraint) {
 		[textContainerView removeConstraint:packageNameLabelTrailingConstraint];
@@ -211,6 +235,11 @@ static UIColor *uninstallQueueColor;
 
 - (void)setFooterText:(NSString *)newText {
 	footerLabel.text = newText;
+}
+
+- (void)setIcon:(UIImage *)newIcon {
+	iconView.image = newIcon;
+	[iconView setNeedsDisplay];
 }
 
 @end

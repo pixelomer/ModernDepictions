@@ -31,6 +31,16 @@
 	}
 }
 
+%new
+- (NSOperationQueue *)iconDownloadQueue {
+	NSOperationQueue *queue = objc_getAssociatedObject(self, _cmd);
+	if (!queue) {
+		queue = [NSOperationQueue new];
+		objc_setAssociatedObject(self, _cmd, queue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	}
+	return queue;
+}
+
 %end
 
 %hook Cydia
