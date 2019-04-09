@@ -1,4 +1,5 @@
 #import "FeaturedBannersView.h"
+#import "FeaturedBannerView.h"
 #import <Tweak/Tweak.h>
 
 @implementation FeaturedBannersView
@@ -27,36 +28,14 @@
 			views:views
 		]];
 	}
-	UIImageView *previousView;
+	__kindof UIView *previousView;
 	// V:|-16-[image(==148)]-16-|
 	// H:[previous]-16-[image(==263)]
 	// Radius: 10
 	for (NSUInteger i = 0; i < bannerLimit; i++) {
 		NSDictionary *packageInfo = packages[i];
-		UIImageView *banner = [[UIImageView alloc] initWithImage:packageInfo[@"image"]];
-		banner.translatesAutoresizingMaskIntoConstraints = NO;
-		banner.contentMode = UIViewContentModeScaleAspectFill;
-		banner.layer.masksToBounds = YES;
-		banner.layer.cornerRadius = 10.0;
-		if (![(NSNumber *)packageInfo[@"hideShadow"] boolValue]) {
-			UIImageView *shadowView = [[UIImageView alloc] initWithImage:GetShadowImage()];
-			shadowView.translatesAutoresizingMaskIntoConstraints = NO;
-			shadowView.contentMode = UIViewContentModeScaleToFill;
-			[banner addSubview:shadowView];
-			NSDictionary *views = @{ @"shadowView" : shadowView };
-			[banner addConstraints:[NSLayoutConstraint
-				constraintsWithVisualFormat:@"H:|[shadowView]|"
-				options:0
-				metrics:nil
-				views:views
-			]];
-			[banner addConstraints:[NSLayoutConstraint
-				constraintsWithVisualFormat:@"V:|[shadowView]|"
-				options:0
-				metrics:nil
-				views:views
-			]];
-		}
+		FeaturedBannerView *banner = [FeaturedBannerView bannerWithPackageInfo:packageInfo];
+		[banner addTarget:self action:@selector(handleBannerTap:) forControlEvents:UIControlEventTouchUpInside];
 		[bannerContainerView addSubview:banner];
 		NSDictionary *views = @{ @"prev" : (previousView ?: [NSNull null]), @"banner" : banner };
 		[bannerContainerView addConstraints:[NSLayoutConstraint
@@ -95,6 +74,10 @@
 
 - (CGFloat)height {
 	return height;
+}
+
+- (void)handleBannerTap:(FeaturedBannerView *)banner {
+	// Show the package controller for the corresponding package
 }
 
 @end
