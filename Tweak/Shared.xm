@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <Headers/Headers.h>
+#import <Extensions/UIDevice+isiPad.h>
 
 static UIImage *shadowImage;
 
@@ -8,7 +9,7 @@ int ModernDepictionsGetPreferenceValue(NSString *prefKey, int defaultValue) {
 	return val ? val.intValue : defaultValue;
 }
 
-UIImage *GetShadowImage(void) {
+UIImage *ModernDepictionsGetShadowImage(void) {
 	if (!shadowImage) {
 		unsigned char shadowImageBytes[] = {
 			0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
@@ -64,6 +65,13 @@ UIImage *GetShadowImage(void) {
 		shadowImage = [UIImage imageWithData:[NSData dataWithBytes:shadowImageBytes length:sizeof(shadowImageBytes)]];
 	}
 	return shadowImage;
+}
+
+NSString *ModernDepictionsGeneratePackageURL(NSString *packageID) {
+	return [NSString stringWithFormat:@"https://cydia.saurik.com/ui/ios~%@/1.1/package/#!/%@",
+		UIDevice.currentDevice.isiPad ? @"ipad" : @"iphone",
+		packageID
+	];
 }
 
 void ModernDepictionsInitializeSharedFunctions(void) {

@@ -3,5 +3,6 @@ void ModernDepictionsInitializeDepictions(void);
 void ModernDepictionsInitializeHome(void);
 void ModernDepictionsInitializeCells(void);
 void ModernDepictionsInitializeSharedFunctions(void);
-UIImage *GetShadowImage(void);
+UIImage *ModernDepictionsGetShadowImage(void);
+NSString *ModernDepictionsGeneratePackageURL(NSString *packageID);
 int ModernDepictionsGetPreferenceValue(NSString *prefKey, int defaultValue);
