@@ -135,6 +135,42 @@
 			<key>label</key>
 			<string>Enable experimental repositories</string>
 		</dict-->
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Credits</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBTwitterCell</string>
+			<key>label</key>
+			<string>Creator</string>
+			<key>showAvatar</key>
+			<true/>
+			<key>user</key>
+			<string>pixelomer</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBTwitterCell</string>
+			<key>label</key>
+			<string>Icon Designer</string>
+			<key>showAvatar</key>
+			<true/>
+			<key>user</key>
+			<string>designer_simply</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBTwitterCell</string>
+			<key>label</key>
+			<string>Sileo's Designer</string>
+			<key>showAvatar</key>
+			<true/>
+			<key>user</key>
+			<string>aesign_</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>ModernDepictions</string>

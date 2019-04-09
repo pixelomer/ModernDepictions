@@ -6,6 +6,7 @@ ModernDepictionsPrefs_INSTALL_PATH = /Library/PreferenceBundles
 ModernDepictionsPrefs_FRAMEWORKS = UIKit
 ModernDepictionsPrefs_LIBRARIES = colorpicker
 ModernDepictionsPrefs_PRIVATE_FRAMEWORKS = Preferences
+ModernDepictionsPrefs_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
