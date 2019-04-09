@@ -7,6 +7,7 @@
 	Cydia *_cydiaDelegate;
 	Database *database;
 	UIBarButtonItem *refreshButton;
+	NSMutableDictionary *dummies;
 	NSArray *cells; // Contains both actual cells and dictionaries
 }
 @property (nonatomic, assign, setter=setDelegate:, getter=delegate) Cydia *cydiaDelegate;

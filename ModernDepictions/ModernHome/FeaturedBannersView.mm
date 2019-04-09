@@ -33,7 +33,8 @@
 	// V:|-16-[image(==148)]-16-|
 	// H:[previous]-16-[image(==263)]
 	// Radius: 10
-	for (NSUInteger i = 0; i < bannerLimit; i++) {
+	NSLog(@"Packages: %@", packages);
+	for (NSUInteger i = 0; i < min(packages.count, bannerLimit); i++) {
 		NSDictionary *packageInfo = packages[i];
 		FeaturedBannerView *banner = [FeaturedBannerView bannerWithPackageInfo:packageInfo];
 		[banner addTarget:self action:@selector(handleBannerTap:) forControlEvents:UIControlEventTouchUpInside];

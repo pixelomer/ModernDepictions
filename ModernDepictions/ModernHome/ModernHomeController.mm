@@ -2,7 +2,10 @@
 #import "FeaturedPackageCell.h"
 #import "FeaturedBannersView.h"
 #import "FeaturedHeaderView.h"
+#import "FeaturedDummyPackage.h"
 #import <Tweak/Tweak.h>
+
+#define REFRESH_ALGORITHM_VERSION 1
 
 @implementation ModernHomeController
 
@@ -33,9 +36,16 @@
 			toDate:lastRefresh 
 			options:0
 		];
+		NSNumber *lastRefreshedWith = [stddef objectForKey:@"ModernDepictionsLastRefreshVersion"];
 		shouldRefresh = (
-			![stddef objectForKey:@"ModernDepictionsCachedFeaturedPackages"] ||
-			([aWeekAfterRefresh compare:[NSDate date]] == NSOrderedAscending)
+			(
+				![stddef objectForKey:@"ModernDepictionsCachedFeaturedPackages"] ||
+				([aWeekAfterRefresh compare:[NSDate date]] == NSOrderedAscending)
+			) ||
+			(
+				![lastRefreshedWith isKindOfClass:[NSNumber class]] ||
+				[lastRefreshedWith unsignedLongValue] < REFRESH_ALGORITHM_VERSION
+			)
 		);
 	}
 	else {
@@ -74,10 +84,11 @@
 	}
 	NSLog(@"Featured packages: %@", featuredPackages);
 	NSMutableArray *chosenPackages = [NSMutableArray new];
-	for (int i = featuredPackages.count; i > max(0, featuredPackages.count - 9); i--) {
+	for (int i = featuredPackages.count; i > 0; i--) {
 		NSInteger index = arc4random_uniform(i);
 		[chosenPackages addObject:featuredPackages[index]];
 		[featuredPackages removeObjectAtIndex:index];
+		if ([chosenPackages count] >= 9) break;
 	}
 	NSLog(@"Chose packages: %@", chosenPackages);
 	[self createCellsFromPackages:chosenPackages];
@@ -112,7 +123,8 @@
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				self.title = [NSString stringWithFormat:@"%@...", source.name];
 			});
-			NSURL *featuredURL = [[NSURL URLWithString:source.rooturi] URLByAppendingPathComponent:@"sileo-featured.json"];
+			NSURL *rootURI = [NSURL URLWithString:source.rooturi];
+			NSURL *featuredURL = [rootURI URLByAppendingPathComponent:@"sileo-featured.json"];
 			if (!featuredURL) continue;
 			NSData *rawJSON = [NSData dataWithContentsOfURL:featuredURL];
 			NSLog(@"Featured URL: %@, Data: %@", featuredURL, rawJSON);
@@ -136,10 +148,11 @@
 					if (data) banner[@"imageData"] = data;
 				}
 			}
-			finalDictionary[featuredURL.absoluteString] = [JSON copy];
+			finalDictionary[rootURI.absoluteString] = [JSON copy];
 		}
 		[stddef setObject:finalDictionary forKey:@"ModernDepictionsCachedFeaturedPackages"];
 		[stddef setObject:[NSDate date] forKey:@"ModernDepictionsLastRefreshDate"];
+		[stddef setObject:@(REFRESH_ALGORITHM_VERSION) forKey:@"ModernDepictionsLastRefreshVersion"];
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			[self loadFeaturedPackages];
 			refreshButton.enabled = YES;
@@ -171,7 +184,16 @@
 	else if ([object isKindOfClass:[NSDictionary class]]) {
 		cell = [tableView dequeueReusableCellWithIdentifier:@"Package"];
 		if (!cell) cell = [[FeaturedPackageCell alloc] initWithIconSize:65.0 centerText:YES reuseIdentifier:@"Package"];
-		((FeaturedPackageCell *)cell).package = [database packageWithName:cells[indexPath.row][@"package"]];
+		NSString *packageID = cells[indexPath.row][@"package"];
+		__kindof NSObject *package = [database packageWithName:packageID];
+		if (!package) {
+			if (!dummies) dummies = [NSMutableDictionary new];
+			if (!dummies[packageID]) {
+				dummies[packageID] = [[FeaturedDummyPackage alloc] initWithPackageName:cells[indexPath.row][@"title"] identifier:packageID];
+			}
+			package = dummies[packageID];
+		}
+		((FeaturedPackageCell *)cell).package = package;
 	}
 	else {
 		cell = (UITableViewCell *)object;
@@ -194,18 +216,6 @@
 	if ([cellInfo isKindOfClass:[NSDictionary class]]) {
 		[self didSelectPackage:cellInfo[@"package"]];
 	} 
-}
-
-- (void)didSelectPackage:(NSString *)packageID {
-	Package *package = [database packageWithName:packageID];
-	NSLog(@"Did select: %@", package);
-	[self.navigationController 
-		pushViewController:[(Cydia *)[UIApplication sharedApplication]
-			pageForPackage:[package id]
-			withReferrer:ModernDepictionsGeneratePackageURL([package id])
-		]
-		animated:YES
-	];
 }
 
 @end
