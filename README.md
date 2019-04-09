@@ -15,6 +15,10 @@ Sileo depictions for Cydia.
 
 - Payment API support
 
+## Credits
+
+- [@designer_simply](https://twitter.com/designer_simply): Icon design
+
 ## Warning
 
 - This is the second time I used UIKit to create a user interface, and the first time I created a user interface without interface builder. I might be doing some things completely wrong. If you think I am, please send me DM on Twitter or open a new issue.
