@@ -41,6 +41,28 @@
 			views:@{ @"v" : view }
 		]];
 	}
+	if ([info[@"title"] isKindOfClass:[NSString class]]) {
+		UILabel *titleLabel = [UILabel new];
+		titleLabel.textColor = [UIColor whiteColor];
+		titleLabel.font = [UIFont boldSystemFontOfSize:24.0];
+		titleLabel.numberOfLines = 1;
+		titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+		titleLabel.text = info[@"title"];
+		[self addSubview:titleLabel];
+		NSDictionary *views = @{ @"title" : titleLabel };
+		[self addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"V:[title]-16-|"
+			options:0
+			metrics:nil
+			views:views
+		]];
+		[self addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"H:|-16-[title]-16-|"
+			options:0
+			metrics:nil
+			views:views
+		]];
+	}
 	return self;
 }
 
