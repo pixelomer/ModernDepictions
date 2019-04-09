@@ -13,6 +13,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	self.navigationController.navigationBar.prefersLargeTitles = YES;
 	NSUserDefaults *stddef = [NSUserDefaults standardUserDefaults];
 	BOOL shouldRefresh = NO;
 	refreshButton = [[UIBarButtonItem alloc]
@@ -132,7 +133,7 @@
 					if (data) banner[@"imageData"] = data;
 				}
 			}
-			finalDictionary[featuredURL.host] = [JSON copy];
+			finalDictionary[featuredURL.absoluteString] = [JSON copy];
 		}
 		[stddef setObject:finalDictionary forKey:@"ModernDepictionsCachedFeaturedPackages"];
 		[stddef setObject:[NSDate date] forKey:@"ModernDepictionsLastRefreshDate"];
