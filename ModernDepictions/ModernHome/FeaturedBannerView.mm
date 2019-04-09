@@ -10,6 +10,7 @@
 }
 
 - (instancetype)initWithPackageInfo:(NSDictionary *)info {
+	_packageInfo = info;
 	self.translatesAutoresizingMaskIntoConstraints = NO;
 	self.layer.masksToBounds = YES;
 	self.layer.cornerRadius = 10.0;
@@ -19,7 +20,7 @@
 	imageView.contentMode = UIViewContentModeScaleAspectFill;
 	[self addSubview:imageView];
 	if (![(NSNumber *)info[@"hideShadow"] boolValue]) {
-		shadowView = [[UIImageView alloc] initWithImage:GetShadowImage()];
+		shadowView = [[UIImageView alloc] initWithImage:ModernDepictionsGetShadowImage()];
 		shadowView.translatesAutoresizingMaskIntoConstraints = NO;
 		shadowView.contentMode = UIViewContentModeScaleToFill;
 		shadowView.transform = CGAffineTransformMakeRotation(M_PI);

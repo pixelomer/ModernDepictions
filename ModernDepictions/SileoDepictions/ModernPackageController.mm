@@ -5,7 +5,7 @@
 #import "ModernDepictionDelegate.h"
 #import "DepictionRootView.h"
 #import "DepictionTabView.h"
-#define shadowImage GetShadowImage()
+#define shadowImage ModernDepictionsGetShadowImage()
 
 @implementation ModernPackageController
 

@@ -2,6 +2,7 @@
 #import "FeaturedPackageCell.h"
 #import "FeaturedBannersView.h"
 #import "FeaturedHeaderView.h"
+#import <Tweak/Tweak.h>
 
 @implementation ModernHomeController
 
@@ -184,6 +185,25 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	FeaturedBannersView *cell = cells[indexPath.row];
 	return [cell isKindOfClass:[FeaturedBannersView class]] ? cell.height : UITableViewAutomaticDimension;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSDictionary *cellInfo = cells[indexPath.row];
+	if ([cellInfo isKindOfClass:[NSDictionary class]]) {
+		[self didSelectPackage:cellInfo[@"package"]];
+	} 
+}
+
+- (void)didSelectPackage:(NSString *)packageID {
+	Package *package = [database packageWithName:packageID];
+	NSLog(@"Did select: %@", package);
+	[self.navigationController 
+		pushViewController:[(Cydia *)[UIApplication sharedApplication]
+			pageForPackage:[package id]
+			withReferrer:ModernDepictionsGeneratePackageURL([package id])
+		]
+		animated:YES
+	];
 }
 
 @end

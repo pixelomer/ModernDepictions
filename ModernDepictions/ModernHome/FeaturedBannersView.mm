@@ -1,5 +1,6 @@
 #import "FeaturedBannersView.h"
 #import "FeaturedBannerView.h"
+#import "ModernHomeController.h"
 #import <Tweak/Tweak.h>
 
 @implementation FeaturedBannersView
@@ -77,7 +78,9 @@
 }
 
 - (void)handleBannerTap:(FeaturedBannerView *)banner {
-	// Show the package controller for the corresponding package
+	[(ModernHomeController *)self._viewControllerForAncestor
+		didSelectPackage:banner.packageInfo[@"package"]
+	];
 }
 
 @end

@@ -14,3 +14,7 @@
 - (void)setDelegate:(Cydia *)newDelegate;
 - (instancetype)init;
 @end
+
+@interface ModernHomeController(Shared)
+- (void)didSelectPackage:(NSString *)package;
+@end
