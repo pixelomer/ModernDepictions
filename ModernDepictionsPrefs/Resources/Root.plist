@@ -60,19 +60,35 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Other</string>
+			<string>Modern Homepage</string>
+			<key>footerText</key>
+			<string>Replaces Cydia's homepage with a page that contains featured packages from your Sileo-compatible repositories.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<false/>
+			<true/>
 			<key>defaults</key>
 			<string>com.pixelomer.moderndepictions.prefs</string>
 			<key>key</key>
 			<string>EnableModernHomeController</string>
 			<key>label</key>
-			<string>Enable Modern Home</string>
+			<string>Enable Modern Homepage</string>
+			<key>enabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>EnableFeaturedPackagesInSectionController</string>
+			<key>label</key>
+			<string>Repo-specific Featured Packages</string>
 			<key>enabled</key>
 			<false/>
 		</dict>
