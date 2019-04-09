@@ -161,16 +161,6 @@
 			<key>user</key>
 			<string>designer_simply</string>
 		</dict>
-		<dict>
-			<key>cellClass</key>
-			<string>HBTwitterCell</string>
-			<key>label</key>
-			<string>Alessandro Chiarlitti</string>
-			<key>showAvatar</key>
-			<true/>
-			<key>user</key>
-			<string>aesign_</string>
-		</dict>
 	</array>
 	<key>title</key>
 	<string>ModernDepictions</string>
