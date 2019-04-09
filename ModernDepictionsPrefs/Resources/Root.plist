@@ -145,7 +145,7 @@
 			<key>cellClass</key>
 			<string>HBTwitterCell</string>
 			<key>label</key>
-			<string>Creator</string>
+			<string>pixelomer</string>
 			<key>showAvatar</key>
 			<true/>
 			<key>user</key>
@@ -155,7 +155,7 @@
 			<key>cellClass</key>
 			<string>HBTwitterCell</string>
 			<key>label</key>
-			<string>Icon Designer</string>
+			<string>Simply Designer</string>
 			<key>showAvatar</key>
 			<true/>
 			<key>user</key>
@@ -165,7 +165,7 @@
 			<key>cellClass</key>
 			<string>HBTwitterCell</string>
 			<key>label</key>
-			<string>Sileo's Designer</string>
+			<string>Alessandro Chiarlitti</string>
 			<key>showAvatar</key>
 			<true/>
 			<key>user</key>
