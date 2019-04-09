@@ -14,7 +14,9 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	self.navigationController.navigationBar.prefersLargeTitles = YES;
+	if (@available(iOS 11.0, *)) {
+		self.navigationController.navigationBar.prefersLargeTitles = YES;
+	}
 	NSUserDefaults *stddef = [NSUserDefaults standardUserDefaults];
 	BOOL shouldRefresh = NO;
 	refreshButton = [[UIBarButtonItem alloc]
