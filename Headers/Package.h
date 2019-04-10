@@ -9,6 +9,7 @@
 - (void)parse;
 - (bool)isCommercial;
 - (NSString *)mode;
+- (NSString *)section;
 - (BOOL)upgradableAndEssential:(BOOL)essential;
 - (NSArray *)downgrades;
 - (UIImage *)icon;
@@ -18,8 +19,9 @@
 - (MIMEAddress *)author;
 - (NSString *)getField:(NSString *)name;
 - (NSString *)longDescription;
+- (Source *)source;
 - (NSString *)shortDescription;
-- (void)freeParsedPackage;
+- (NSString *)shortSection;
 @end
 
 @interface Package(ModernDepictions)

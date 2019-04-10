@@ -108,12 +108,6 @@ static UIColor *uninstallQueueColor;
 			]];
 		}
 	}
-	[textContainerView addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"V:|[placard(==20.5)]"
-		options:0
-		metrics:nil
-		views:views
-	]];
 	[textContainerView addConstraints:@[
 		[NSLayoutConstraint
 			constraintWithItem:placard
@@ -131,7 +125,25 @@ static UIColor *uninstallQueueColor;
 			toItem:nil
 			attribute:NSLayoutAttributeNotAnAttribute
 			multiplier:1.0
-			constant:20.5
+			constant:17.5
+		],
+		[NSLayoutConstraint
+			constraintWithItem:placard
+			attribute:NSLayoutAttributeHeight
+			relatedBy:NSLayoutRelationEqual
+			toItem:placard
+			attribute:NSLayoutAttributeWidth
+			multiplier:1.0
+			constant:0.0
+		],
+		[NSLayoutConstraint
+			constraintWithItem:placard
+			attribute:NSLayoutAttributeCenterY
+			relatedBy:NSLayoutRelationEqual
+			toItem:packageNameLabel
+			attribute:NSLayoutAttributeCenterY
+			multiplier:1.0
+			constant:-0.5
 		]
 	]];
 
@@ -190,10 +202,14 @@ static UIColor *uninstallQueueColor;
 	}
 	packageNameLabel.text = package.name;
 	NSString *authorName = package.author.name;
-	authorLabel.text = (
-		(authorName && [authorName isKindOfClass:[NSString class]] && ![authorName isEqualToString:@""]) ?
-		authorName : [NSString stringWithFormat:@"(%@)", UCLocalize(@"UNKNOWN")]
-	);
+	NSString *sourceName = package.source.name;
+	authorLabel.text = [NSString stringWithFormat:@"%@%@",
+		(
+			(authorName && [authorName isKindOfClass:[NSString class]] && ![authorName isEqualToString:@""]) ?
+			authorName : [NSString stringWithFormat:@"(%@)", UCLocalize(@"UNKNOWN")]
+		),
+		sourceName ? [NSString stringWithFormat:@" ∙ %@", sourceName] : @""
+	];
 	NSArray *placardImageInfo = nil;
 	if (NSString *mode = package.mode) {
 		placardImageInfo = (

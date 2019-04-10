@@ -64,9 +64,16 @@
 	if (![versionString isKindOfClass:[NSString class]]) {
 		versionString = @"?";
 	}
+	NSString *sourceName = self.depictionDelegate.package.source.name;
 	NSArray *footerCellDict = @[
 		@{
-			@"markdown" : [NSString stringWithFormat:@"<style>body { text-align: center; }</style><small style=\"color: #aaa;\">%@ (%@)</small>", self.depictionDelegate.package.id, versionString],
+			@"markdown" : [NSString stringWithFormat:@"<style>body { text-align: center; } small { color: #aaa; }</style><small>%@ (%@)</small><br/><small>%@%@%@</small>",
+				self.depictionDelegate.package.id,
+				versionString,
+				sourceName ?: @"",
+				sourceName ? @" ∙ " : @"",
+				self.depictionDelegate.package.shortSection
+			],
 			@"useRawFormat" : @YES,
 			@"class" : @"DepictionMarkdownView"
 		}
