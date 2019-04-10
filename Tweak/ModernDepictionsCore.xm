@@ -7,39 +7,31 @@
 
 - (void)reloadDataWithInvocation:(NSInvocation *)invocation {
 	%orig;
-	NSMutableArray *sourceList = MSHookIvar<id>(self, "sourceList_");
-	if (!sourceList) return;
-	for (Source *source in sourceList) {
-		if (!source.didAttemptBefore) {
-			source.didAttemptBefore = true;
-			NSLog(@"Root URI: %@", source.rooturi);
-			NSURL *paymentEndpointSource = [[NSURL URLWithString:source.rooturi] URLByAppendingPathComponent:@"payment_endpoint"];
-			NSLog(@"Payment endpoint source: %@", paymentEndpointSource);
-			if (paymentEndpointSource) {
-				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-					NSData *rawData = [NSData dataWithContentsOfURL:paymentEndpointSource];
-					NSString *stringURL = [[NSString alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
-					NSLog(@"Payment endpoint: %@", stringURL);
-					if (!(source.paymentEndpoint = [NSURL URLWithString:stringURL])) return;
-					NSURL *infoURL = [source.paymentEndpoint URLByAppendingPathComponent:@"info"];
-					NSLog(@"Info URL: %@", infoURL);
-					if (!infoURL || !(rawData = [NSData dataWithContentsOfURL:infoURL])) return;
-					source.paymentProviderInfo = [NSJSONSerialization JSONObjectWithData:rawData options:0 error:nil];
-					NSLog(@"Payment provider info: %@", source.paymentProviderInfo);
-				});
+	if (ModernDepictionsGetPreferenceValue(@"LookForSileoPrices", 0)) {
+		NSArray *sourceList = [MSHookIvar<NSMutableArray *>(self, "sourceList_") copy];
+		if (!sourceList) return;
+		for (Source *source in sourceList) {
+			if (!source.didAttemptBefore) {
+				source.didAttemptBefore = true;
+				NSLog(@"Root URI: %@", source.rooturi);
+				NSURL *paymentEndpointSource = [[NSURL URLWithString:source.rooturi] URLByAppendingPathComponent:@"payment_endpoint"];
+				NSLog(@"Payment endpoint source: %@", paymentEndpointSource);
+				if (paymentEndpointSource) {
+					dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+						NSData *rawData = [NSData dataWithContentsOfURL:paymentEndpointSource];
+						NSString *stringURL = [[NSString alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
+						NSLog(@"Payment endpoint: %@", stringURL);
+						if (!(source.paymentEndpoint = [NSURL URLWithString:stringURL])) return;
+						NSURL *infoURL = [source.paymentEndpoint URLByAppendingPathComponent:@"info"];
+						NSLog(@"Info URL: %@", infoURL);
+						if (!infoURL || !(rawData = [NSData dataWithContentsOfURL:infoURL])) return;
+						source.paymentProviderInfo = [NSJSONSerialization JSONObjectWithData:rawData options:0 error:nil];
+						NSLog(@"Payment provider info: %@", source.paymentProviderInfo);
+					});
+				}
 			}
 		}
 	}
-}
-
-%new
-- (NSOperationQueue *)iconDownloadQueue {
-	NSOperationQueue *queue = objc_getAssociatedObject(self, _cmd);
-	if (!queue) {
-		queue = [NSOperationQueue new];
-		objc_setAssociatedObject(self, _cmd, queue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-	}
-	return queue;
 }
 
 %end

@@ -8,5 +8,4 @@
 - (NSString *)getField:(NSString *)name;
 + (Database *)sharedInstance;
 - (NSArray<Source *> *)sources;
-- (NSOperationQueue *)iconDownloadQueue;
 @end

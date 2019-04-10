@@ -144,7 +144,19 @@
 			<key>key</key>
 			<string>EnableDepictionWebView</string>
 			<key>label</key>
-			<string>Enable DepictionWebView (buggy)</string>
+			<string>Enable DepictionWebView (Buggy)</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>LookForSileoPrices</string>
+			<key>label</key>
+			<string>Fetch Payment Info (Beta)</string>
 		</dict>
 		<!-- This is not available yet -->
 		<!--dict>
