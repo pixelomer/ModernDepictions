@@ -6,6 +6,16 @@
 	<array>
 		<dict>
 			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>headerCellClass</key>
+			<string>HBImageTableCell</string>
+			<key>icon</key>
+			<string>header.png</string>
+			<key>height</key>
+    		<integer>100</integer>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<true/>
@@ -176,6 +186,16 @@
 			<true/>
 			<key>user</key>
 			<string>designer_simply</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBTwitterCell</string>
+			<key>label</key>
+			<string>EPSYLON</string>
+			<key>showAvatar</key>
+			<true/>
+			<key>user</key>
+			<string>EPSYLON2K</string>
 		</dict>
 	</array>
 	<key>title</key>
