@@ -9,13 +9,13 @@
 static void _logos_method$ModernHome$Shared$didSelectPackage$(UIViewController *self, SEL _cmd, NSString *packageID) {
 	Package *package = [[%c(Database) sharedInstance] packageWithName:packageID];
 	NSLog(@"Did select: %@", package);
-	[self.navigationController
-		pushViewController:[(Cydia *)[UIApplication sharedApplication]
-			pageForPackage:[package id]
-			withReferrer:ModernDepictionsGeneratePackageURL([package id])
-		]
-		animated:YES
+	Cydia *delegate = (id)UIApplication.sharedApplication;
+	CYPackageController *pvc = (id)[delegate
+		pageForPackage:[package id]
+		withReferrer:ModernDepictionsGeneratePackageURL([package id])
 	];
+	pvc.delegate = delegate;
+	[self.navigationController pushViewController:pvc animated:YES];
 }
 
 %group ModernHome
