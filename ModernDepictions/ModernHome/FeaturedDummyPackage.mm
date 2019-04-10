@@ -24,6 +24,10 @@ static UIImage *qmarkIcon;
 	return _identifier;
 }
 
+- (id)source {
+	return nil;
+}
+
 - (id)author {
 	return nil;
 }

@@ -99,8 +99,6 @@
 			<string>EnableFeaturedPackagesInSectionController</string>
 			<key>label</key>
 			<string>Repo-specific Featured Packages</string>
-			<key>enabled</key>
-			<false/>
 		</dict>
 		<dict>
 			<key>cell</key>

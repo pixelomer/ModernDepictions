@@ -15,7 +15,9 @@
 	self.layer.masksToBounds = YES;
 	self.layer.cornerRadius = 10.0;
 	[self addTarget:self action:@selector(handleTap:) forControlEvents:UIControlEventTouchUpInside];
-	UIImageView *imageView = [[UIImageView alloc] initWithImage:info[@"image"]];
+	UIImage *image = (info[@"image"] ?: [[UIImage alloc] initWithData:info[@"imageData"]]);
+	if (!image) return nil;
+	UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
 	imageView.translatesAutoresizingMaskIntoConstraints = NO;
 	imageView.contentMode = UIViewContentModeScaleAspectFill;
 	[self addSubview:imageView];

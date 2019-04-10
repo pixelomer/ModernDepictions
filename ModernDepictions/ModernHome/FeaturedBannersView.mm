@@ -5,7 +5,20 @@
 
 @implementation FeaturedBannersView
 
+static CGSize defaultSize;
+
++ (void)initialize {
+	if ([self class] == [FeaturedBannersView class]) {
+		defaultSize = CGSizeMake(263.0, 148.0);
+	}
+}
+
 - (instancetype)initWithPackages:(NSArray *)packages bannerLimit:(NSUInteger)bannerLimit {
+	return [self initWithPackages:packages bannerLimit:bannerLimit bannerSize:nil];
+}
+
+- (instancetype)initWithPackages:(NSArray *)packages bannerLimit:(NSUInteger)bannerLimit bannerSize:(CGSize *)bannerSizePt {
+	CGSize bannerSize = bannerSizePt ? *bannerSizePt : defaultSize;
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
 	bannerScrollView = [UIScrollView new];
 	bannerScrollView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -37,19 +50,21 @@
 	for (NSUInteger i = 0; i < min(packages.count, bannerLimit); i++) {
 		NSDictionary *packageInfo = packages[i];
 		FeaturedBannerView *banner = [FeaturedBannerView bannerWithPackageInfo:packageInfo];
+		if (!banner) continue;
 		[banner addTarget:self action:@selector(handleBannerTap:) forControlEvents:UIControlEventTouchUpInside];
 		[bannerContainerView addSubview:banner];
 		NSDictionary *views = @{ @"prev" : (previousView ?: [NSNull null]), @"banner" : banner };
 		[bannerContainerView addConstraints:[NSLayoutConstraint
-			constraintsWithVisualFormat:@"V:|-16-[banner(==148)]-16-|"
+			constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-16-[banner(==%f)]-16-|", bannerSize.height]
 			options:0
 			metrics:nil
 			views:views
 		]];
 		[bannerContainerView addConstraints:[NSLayoutConstraint
-			constraintsWithVisualFormat:[NSString stringWithFormat:@"H:%@-%d-[banner(==263)]",
+			constraintsWithVisualFormat:[NSString stringWithFormat:@"H:%@-%d-[banner(==%f)]",
 				(previousView ? @"[prev]" : @"|"),
-				(16 / (!!previousView + 1))
+				(16 / (!!previousView + 1)),
+				bannerSize.width
 			]
 			options:0
 			metrics:nil
@@ -65,7 +80,8 @@
 			views:@{ @"prev" : previousView }
 		]];
 	}
-	height = 148.0 + 32.1;
+	else return nil;
+	height = bannerSize.height + 32.1;
 	return self;
 }
 
@@ -76,6 +92,10 @@
 
 - (CGFloat)height {
 	return height;
+}
+
+- (void)dealloc {
+	NSLog(@"A %@ is being deallocated...", NSStringFromClass(self.class));
 }
 
 - (void)handleBannerTap:(FeaturedBannerView *)banner {

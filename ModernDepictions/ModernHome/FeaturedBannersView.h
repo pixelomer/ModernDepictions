@@ -8,4 +8,5 @@
 }
 - (CGFloat)height;
 - (instancetype)initWithPackages:(NSArray *)packages bannerLimit:(NSUInteger)bannerLimit;
+- (instancetype)initWithPackages:(NSArray *)packages bannerLimit:(NSUInteger)bannerLimit bannerSize:(CGSize *)bannerSizePt;
 @end
