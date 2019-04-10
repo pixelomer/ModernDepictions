@@ -18,7 +18,6 @@ extern "C" void _CFEnableZombies();
 		ModernDepictionsGetPreferenceValue(@"EnableModernDepictions", 1))
 	{
 		NSLog(@"init");
-		_CFEnableZombies();
 		ModernDepictionsInitializeCore();
 		if (ModernDepictionsGetPreferenceValue(@"EnableSileoDepictions", 1)) {
 			ModernDepictionsInitializeDepictions();
