@@ -37,12 +37,12 @@ void ModernDepictionsInitializeHome(void) {
 		objc_getClass("ModernHomeController"),
 		@selector(didSelectPackage:),
 		(IMP)_logos_method$ModernHome$Shared$didSelectPackage$,
-		"@:@"
+		"v@:@"
 	);
 	class_addMethod(
-		objc_getClass("SectionController"),
+		objc_getClass("SectionsController"),
 		@selector(didSelectPackage:),
 		(IMP)_logos_method$ModernHome$Shared$didSelectPackage$,
-		"@:@"
+		"v@:@"
 	);
 }
