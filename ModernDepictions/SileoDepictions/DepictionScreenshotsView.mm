@@ -93,12 +93,11 @@
 }
 
 - (void)setScreenshots:(NSArray<NSDictionary<NSString *, id> *> *)newScreenshots {
-	if (!newScreenshots) {
-		_height = 32.0;
-		return;
-	}
 	if (_imageViews) for (UIImageView *view in _imageViews) {
 		[view removeFromSuperview];
+	}
+	if (!newScreenshots || [newScreenshots count] <= 0) {
+		return;
 	}
 	_imageViews = [[NSMutableArray alloc] init];
 	for (int i = 0; i < newScreenshots.count; i++) {
