@@ -39,14 +39,14 @@
 		#else
 			break;
 		#endif
-			else if (![cellClass isSubclassOfClass:[DepictionBaseView class]])
+			cNSLog(@"Class: %@", NSStringFromClass(cellClass));
+			if (![cellClass isSubclassOfClass:[DepictionBaseView class]])
 		#if DEBUG
 			cell = [[ModernErrorCell alloc] initWithErrorMessage:[NSString stringWithFormat:@"(!) %@", cellInfo[@"class"]]];
 			if (!cell) {
 		#else
 			break;
 		#endif
-			cNSLog(@"Class: %@", NSStringFromClass(cellClass));
 			cNSLog(@"Allocating and initializing cell...");
 			cell = [(DepictionBaseView *)[cellClass alloc]
 				initWithDepictionDelegate:delegate
