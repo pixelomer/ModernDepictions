@@ -62,7 +62,7 @@
 	];
 	finalString = [htmlPrefix stringByAppendingString:finalString];
 	NSMutableAttributedString *finalObject = [[[self alloc] initWithData:[finalString dataUsingEncoding:NSUTF8StringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil] mutableCopy];
-	if ([finalObject.mutableString characterAtIndex:finalObject.mutableString.length - 1] == '\n') {
+	if (finalObject.mutableString.length > 0 && [finalObject.mutableString characterAtIndex:finalObject.mutableString.length - 1] == '\n') {
 		[finalObject deleteCharactersInRange:NSMakeRange(finalObject.mutableString.length - 1, 1)];
 	}
 	return [finalObject copy];
