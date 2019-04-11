@@ -5,6 +5,12 @@
 #import <Extensions/UIDevice+isiPad.h>
 #import <Extensions/UIColor+HexString.h>
 
+#if 0
+#define cNSLog(args...) NSLog(@"[ContentCellFactory] "args)
+#else
+#define cNSLog(...);
+#endif
+
 @implementation ContentCellFactory
 
 + (NSArray<__kindof DepictionBaseView *> *)createCellsFromArray:(NSArray<NSDictionary<NSString *, id> *> *)sourceArray
@@ -13,11 +19,15 @@
 {
 	if (!sourceArray) return nil;
 	else if ([sourceArray count] <= 0) return [NSArray new];
+	cNSLog(@"Source array: %@", sourceArray);
 	NSMutableArray *mutableResult = [[NSMutableArray alloc] initWithCapacity:sourceArray.count];
 	unsigned int i = 0;
 	for	(NSDictionary *rootCellInfo in sourceArray) {
 		NSDictionary *cellInfo = rootCellInfo;
+		cNSLog(@"--New Cell-------------------------------");
+		cNSLog(@"Cell root: %@", rootCellInfo);
 		while (true) {
+			if (cellInfo != rootCellInfo) cNSLog(@"Info: %@", cellInfo);
 			Class cellClass;
 			if (!cellInfo[@"class"] ||
 				![cellInfo[@"class"] isKindOfClass:[NSString class]]
@@ -36,10 +46,13 @@
 		#else
 			break;
 		#endif
+			cNSLog(@"Class: %@", NSStringFromClass(cellClass));
+			cNSLog(@"Allocating and initializing cell...");
 			cell = [(DepictionBaseView *)[cellClass alloc]
 				initWithDepictionDelegate:delegate
 				reuseIdentifier:[NSString stringWithFormat:@"%@%d", reuseIdentifierPrefix, i++]
 			];
+			cNSLog(@"Cell: %@", cell);
 			if (!cell) break;
 			if (cellClass == [DepictionScreenshotsView class]) {
 				if (UIDevice.currentDevice.isiPad && cellInfo[@"ipad"]) cellInfo = cellInfo[@"ipad"];
@@ -48,7 +61,9 @@
 					[cellInfo[@"class"] isEqualToString:@"DepictionScreenshotView"])
 				) continue;
 			}
+			cNSLog(@"Setting properties...");
 			for (NSString *propertyKey in cellInfo) {
+				cNSLog(@"\"%@\"=%@", propertyKey, cellInfo[propertyKey]);
 				if ([propertyKey isEqualToString:@"class"] || ![cell respondsToSelector:NSSelectorFromString(propertyKey)]) continue;
 				__kindof NSObject<NSCopying> *property = cellInfo[propertyKey];
 				// A JSON value can be null.
@@ -56,7 +71,6 @@
 					@try {
 						[cell setValue:property forKey:propertyKey];
 					}
-#define cNSLog(args...) NSLog(@"[ContentCellFactory] "args)
 					@catch (NSException *ex) {
 						cNSLog(@"Failed to set \"%@\" for the following key: \"%@\"", property, propertyKey);
 						cNSLog(@"Exception: %@", ex);
@@ -70,7 +84,6 @@
 							@throw ex;
 						}
 					}
-#undef cNSLog
 				}
 			}
 		#if DEBUG
