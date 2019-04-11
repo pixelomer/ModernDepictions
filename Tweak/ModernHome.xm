@@ -76,6 +76,13 @@ static void _logos_method$ModernHome$Shared$didSelectPackage$(UIViewController *
 	else return UITableViewAutomaticDimension;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (self.bannersView && indexPath.section == 0) {
+		if (indexPath.row != 0) %orig(tableView, [NSIndexPath indexPathForRow:(indexPath.row - 1) inSection:indexPath.section]);
+	}
+	else %orig;
+}
+
 %end
 %end
 
