@@ -30,9 +30,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [self cellForRow:indexPath.row];
-	if ([cell.class isSubclassOfClass:[DepictionBaseView class]]) {
-		[cell performSelector:@selector(cellWillAppear)];
-	}
 	return cell;
 }
 
@@ -51,6 +48,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell<ModernCell> * _Nullable cell = [self cellForRow:indexPath.row];
 	return cell ? [cell height] : 44.0;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([cell.class isSubclassOfClass:[DepictionBaseView class]]) {
+		[cell performSelector:@selector(cellWillAppear)];
+	}
 }
 
 @end
