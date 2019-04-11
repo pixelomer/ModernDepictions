@@ -14,12 +14,9 @@
 - (void)didGetSelected {
 	NSURL *URL = defaultURL ?: backupURL;
 	DepictionButtonAction action = defaultURL ? defaultButtonAction : backupButtonAction;
-
-	if (!URL) {
-#		if DEBUG
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"DEBUG" message:@"No valid URL to use." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	if (!URL || (action == DepictionButtonActionOpenURL && ![UIApplication.sharedApplication canOpenURL:URL])) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid URL" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-#		endif
 		return;
 	}
 	if (action == DepictionButtonActionOpenURL) {
