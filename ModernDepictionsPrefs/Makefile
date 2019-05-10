@@ -4,7 +4,7 @@ BUNDLE_NAME = ModernDepictionsPrefs
 ModernDepictionsPrefs_FILES = PXMDSPRootListController.m
 ModernDepictionsPrefs_INSTALL_PATH = /Library/PreferenceBundles
 ModernDepictionsPrefs_FRAMEWORKS = UIKit
-ModernDepictionsPrefs_LIBRARIES = colorpicker
+ModernDepictionsPrefs_LIBRARIES = CSColorPicker
 ModernDepictionsPrefs_PRIVATE_FRAMEWORKS = Preferences
 ModernDepictionsPrefs_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
 

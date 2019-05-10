@@ -11,7 +11,7 @@ TWEAK_NAME = ModernDepictions
 ModernDepictions_FILES = Tweak.xm $(wildcard Tweak/*.xm MMMarkdown/*.m ModernDepictions/*/*.mm Extensions/*.mm)
 ModernDepictions_FRAMEWORKS = WebKit
 ModernDepictions_LIBRARIES = GoogleMobileAds CSColorPicker
-ModernDepictions_EXTRA_FRAMEWORKS = nanopb GoogleUtilities GoogleMobileAds GoogleAppMeasurement
+ModernDepictions_EXTRA_FRAMEWORKS = GoogleMobileAds
 
 # Depictions.xm has to be built every time so "IRU_API_ALLOW_ALL" takes effect
 $(shell touch Tweak/Depictions.xm)
