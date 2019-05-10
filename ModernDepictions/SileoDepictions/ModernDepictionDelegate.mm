@@ -25,7 +25,7 @@ static UIColor *defaultTintColor;
 			[DepictionStackView class]
 		];
 		NSString *preferredTintColor = [[NSUserDefaults standardUserDefaults] objectForKey:@"PreferredTintColor" inDomain:@"com.pixelomer.moderndepictions.prefs"];
-		defaultTintColor = LCPParseColorString(preferredTintColor, @"#2CB1BE");
+		defaultTintColor = [UIColor cscp_colorFromHexString:preferredTintColor fallback:@"#2CB1BE"];
 	}
 }
 
@@ -147,7 +147,7 @@ static UIColor *defaultTintColor;
 			if (_depiction[@"tintColor"]) {
 				// The tint color may not be valid.
 				@try {
-					_tintColor = [UIColor colorWithHexString:_depiction[@"tintColor"]];
+					_tintColor = [UIColor cscp_colorFromHexString:_depiction[@"tintColor"]];
 				}
 				@catch (NSException *ex) {
 					NSLog(@"An error occurred while parsing the color: %@", ex);

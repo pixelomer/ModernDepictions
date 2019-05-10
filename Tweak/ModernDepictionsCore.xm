@@ -86,10 +86,17 @@
 	];
 }
 
+static NSArray<NSString *> *possibleKeys;
 - (void)parse {
 	%orig;
-	id value = [self getField:@"sileodepiction"];
-	self.sileoDepiction = [value isKindOfClass:[NSNull class]] ? nil : value;
+	for (NSString *key in possibleKeys) {
+		__kindof NSObject *value = [self getField:key];
+		if ([value isKindOfClass:[NSString class]]) {
+			self.sileoDepiction = value;
+			return;
+		}
+	}
+	self.sileoDepiction = nil;
 }
 
 // A failed attempt to free the parsed package, not used anywhere
@@ -121,6 +128,10 @@
 %end
 
 void ModernDepictionsInitializeCore(void) {
+	possibleKeys = @[
+		@"sileodepiction",
+		@"moderndepiction"
+	];
 	%init(ModernDepictionsCore);
 	ModernDepictionsInitializeSharedFunctions();
 }

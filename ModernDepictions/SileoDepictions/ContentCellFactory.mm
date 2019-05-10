@@ -75,7 +75,7 @@
 						cNSLog(@"Failed to set \"%@\" for the following key: \"%@\"", property, propertyKey);
 						cNSLog(@"Exception: %@", ex);
 						if ([property isKindOfClass:[NSString class]] && [ex.name isEqualToString:NSInvalidArgumentException]) {
-							property = [UIColor colorWithHexString:property];
+							property = [UIColor cscp_colorFromHexString:property fallback:nil];
 							cNSLog(@"Retrying with value: %@", property);
 							[cell setValue:property forKey:propertyKey];
 						}

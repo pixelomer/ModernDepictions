@@ -63,7 +63,7 @@
 }
 
 - (void)setTintColor:(id)newColor {
-	UIColor *tintColor = [newColor isKindOfClass:[NSString class]] ? [UIColor colorWithHexString:newColor] : newColor;
+	UIColor *tintColor = [newColor isKindOfClass:[NSString class]] ? [UIColor cscp_colorFromHexString:newColor] : newColor;
 	self.textLabel.textColor = tintColor;
 	[super setTintColor:tintColor];
 }

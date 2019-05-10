@@ -1,6 +1,6 @@
 Package: com.pixelomer.moderndepictions
 Name: ModernDepictions
-Depends: mobilesubstrate, firmware (>=8.0), org.thebigboss.libcolorpicker, preferenceloader, ws.hbang.common (>= 1.11)
+Depends: mobilesubstrate, firmware (>=8.0), com.creaturesurvive.libcscolorpicker, preferenceloader, ws.hbang.common (>= 1.11)
 Version: 0.3
 Architecture: iphoneos-arm
 Icon: http://repo.pixelomer.com/icons/MD-Icon.png
