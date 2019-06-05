@@ -83,7 +83,7 @@ static UIColor *origTintColor;
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	self.edgesForExtendedLayout = UIRectEdgeTop;
+	self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeBottom;
 	navBarLowerY = 0.0;
 	
 	// The intended image will be shown after the depiction data is downloaded.
