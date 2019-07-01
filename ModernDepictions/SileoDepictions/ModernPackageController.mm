@@ -73,6 +73,7 @@ static UIColor *origTintColor;
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	self.navigationController.navigationBar.translucent = YES;
 	[self.depictionDelegate reloadData];
 }
 
@@ -83,7 +84,6 @@ static UIColor *origTintColor;
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	self.edgesForExtendedLayout = UIRectEdgeTop;
 	navBarLowerY = 0.0;
 	
 	// The intended image will be shown after the depiction data is downloaded.
@@ -158,6 +158,7 @@ static UIColor *origTintColor;
 	]];
 
 	self.navigationController.opacity = 0.0;
+	self.navigationController.navigationBar.translucent = YES;
 	self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 	[self.class setOriginalNavBarTintColor:self.navigationController.navigationBar.tintColor];
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
