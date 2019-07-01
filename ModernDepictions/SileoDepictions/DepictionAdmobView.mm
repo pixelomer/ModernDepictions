@@ -1,6 +1,5 @@
 #import "DepictionAdmobView.h"
 #import "ModernDepictionDelegate.h"
-#import "AdmobTests.h"
 
 @implementation DepictionAdmobView
 

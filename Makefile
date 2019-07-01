@@ -13,9 +13,6 @@ ModernDepictions_FRAMEWORKS = WebKit
 ModernDepictions_LIBRARIES = GoogleMobileAds CSColorPicker
 ModernDepictions_EXTRA_FRAMEWORKS = GoogleMobileAds
 
-# Depictions.xm has to be built every time so "IRU_API_ALLOW_ALL" takes effect
-$(shell touch Tweak/Depictions.xm)
-
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 install-example:

@@ -4,10 +4,7 @@
 
 - (https://github.com/theos/theos)[Theos]
 - Put the following into `$THEOS/lib`:
-  - nanopb.framework
-  - GoogleUtilities.framework
   - GoogleMobileAds.framework **\(Must be version 7.41\)**
-  - GoogleAppMeasurement.framework
   - libGoogleMobileAds.a **\(Must be version 7.41\)**
 - iOS 11.2 SDK
 
