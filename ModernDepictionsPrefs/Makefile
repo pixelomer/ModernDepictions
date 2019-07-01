@@ -1,6 +1,3 @@
-TARGET = iphone:clang:11.2:8.0
-ARCHS = arm64e arm64 armv7
-
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = ModernDepictionsPrefs
