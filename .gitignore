@@ -1,7 +1,4 @@
-ExamplePackage.deb
+QuotesForCommits.txt
 .theos
 obj
 packages
-_.deb
-make.sh
-WeirdIncompleteStuff
