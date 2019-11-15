@@ -1,11 +1,13 @@
 #import <UIKit/UIKit.h>
 #import "Depictions.h"
+#import "MDDepictionViewController.h"
 
 %hook DepictionViewController
+
 + (id)alloc {
-	TEST_EXCEPTION(@"Hooking works UwU");
-	return NULL;
+	return [MDDepictionViewController alloc];
 }
+
 %end
 
 void MDInitializeDepictions(void) {

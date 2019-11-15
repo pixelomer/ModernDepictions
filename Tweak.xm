@@ -1,6 +1,6 @@
 /*
- * Now your sanity and mine can die TOGETHER!
- * ~ Undyne
+ * I can't go to hell, I'm all out of vacation days.
+ * ~ Burgerpants
  */
 
 #import <UIKit/UIKit.h>

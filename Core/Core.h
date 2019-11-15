@@ -12,5 +12,6 @@ typedef NS_ENUM(NSInteger, MDPackageManager) {
 
 Class MDGetClass(MDTargetClass classID);
 void MDInitializeCore(void);
+NSString *MDGetFieldFromPackage(__kindof NSObject *package, NSString *field);
 const char *MDGetClassName(MDTargetClass classID);
 extern MDPackageManager MDCurrentPackageManager;
