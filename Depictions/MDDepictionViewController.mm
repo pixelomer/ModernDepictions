@@ -1,4 +1,5 @@
 #import "MDDepictionViewController.h"
+#import "MDStackView.h"
 
 @implementation MDDepictionViewController
 
@@ -47,6 +48,38 @@
 		// We don't want the views added by Zebra
 		[view removeFromSuperview];
 	}
+	// BEGIN: MDStackView tests
+	MDStackView *testView = [MDStackView new];
+	for (int i = 0; i <= 2; i++) {
+		UIView *newView = [UIView new];
+		UIView *subview = [UIView new];
+		[newView addSubview:subview];
+		subview.translatesAutoresizingMaskIntoConstraints = NO;
+		newView.translatesAutoresizingMaskIntoConstraints = NO;
+		[newView addConstraints:[NSLayoutConstraint
+			constraintsWithVisualFormat:@"V:|[subview(50)]|"
+			options:0
+			metrics:nil
+			views:@{ @"subview" : subview }
+		]];
+		newView.backgroundColor = [UIColor colorWithRed:(i * 50.0)/255.0 green:0.0 blue:0.0 alpha:1.0];
+		[testView insertView:newView];
+	}
+	[self.view addSubview:testView];
+	testView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.view addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:|[view]|"
+		options:0
+		metrics:nil
+		views:@{ @"view" : testView }
+	]];
+	[self.view addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"H:|[view]|"
+		options:0
+		metrics:nil
+		views:@{ @"view" : testView }
+	]];
+	// END: MDStackView tests
 }
 
 @end
