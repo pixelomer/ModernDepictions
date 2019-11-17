@@ -1,5 +1,6 @@
 #import "MDDepictionViewController.h"
 #import "MDStackView.h"
+#import <Extensions/UIImage+ImageWithColor.h>
 
 @implementation MDDepictionViewController
 
@@ -48,38 +49,54 @@
 		// We don't want the views added by Zebra
 		[view removeFromSuperview];
 	}
-	// BEGIN: MDStackView tests
-	MDStackView *testView = [MDStackView new];
-	for (int i = 0; i <= 2; i++) {
-		UIView *newView = [UIView new];
-		UIView *subview = [UIView new];
-		[newView addSubview:subview];
-		subview.translatesAutoresizingMaskIntoConstraints = NO;
-		newView.translatesAutoresizingMaskIntoConstraints = NO;
-		[newView addConstraints:[NSLayoutConstraint
-			constraintsWithVisualFormat:@"V:|[subview(50)]|"
-			options:0
-			metrics:nil
-			views:@{ @"subview" : subview }
-		]];
-		newView.backgroundColor = [UIColor colorWithRed:(i * 50.0)/255.0 green:0.0 blue:0.0 alpha:1.0];
-		[testView insertView:newView];
-	}
-	[self.view addSubview:testView];
-	testView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.view addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"V:|[view]|"
-		options:0
-		metrics:nil
-		views:@{ @"view" : testView }
+	self.edgesForExtendedLayout = UIRectEdgeTop;
+	
+	// Header Image View
+	_headerImageView = [UIImageView new];
+	_headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
+	_headerImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+	[self.view addSubview:_headerImageView];
+	_headerImageHeight = [NSLayoutConstraint
+		constraintWithItem:_headerImageView
+		attribute:NSLayoutAttributeHeight
+		relatedBy:NSLayoutRelationEqual
+		toItem:nil
+		attribute:NSLayoutAttributeNotAnAttribute
+		multiplier:1.0
+		constant:200.0
+	];
+	_headerImageWidth = [NSLayoutConstraint
+		constraintWithItem:_headerImageView
+		attribute:NSLayoutAttributeWidth
+		relatedBy:NSLayoutRelationEqual
+		toItem:self.view
+		attribute:NSLayoutAttributeWidth
+		multiplier:1.0
+		constant:0.0
+	];
+	_headerImagePosition = [NSLayoutConstraint
+		constraintWithItem:_headerImageView
+		attribute:NSLayoutAttributeTop
+		relatedBy:NSLayoutRelationEqual
+		toItem:self.view
+		attribute:NSLayoutAttributeTop
+		multiplier:1.0
+		constant:0.0
+	];
+	[self.view addConstraints:@[
+		_headerImageHeight,
+		_headerImageWidth,
+		_headerImagePosition,
+		[NSLayoutConstraint
+			constraintWithItem:_headerImageView
+			attribute:NSLayoutAttributeCenterX
+			relatedBy:NSLayoutRelationEqual
+			toItem:self.view
+			attribute:NSLayoutAttributeCenterX
+			multiplier:1.0
+			constant:0.0
+		]
 	]];
-	[self.view addConstraints:[NSLayoutConstraint
-		constraintsWithVisualFormat:@"H:|[view]|"
-		options:0
-		metrics:nil
-		views:@{ @"view" : testView }
-	]];
-	// END: MDStackView tests
 }
 
 @end
