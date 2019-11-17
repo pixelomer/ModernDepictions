@@ -6,11 +6,10 @@ MD_BASIC_INTERFACE(MIMEAddress, NSObject)
 MD_BASIC_INTERFACE(ZBPackage, NSObject)
 MD_BASIC_INTERFACE(ZBRepo, NSObject)
 MD_BASIC_INTERFACE(Database, NSObject)
+MD_BASIC_INTERFACE(ZBDatabaseManager, NSObject)
 
 // Categories aren't necessary. They're here just to make it easier to identify the
 // package manager that has a specific class.
-
-NS_ASSUME_NONNULL_BEGIN
 
 @interface Package(Cydia)
 - (NSString *)depiction;
@@ -57,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray <ZBPackage *> *dependencies;
 @property (nonatomic, strong) NSMutableArray <ZBPackage *> *dependencyOf;
 @property (nonatomic, strong) NSMutableArray <NSString *> *issues;
-@property (nonatomic, strong) ZBPackage * _Nullable removedBy;
+@property (nonatomic, strong) ZBPackage *removedBy;
 @property int installedSize;
 @property int downloadSize;
 @property BOOL sileoDownload;
@@ -95,4 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (Package *)packageWithName:(NSString *)name;
 @end
 
-NS_ASSUME_NONNULL_END
+@interface ZBDatabaseManager(Zebra)
++ (instancetype)sharedInstance;
+- (ZBPackage *)topVersionForPackageID:(NSString *)packageIdentifier inRepo:(ZBRepo *)repo;
+@end

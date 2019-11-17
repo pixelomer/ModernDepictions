@@ -1,5 +1,5 @@
 /*
- * Lie to yourself all the time. It makes you feel better.
+ * I'm 19 years old and I've already wasted my entire life.
  * ~ Burgerpants
  */
 

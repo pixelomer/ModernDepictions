@@ -29,9 +29,7 @@ Class MDGetClass(MDTargetClass classID) {
 }
 
 NSString *MDGetFieldFromPackage(__kindof NSObject *package, NSString *field) {
-	if (!package) {
-		return nil;
-	}
+	if (!package) return nil;
 	if (object_getClass(package) != MDGetClass(MDTargetPackage)) {
 		// Q: Why is object_getClass(object) used here instead of [object class]?
 		// A: Let me ask you another question: What if object isn't an NSObject?

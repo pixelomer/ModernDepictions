@@ -5,6 +5,7 @@
 @interface MDDepictionViewController : UIViewController {
 	UIImageView *_headerImageView;
 	NSArray<MDStackView *> *_depictionStackViews;
+	NSDictionary *_sileoDepiction;
 	UIScrollView *_depictionScrollView;
 	NSLayoutConstraint *_headerImagePosition; // Y position
 	NSLayoutConstraint *_headerImageWidth;

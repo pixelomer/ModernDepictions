@@ -5,7 +5,8 @@
 %hook DepictionViewController
 
 + (id)alloc {
-	return [MDDepictionViewController alloc];
+	MDDepictionViewController *newVC = [MDDepictionViewController alloc];
+	return newVC;
 }
 
 %end
