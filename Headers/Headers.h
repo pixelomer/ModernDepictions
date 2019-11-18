@@ -7,6 +7,7 @@ MD_BASIC_INTERFACE(ZBPackage, NSObject)
 MD_BASIC_INTERFACE(ZBRepo, NSObject)
 MD_BASIC_INTERFACE(Database, NSObject)
 MD_BASIC_INTERFACE(ZBDatabaseManager, NSObject)
+MD_BASIC_INTERFACE(CydiaWebViewController, UIViewController)
 
 // Categories aren't necessary. They're here just to make it easier to identify the
 // package manager that has a specific class.
@@ -97,4 +98,8 @@ MD_BASIC_INTERFACE(ZBDatabaseManager, NSObject)
 @interface ZBDatabaseManager(Zebra)
 + (instancetype)sharedInstance;
 - (ZBPackage *)topVersionForPackageID:(NSString *)packageIdentifier inRepo:(ZBRepo *)repo;
+@end
+
+@interface CydiaWebViewController(Cydia)
++ (NSURLRequest *)requestWithHeaders:(NSURLRequest *)request;
 @end

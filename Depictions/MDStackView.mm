@@ -20,6 +20,12 @@
 }
 
 - (void)resetConstraints {
+	for (UIView *view in _views) {
+		if (![view isKindOfClass:[UIView class]]) {
+			[NSException raise:NSInvalidArgumentException format:@"Object isn't a view: %@", view];
+		}
+	}
+	if (_isUpdating) return;
 	self.translatesAutoresizingMaskIntoConstraints = NO;
 	if (_currentConstraints) {
 		[self removeConstraints:_currentConstraints];
@@ -28,9 +34,6 @@
 	NSMutableArray *newConstraints = [NSMutableArray new];
 	UIView *previousView = nil;
 	for (UIView *view in _views) {
-		if (![view isKindOfClass:[UIView class]]) {
-			[NSException raise:NSInvalidArgumentException format:@"Object isn't a view: %@", view];
-		}
 		if (view.superview != self) {
 			[view removeFromSuperview];
 			view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -97,6 +100,18 @@
 - (void)setSpacing:(CGFloat)spacing {
 	_spacing = spacing;
 	[self resetConstraints];
+}
+
+- (void)beginUpdates {
+	_isUpdating = YES;
+}
+
+- (void)endUpdates {
+	BOOL wasUpdating = _isUpdating;
+	_isUpdating = NO;
+	if (wasUpdating) {
+		[self resetConstraints];
+	}
 }
 
 - (NSArray *)views {

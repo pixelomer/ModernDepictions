@@ -44,6 +44,40 @@ NSString *MDGetFieldFromPackage(__kindof NSObject *package, NSString *field) {
 	return nil;
 }
 
+void MDGetDataFromURL(NSURL *URL, BOOL useCacheIfPossible, void (^callback)(NSData *, NSError *, NSInteger)) {
+	if (!URL || ![URL.scheme.lowercaseString hasPrefix:@"http"]) return;
+	static NSURLSession *session = nil;
+	static NSOperationQueue *queue;
+	if (!session) {
+		queue = [NSOperationQueue new];
+		session = [NSURLSession
+			sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
+			delegate:nil
+			delegateQueue:queue
+		];
+	}
+	NSURLRequest *request = [NSURLRequest
+		requestWithURL:URL
+		cachePolicy:(
+			useCacheIfPossible ?
+			NSURLRequestReturnCacheDataElseLoad :
+			NSURLRequestReloadIgnoringLocalCacheData
+		)
+		timeoutInterval:5 // ¯\_(ツ)_/¯
+	];
+	request = [%c(CydiaWebViewController) requestWithHeaders:request] ?: request;
+	NSURLSessionDownloadTask *task = [session
+		downloadTaskWithRequest:request
+		completionHandler:(void(^)(id,id,id))
+		^(NSURL *location, NSHTTPURLResponse *response, NSError *error){
+			NSData *data = nil;
+			if (location) data = [NSData dataWithContentsOfURL:location];
+			callback(data, error, response.statusCode);
+		}
+	];
+	[task resume];
+}
+
 void MDInitializeCore(void) {
 	NSString *str = NSBundle.mainBundle.bundleIdentifier;
 	if ([str isEqualToString:@(CYDIA_BUNDLE_ID)]) {

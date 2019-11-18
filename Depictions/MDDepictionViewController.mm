@@ -1,6 +1,7 @@
 #import "MDDepictionViewController.h"
 #import "MDStackView.h"
 #import <Extensions/UIImage+ImageWithColor.h>
+#import "Depictions.h"
 
 @implementation MDDepictionViewController
 
@@ -93,8 +94,28 @@
 	[self reloadData];
 }
 
-- (void)reloadDepiction {
+- (void)parseDepiction {
+	NSArray *parsed = MDParseSileoDepiction(_sileoDepiction);
+	if (parsed.count > 0) {
+		_depictionStackViews = parsed;
+		for (UIView *view in _depictionScrollView.subviews) {
+			// We don't want the views added by Zebra
+			[view removeFromSuperview];
+		}
+		for (UIView *stackView in _depictionStackViews) {
+			// NOTE TO PIXEL: Continue from here...
+		}
+	}
+}
 
+- (void)setSileoDepiction:(NSDictionary *)depiction {
+	_sileoDepiction = depiction;
+	[self parseDepiction];
+}
+
+- (NSURL *)sileoDepictionURL {
+	NSString *URLString = MDGetFieldFromPackage(_package, @"sileodepiction");
+	return URLString ? [NSURL URLWithString:URLString] : nil;
 }
 
 - (void)reloadData {
@@ -104,7 +125,7 @@
 		MDGetFieldFromPackage(_package, @"package") ?:
 		@"Invalid Package"
 	);
-	_sileoDepiction = @{
+	self.sileoDepiction = @{
 		@"minVersion" : @"0.1",
 		@"tabs" : @[
 			@{
@@ -120,6 +141,20 @@
 			}
 		]
 	};
+	if (self.sileoDepictionURL) {
+		__weak typeof(self) _self = self;
+		MDGetDataFromURL(self.sileoDepictionURL, NO, ^(NSData *data, NSError *error, NSInteger status){
+			if (data && (status == 200)) {
+				NSDictionary *newDepiction = [NSJSONSerialization
+					JSONObjectWithData:data
+					options:0
+					error:nil
+				];
+				if (![newDepiction isKindOfClass:[NSDictionary class]]) return;
+				_self.sileoDepiction = newDepiction;
+			}
+		});
+	}
 }
 
 #pragma mark - Methods for ignoring errors
