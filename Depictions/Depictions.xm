@@ -22,15 +22,14 @@ __kindof UIView<MDSileoDepictionViewProtocol> *MDCreateView(NSDictionary *_prope
 	NSString *className = _properties[@"class"];
 	if (!className) return nil;
 	className = [NSString stringWithFormat:@"MDSileo%@", className];
-	Class _meta = objc_getMetaClass(className.UTF8String);
 	Class _class = objc_getClass(className.UTF8String);
-	if (!_meta || !_class) return nil;
+	if (!_class) return nil;
 	if (![_class conformsToProtocol:@protocol(MDSileoDepictionViewProtocol)]) return nil;
 	NSDictionary *properties = (id)_properties.mutableCopy;
 	[(NSMutableDictionary *)properties removeObjectForKey:@"class"];
 	properties = properties.copy;
-	BOOL separately = [_meta shouldAssignPropertiesSeparately];
-	__kindof UIView *view = [[_meta alloc] initWithProperties:properties];
+	BOOL separately = [_class shouldAssignPropertiesSeparately];
+	__kindof UIView *view = [[_class alloc] initWithProperties:properties];
 	if (!view) return nil;
 	if (separately) {
 		for (NSString *JSONPropertyKey in properties) {

@@ -102,7 +102,7 @@
 			// We don't want the views added by Zebra
 			[view removeFromSuperview];
 		}
-		for (UIView *stackView in _depictionStackViews) {
+		for (__unused UIView *stackView in _depictionStackViews) {
 			// NOTE TO PIXEL: Continue from here...
 		}
 	}
