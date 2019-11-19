@@ -1,9 +1,27 @@
 #import "MDDepictionViewController.h"
-#import "MDStackView.h"
+#import "MDSileoDepictionStackView.h"
 #import <Extensions/UIImage+ImageWithColor.h>
 #import "Depictions.h"
 
 @implementation MDDepictionViewController
+
+- (id)package {
+	switch (MDCurrentPackageManager) {
+		case MDPackageManagerZebra:
+			return (
+				_package ?:
+				[[objc_getClass("ZBDatabaseManager") sharedInstance]
+					topVersionForPackageID:_packageID
+					inRepo:_repo
+				]
+			);
+		case MDPackageManagerCydia:
+			return [[objc_getClass("Database") sharedInstance]
+				packageWithName:_packageID
+			];
+	}
+	return nil;
+}
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -68,6 +86,11 @@
 
 	// Scroll View and Image Container Layout
 	_depictionScrollView = [UIScrollView new];
+	//_depictionScrollView.scrollEnabled = NO;
+	_depictionScrollView.pagingEnabled = YES;
+	_depictionScrollView.directionalLockEnabled = YES;
+	_depictionScrollView.alwaysBounceHorizontal = NO;
+	_depictionScrollView.alwaysBounceVertical = NO;
 	_depictionScrollView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.view addSubview:_depictionScrollView];
 	_depictionScrollView.layer.zPosition = 0.0;
@@ -102,9 +125,68 @@
 			// We don't want the views added by Zebra
 			[view removeFromSuperview];
 		}
-		for (__unused UIView *stackView in _depictionStackViews) {
-			// NOTE TO PIXEL: Continue from here...
+		UIView *prevView = _depictionScrollView;
+		for (MDSileoDepictionStackView *stackView in _depictionStackViews) {
+			stackView.translatesAutoresizingMaskIntoConstraints = NO;
+			UIScrollView *stackViewContainer = [UIScrollView new];
+			stackViewContainer.directionalLockEnabled = YES;
+			stackViewContainer.alwaysBounceVertical = YES;
+			stackViewContainer.translatesAutoresizingMaskIntoConstraints = NO;
+			[stackViewContainer addSubview:stackView];
+			#define EQUAL_CONSTRAINT(item1, item2, attr) [NSLayoutConstraint \
+				constraintWithItem: item1 \
+				attribute: attr \
+				relatedBy:NSLayoutRelationEqual \
+				toItem: item2 \
+				attribute: attr \
+				multiplier:1.0 \
+				constant:0.0 \
+			]
+			#define EQUAL_ATTR(attr) EQUAL_CONSTRAINT(stackView, stackViewContainer, attr)
+			[stackViewContainer addConstraints:@[
+				EQUAL_ATTR(NSLayoutAttributeLeft),
+				EQUAL_ATTR(NSLayoutAttributeRight),
+				EQUAL_ATTR(NSLayoutAttributeTop),
+				EQUAL_ATTR(NSLayoutAttributeBottom),
+				EQUAL_ATTR(NSLayoutAttributeHeight),
+				EQUAL_ATTR(NSLayoutAttributeWidth)
+			]];
+			[_depictionScrollView addSubview:stackViewContainer];
+			#undef EQUAL_ATTR
+			#define EQUAL_ATTR(attr) EQUAL_CONSTRAINT(stackViewContainer, _depictionScrollView, attr)
+			NSLayoutAttribute attr = (
+				(prevView == _depictionScrollView) ?
+				NSLayoutAttributeLeading :
+				NSLayoutAttributeTrailing
+			);
+			[_depictionScrollView addConstraints:@[
+				[NSLayoutConstraint
+					constraintWithItem:stackViewContainer
+					attribute:NSLayoutAttributeLeading
+					relatedBy:NSLayoutRelationEqual
+					toItem:prevView
+					attribute:attr
+					multiplier:1.0
+					constant:0.0
+				],
+				EQUAL_ATTR(NSLayoutAttributeWidth),
+				EQUAL_ATTR(NSLayoutAttributeTop),
+				EQUAL_ATTR(NSLayoutAttributeBottom),
+				EQUAL_ATTR(NSLayoutAttributeHeight)
+			]];
+			#undef EQUAL_ATTR
+			#undef EQUAL_CONSTRAINT
+			prevView = (id)stackViewContainer;
 		}
+		[_depictionScrollView addConstraint:[NSLayoutConstraint
+			constraintWithItem:prevView
+			attribute:NSLayoutAttributeTrailing
+			relatedBy:NSLayoutRelationEqual
+			toItem:_depictionScrollView
+			attribute:NSLayoutAttributeTrailing
+			multiplier:1.0
+			constant:0.0
+		]];
 	}
 }
 
@@ -114,15 +196,15 @@
 }
 
 - (NSURL *)sileoDepictionURL {
-	NSString *URLString = MDGetFieldFromPackage(_package, @"sileodepiction");
+	NSString *URLString = MDGetFieldFromPackage(self.package, @"sileodepiction");
 	return URLString ? [NSURL URLWithString:URLString] : nil;
 }
 
 - (void)reloadData {
 	NSString *markdown = (
-		MDGetFieldFromPackage(_package, @"description") ?:
-		MDGetFieldFromPackage(_package, @"name") ?:
-		MDGetFieldFromPackage(_package, @"package") ?:
+		MDGetFieldFromPackage(self.package, @"description") ?:
+		MDGetFieldFromPackage(self.package, @"name") ?:
+		MDGetFieldFromPackage(self.package, @"package") ?:
 		@"Invalid Package"
 	);
 	self.sileoDepiction = @{
@@ -139,19 +221,24 @@
 				],
 				@"class" : @"DepictionStackView"
 			}
-		]
+		],
+		@"class" : @"DepictionTabView"
 	};
 	if (self.sileoDepictionURL) {
-		__weak typeof(self) _self = self;
+		__block __weak typeof(self) _self = self;
 		MDGetDataFromURL(self.sileoDepictionURL, NO, ^(NSData *data, NSError *error, NSInteger status){
-			if (data && (status == 200)) {
+			NSLog(@"[Download] Completed. Status:%ld, Self:%@", (long)status, _self);
+			if (data && (status == 200) && _self) {
 				NSDictionary *newDepiction = [NSJSONSerialization
 					JSONObjectWithData:data
 					options:0
 					error:nil
 				];
 				if (![newDepiction isKindOfClass:[NSDictionary class]]) return;
-				_self.sileoDepiction = newDepiction;
+				__block __weak typeof(self) __self = _self;
+				dispatch_async(dispatch_get_main_queue(), ^{
+					__self.sileoDepiction = newDepiction;
+				});
 			}
 		});
 	}
@@ -170,7 +257,12 @@
 }
 
 - (void)setValue:(id)value forUndefinedKey:(id)key {
-	NSLog(@"[Ignored] Key: %@, Value: %@", key, value);
+	NSLog(@"[SetFailure] Key: %@, Value: %@", key, value);
+}
+
+- (void)setValue:(id)value forKey:(id)key {
+	NSLog(@"[SetAttempt] Key: %@, Value: %@", key, value);
+	[super setValue:value forKey:key];
 }
 
 #pragma mark - Methods for Cydia
@@ -178,23 +270,31 @@
 	forPackage:(NSString *)name
 	withReferrer:(NSString *)referrer
 {
+	_packageID = name;
+	if (!self.package) return nil;
 	self = [self init];
-	self.package = [database packageWithName:name];
 	return self;
 }
 
 #pragma mark - Methods for Zebra
 - (id)initWithPackageID:(NSString *)packageID fromRepo:(ZBRepo *)repo {
+	NSLog(@"[Zebra] Initializing the proper way...");
+	_packageID = packageID;
+	_repo = repo;
+	if (!self.package) return nil;
 	self = [self init];
-	ZBDatabaseManager *databaseManager = [objc_getClass("ZBDatabaseManager") sharedInstance];
-	self.package = [databaseManager topVersionForPackageID:packageID inRepo:repo];
 	return self;
 }
 
-- (void)setPackage:(id)package {
+// This is necessary to trick Zebra into giving a ZBPackage instance in some cases
+- (BOOL)isKindOfClass:(Class)_class {
+	return [super isKindOfClass:_class] || (_class == objc_getClass("ZBPackageDepictionViewController"));
+}
+
+- (void)setPackage:(ZBPackage *)package {
 	_package = package;
-	//self.title = MDGetFieldFromPackage(package, @"name");
-	NSLog(@"Package: %@ (%@)", package, NSStringFromClass([package class]));
+	_packageID = package.identifier;
+	_repo = package.repo;
 }
 
 @end

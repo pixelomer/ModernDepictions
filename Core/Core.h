@@ -12,7 +12,7 @@ typedef NS_ENUM(NSInteger, MDPackageManager) {
 
 Class MDGetClass(MDTargetClass classID);
 void MDInitializeCore(void);
-NSString *MDGetFieldFromPackage(__kindof NSObject *package, NSString *field);
+NSString *MDGetFieldFromPackage(Package *package, NSString *field);
 const char *MDGetClassName(MDTargetClass classID);
 void MDGetDataFromURL(NSURL *URL, BOOL useCacheIfPossible, void (^callback)(NSData *, NSError *, NSInteger));
 extern MDPackageManager MDCurrentPackageManager;

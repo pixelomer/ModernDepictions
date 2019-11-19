@@ -9,7 +9,10 @@
 	NSLayoutConstraint *_headerImagePosition; // Y position
 	NSLayoutConstraint *_headerImageWidth;
 	NSLayoutConstraint *_headerImageHeight;
+	NSString *_packageID;
+	__weak id _package;
+	id _repo;
 }
-@property (nonatomic, weak) __kindof NSObject *package;
 @property (nonatomic, strong) NSDictionary *sileoDepiction;
+- (id)package;
 @end

@@ -3,6 +3,7 @@
 #import <objc/runtime.h>
 
 MDPackageManager MDCurrentPackageManager = 0;
+static NSArray *fieldArray;
 
 const char *MDGetClassName(MDTargetClass classID) {
 	switch (MDCurrentPackageManager) {
@@ -28,20 +29,34 @@ Class MDGetClass(MDTargetClass classID) {
 	return objc_getClass(MDGetClassName(classID));
 }
 
-NSString *MDGetFieldFromPackage(__kindof NSObject *package, NSString *field) {
+NSString *MDGetFieldFromPackage(Package *package, NSString *field) {
+	NSLog(@"[GetField] Field: \"%@\", Package: %@", field, package);
 	if (!package) return nil;
 	if (object_getClass(package) != MDGetClass(MDTargetPackage)) {
+		NSLog(@"[GetField] Invalid class");
 		// Q: Why is object_getClass(object) used here instead of [object class]?
 		// A: Let me ask you another question: What if object isn't an NSObject?
 		return nil;
 	}
+	id value = nil;
 	switch (MDCurrentPackageManager) {
 		case MDPackageManagerCydia:
-			[(Package *)package parse];
+			[package parse];
+			value = [package getField:field];
+			value = [value isKindOfClass:[NSString class]] ? value : nil;
+			return value;
 		case MDPackageManagerZebra:
-			return [(Package *)package getField:field];
+			switch ([fieldArray indexOfObject:field.lowercaseString]) {
+				case 0: return [package name];
+				case 1: return [package longDescription];
+				case 2: return [(ZBPackage *)package identifier];
+				case 3: return [(ZBPackage *)package version];
+				default: return [package getField:field];
+			}
+			break;
 	}
-	return nil;
+	NSLog(@"Returning \"%@\"...", value);
+	return value;
 }
 
 void MDGetDataFromURL(NSURL *URL, BOOL useCacheIfPossible, void (^callback)(NSData *, NSError *, NSInteger)) {
@@ -80,6 +95,7 @@ void MDGetDataFromURL(NSURL *URL, BOOL useCacheIfPossible, void (^callback)(NSDa
 
 void MDInitializeCore(void) {
 	NSString *str = NSBundle.mainBundle.bundleIdentifier;
+	fieldArray = @[@"name", @"description", @"package", @"version"];
 	if ([str isEqualToString:@(CYDIA_BUNDLE_ID)]) {
 		MDCurrentPackageManager = MDPackageManagerCydia;
 	}

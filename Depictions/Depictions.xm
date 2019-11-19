@@ -5,6 +5,9 @@
 #import "MDSileoDepictionViewProtocol.h"
 #import "MDStackView.h"
 
+static NSArray *fieldArray;
+
+%group Depictions
 %hook DepictionViewController
 
 + (id)alloc {
@@ -13,9 +16,10 @@
 }
 
 %end
+%end
 
 void MDInitializeDepictions(void) {
-	%init(DepictionViewController = MDGetClass(MDTargetDepictionController));
+	%init(Depictions, DepictionViewController=MDGetClass(MDTargetDepictionController));
 }
 
 __kindof UIView<MDSileoDepictionViewProtocol> *MDCreateView(NSDictionary *_properties) {
@@ -38,9 +42,10 @@ __kindof UIView<MDSileoDepictionViewProtocol> *MDCreateView(NSDictionary *_prope
 			NSString *propertyKey = [NSString
 				stringWithFormat:@"depiction%C%@", c, [JSONPropertyKey substringFromIndex:1]
 			];
-			NSLog(@"[Key] %@", propertyKey);
-			if (class_getProperty(_class, propertyKey.UTF8String)) {
-				id value = properties[propertyKey];
+			BOOL isValid = !!class_getProperty(_class, propertyKey.UTF8String);
+			NSLog(@"[Key] \"%@\", %d", propertyKey, (int)isValid);
+			if (isValid) {
+				id value = properties[JSONPropertyKey];
 				[view setValue:value forKey:propertyKey];
 			}
 		}
@@ -49,14 +54,17 @@ __kindof UIView<MDSileoDepictionViewProtocol> *MDCreateView(NSDictionary *_prope
 }
 
 NSArray<MDSileoDepictionStackView *> *MDParseSileoDepiction(NSDictionary *depiction) {
+	NSLog(@"[ParseDepiction] %@", depiction);
 	if (![depiction isKindOfClass:[NSDictionary class]]) return nil;
 	if ([depiction[@"class"] isEqualToString:@"DepictionTabView"]) {
-		// I have no idea about how Sileo implements DepictionTabView
+		// DepictionTabView is the only root view so let's just check for it
 		NSArray *tabs = depiction[@"tabs"];
 		if (![tabs isKindOfClass:[NSArray class]] || tabs.count <= 0) return nil;
 		NSMutableArray *stacks = [NSMutableArray new];
 		for (NSDictionary *tab in tabs) {
+			NSLog(@"[ParseDepiction] Parsing tab: %@", tab);
 			UIView *stack = MDCreateView(tab);
+			NSLog(@"[ParseDepiction] Result: %@", stack);
 			if (stack) [stacks addObject:stack];
 		}
 		return stacks.copy;

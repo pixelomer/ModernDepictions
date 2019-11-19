@@ -6,6 +6,6 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = ModernDepictions
 
 ModernDepictions_FILES = Tweak.xm $(wildcard */*.xm) $(wildcard */*.mm) $(wildcard MMMarkdown/Source/*.m)
-ModernDepictions_CFLAGS = -fobjc-arc -include macros.h -I. -IMMMarkdown/Source
+ModernDepictions_CFLAGS = -fobjc-arc -include macros.h -I. -IMMMarkdown/Source -Wno-unused-value
 
 include $(THEOS_MAKE_PATH)/tweak.mk
