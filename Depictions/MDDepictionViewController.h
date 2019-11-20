@@ -1,15 +1,19 @@
 #import <UIKit/UIKit.h>
 
 @class MDStackView;
+@class MDTabView;
 
-@interface MDDepictionViewController : UIViewController {
+@interface MDDepictionViewController : UIViewController<UIScrollViewDelegate> {
 	UIImageView *_headerImageView;
 	NSArray<MDStackView *> *_depictionStackViews;
 	UIScrollView *_depictionScrollView;
-	NSLayoutConstraint *_headerImagePosition; // Y position
+	NSLayoutConstraint *_headerPosition; // Y position
 	NSLayoutConstraint *_headerImageWidth;
 	NSLayoutConstraint *_headerImageHeight;
+	MDTabView *_tabView;
 	NSString *_packageID;
+	CGFloat _initialImageHeight;
+	BOOL _didLayoutSubviews;
 	__weak id _package;
 	id _repo;
 }

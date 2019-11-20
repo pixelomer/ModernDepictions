@@ -126,3 +126,7 @@ MD_BASIC_INTERFACE(CydiaWebViewController, UIViewController)
 @interface CydiaWebViewController(Cydia)
 + (NSURLRequest *)requestWithHeaders:(NSURLRequest *)request;
 @end
+
+@interface WKScrollView : UIScrollView
+- (UIEdgeInsets)_systemContentInset;
+@end

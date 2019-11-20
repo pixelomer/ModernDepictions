@@ -51,6 +51,7 @@ NSString *MDGetFieldFromPackage(Package *package, NSString *field) {
 				case 1: return [package longDescription];
 				case 2: return [(ZBPackage *)package identifier];
 				case 3: return [(ZBPackage *)package version];
+				case 4: return [(ZBPackage *)package depictionURL].absoluteString;
 				default: return [package getField:field];
 			}
 			break;
@@ -95,7 +96,7 @@ void MDGetDataFromURL(NSURL *URL, BOOL useCacheIfPossible, void (^callback)(NSDa
 
 void MDInitializeCore(void) {
 	NSString *str = NSBundle.mainBundle.bundleIdentifier;
-	fieldArray = @[@"name", @"description", @"package", @"version"];
+	fieldArray = @[@"name", @"description", @"package", @"version", @"depiction"];
 	if ([str isEqualToString:@(CYDIA_BUNDLE_ID)]) {
 		MDCurrentPackageManager = MDPackageManagerCydia;
 	}

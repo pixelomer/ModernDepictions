@@ -47,10 +47,14 @@
 		documentAttributes:nil
 		error:nil
 	];
-	if (finalObject.mutableString.length > 0 && [finalObject.mutableString characterAtIndex:finalObject.mutableString.length - 1] == '\n') {
-		[finalObject deleteCharactersInRange:NSMakeRange(finalObject.mutableString.length - 1, 1)];
+	for (NSUInteger i = finalObject.mutableString.length-1; i > 0; i--) {
+		if (finalObject.mutableString.length > 0 && [finalObject.mutableString characterAtIndex:i] == '\n') {
+			[finalObject deleteCharactersInRange:NSMakeRange(i, 1)];
+		}
+		else break;
 	}
 	_textView.attributedText = finalObject.copy;
+	[_textView sizeToFit];
 }
 
 - (void)setDepictionMarkdown:(NSString *)markdown {

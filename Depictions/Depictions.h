@@ -12,3 +12,4 @@
 void MDInitializeDepictions(void);
 NSArray<MDSileoDepictionStackView *> *MDParseSileoDepiction(NSDictionary *depiction);
 __kindof UIView<MDSileoDepictionViewProtocol> *MDCreateView(NSDictionary *properties);
+UIImage *MDGetShadowImage(void);

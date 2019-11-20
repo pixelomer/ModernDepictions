@@ -66,7 +66,7 @@
 	[newConstraints addObject:[NSLayoutConstraint
 		constraintWithItem:previousView
 		attribute:NSLayoutAttributeBottom
-		relatedBy:NSLayoutRelationLessThanOrEqual
+		relatedBy:NSLayoutRelationEqual
 		toItem:self
 		attribute:NSLayoutAttributeBottom
 		multiplier:1.0
