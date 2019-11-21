@@ -10,9 +10,14 @@ typedef NS_ENUM(NSInteger, MDPackageManager) {
     MDPackageManagerCydia
 };
 
+typedef NS_ENUM(NSInteger, MDPackageAttribute) {
+    MDPackageAttributeIcon
+};
+
 Class MDGetClass(MDTargetClass classID);
 void MDInitializeCore(void);
 NSString *MDGetFieldFromPackage(Package *package, NSString *field);
 const char *MDGetClassName(MDTargetClass classID);
 void MDGetDataFromURL(NSURL *URL, BOOL useCacheIfPossible, void (^callback)(NSData *, NSError *, NSInteger));
 extern MDPackageManager MDCurrentPackageManager;
+id MDGetAttribute(Package *package, MDPackageAttribute attr);

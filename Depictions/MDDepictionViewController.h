@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 
+@class MDGetPackageView;
 @class MDStackView;
 @class MDTabView;
 
@@ -10,6 +11,7 @@
 	NSLayoutConstraint *_headerPosition; // Y position
 	NSLayoutConstraint *_headerImageWidth;
 	NSLayoutConstraint *_headerImageHeight;
+	MDGetPackageView *_getPackageView;
 	MDTabView *_tabView;
 	NSString *_packageID;
 	CGFloat _initialImageHeight;

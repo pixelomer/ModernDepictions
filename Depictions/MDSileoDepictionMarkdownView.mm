@@ -77,6 +77,9 @@
 		_textView.textContainer.lineFragmentPadding = 0.0;
 		_textView.textContainerInset = UIEdgeInsetsZero;
 		_textView.layoutManager.usesFontLeading = NO;
+		_textView.linkTextAttributes = @{
+			NSForegroundColorAttributeName : [UIColor redColor]
+		};
 		_textView.editable = NO;
 		if (@available(iOS 11.0, *)) _textView.textDragInteraction.enabled = NO;
 		[self addSubview:_textView];

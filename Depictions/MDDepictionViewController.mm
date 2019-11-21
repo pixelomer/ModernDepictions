@@ -1,6 +1,7 @@
 #import "MDDepictionViewController.h"
 #import "MDSileoDepictionStackView.h"
 #import "Depictions.h"
+#import "MDGetPackageView.h"
 #import "MDTabView.h"
 #import <WebKit/WebKit.h>
 
@@ -37,7 +38,6 @@
 	[super viewDidLoad];
 	_initialImageHeight = self.sileoDepictionURL ? 200.0 : 100.0;
 	self.automaticallyAdjustsScrollViewInsets = NO;
-	self.view.backgroundColor = [UIColor whiteColor];
 	for (UIView *view in self.view.subviews) {
 		// We don't want the views added by Zebra
 		[view removeFromSuperview];
@@ -46,6 +46,7 @@
 	
 	// Header Image View
 	UIView *containerView = [UIView new];
+	containerView.backgroundColor = [UIColor whiteColor];
 	containerView.clipsToBounds = YES;
 	containerView.translatesAutoresizingMaskIntoConstraints = NO;
 	_headerImageView = [UIImageView new];
@@ -120,7 +121,7 @@
 	shadowView.translatesAutoresizingMaskIntoConstraints = NO;
 	shadowView.image = MDGetShadowImage();
 	[_headerImageView addSubview:shadowView];
-	NSDictionary *views = @{ @"shadow" : shadowView };
+	NSDictionary *views = @{ @"shadow" : shadowView, @"image" : _headerImageView };
 	[_headerImageView addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"H:|[shadow]|"
 		options:0
@@ -129,6 +130,25 @@
 	]];
 	[_headerImageView addConstraints:[NSLayoutConstraint
 		constraintsWithVisualFormat:@"V:|[shadow]|"
+		options:0
+		metrics:nil
+		views:views
+	]];
+
+	// Get Package View
+	_getPackageView = [MDGetPackageView new];
+	_getPackageView.translatesAutoresizingMaskIntoConstraints = NO;
+	_getPackageView.package = self.package;
+	[containerView addSubview:_getPackageView];
+	views = @{ @"shadow" : shadowView, @"image" : _headerImageView, @"get" : _getPackageView };
+	[containerView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"V:[image][get]"
+		options:0
+		metrics:nil
+		views:views
+	]];
+	[containerView addConstraints:[NSLayoutConstraint
+		constraintsWithVisualFormat:@"H:|[get]|"
 		options:0
 		metrics:nil
 		views:views
@@ -146,7 +166,7 @@
 		_depictionScrollView.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.view addSubview:_depictionScrollView];
 		_depictionScrollView.layer.zPosition = 0.0;
-		views = @{ @"scroll" : _depictionScrollView, @"container" : containerView };
+		views = @{ @"scroll" : _depictionScrollView };
 		[self.view addConstraints:[NSLayoutConstraint
 			constraintsWithVisualFormat:@"H:|[scroll]|"
 			options:0
@@ -164,9 +184,9 @@
 		_tabView = [MDTabView new];
 		_tabView.translatesAutoresizingMaskIntoConstraints = NO;
 		[containerView addSubview:_tabView];
-		views = @{ @"tabs" : _tabView, @"image" : _headerImageView };
+		views = @{ @"tabs" : _tabView, @"get" : _getPackageView };
 		[containerView addConstraints:[NSLayoutConstraint
-			constraintsWithVisualFormat:@"V:[image][tabs]|"
+			constraintsWithVisualFormat:@"V:[get][tabs]|"
 			options:0
 			metrics:nil
 			views:views
@@ -188,7 +208,7 @@
 		_depictionScrollView.delegate = self;
 		webView.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.view addSubview:webView];
-		views = @{ @"header" : containerView, @"image" : _headerImageView, @"web" : webView };
+		views = @{ @"get" : _getPackageView, @"image" : _headerImageView, @"web" : webView };
 		[self.view addConstraints:[NSLayoutConstraint
 			constraintsWithVisualFormat:@"H:|[web]|"
 			options:0
@@ -196,7 +216,7 @@
 			views:views
 		]];
 		[containerView addConstraints:[NSLayoutConstraint
-			constraintsWithVisualFormat:@"V:[image]|"
+			constraintsWithVisualFormat:@"V:[get]|"
 			options:0
 			metrics:nil
 			views:views
@@ -294,12 +314,14 @@
 }
 
 - (void)viewDidLayoutSubviews {
+	self.view.backgroundColor = [UIColor whiteColor];
 	if (!_didLayoutSubviews) {
 		_didLayoutSubviews = YES;
 		UIView *containerView = _headerPosition.firstItem;
 		CGFloat top = containerView.frame.origin.y + containerView.frame.size.height;
 		_depictionScrollView.layer.masksToBounds = NO;
 		_depictionScrollView.contentInset = UIEdgeInsetsMake(top, 0, 0, 0);
+		_depictionScrollView.showsVerticalScrollIndicator = NO;
 	}
 }
 
@@ -327,6 +349,16 @@
 							@"class" : @"DepictionMarkdownView",
 							@"markdown" : self.packageDescription,
 							@"useRawFormat" : @NO
+						},
+						@{
+							@"class" : @"DepictionMarkdownView",
+							@"markdown" : [NSString stringWithFormat:@(
+								"<div style=\"font-family: -apple-system; color: darkgray; text-align: center;\">"
+								"	%@ (%@)<br/>"
+								"	%@"
+								"</div>"
+							), MDGetFieldFromPackage(self.package, @"package"), MDGetFieldFromPackage(self.package, @"version"), @"Repo here"],
+							@"useRawFormat" : @YES
 						}
 					],
 					@"class" : @"DepictionStackView"

@@ -29,34 +29,49 @@ Class MDGetClass(MDTargetClass classID) {
 	return objc_getClass(MDGetClassName(classID));
 }
 
+id MDGetAttribute(Package *package, MDPackageAttribute attr) {
+	NSLog(@"[GetAttribute] Attribute: \"%ld\", Package: %@", (long)attr, package);
+	if (!package) return nil;
+	if (object_getClass(package) != MDGetClass(MDTargetPackage)) return nil;
+	switch (attr) {
+		case MDPackageAttributeIcon:
+			switch (MDCurrentPackageManager) {
+				case MDPackageManagerCydia:
+					return [package icon];
+				case MDPackageManagerZebra:
+					return (
+						[UIImage imageWithContentsOfFile:[(ZBPackage *)package iconPath]] ?:
+						[UIImage imageNamed:[(ZBPackage *)package sectionImageName]]
+					);
+			}
+	}
+	return nil;
+}
+
 NSString *MDGetFieldFromPackage(Package *package, NSString *field) {
 	NSLog(@"[GetField] Field: \"%@\", Package: %@", field, package);
 	if (!package) return nil;
-	if (object_getClass(package) != MDGetClass(MDTargetPackage)) {
-		NSLog(@"[GetField] Invalid class");
-		// Q: Why is object_getClass(object) used here instead of [object class]?
-		// A: Let me ask you another question: What if object isn't an NSObject?
-		return nil;
-	}
+	if (object_getClass(package) != MDGetClass(MDTargetPackage)) return nil;
 	id value = nil;
 	switch (MDCurrentPackageManager) {
 		case MDPackageManagerCydia:
 			[package parse];
 			value = [package getField:field];
 			value = [value isKindOfClass:[NSString class]] ? value : nil;
-			return value;
+			break;
 		case MDPackageManagerZebra:
 			switch ([fieldArray indexOfObject:field.lowercaseString]) {
-				case 0: return [package name];
-				case 1: return [package longDescription];
-				case 2: return [(ZBPackage *)package identifier];
-				case 3: return [(ZBPackage *)package version];
-				case 4: return [(ZBPackage *)package depictionURL].absoluteString;
-				default: return [package getField:field];
+				case 0: value = [package name]; break;
+				case 1: value = [package longDescription]; break;
+				case 2: value = [(ZBPackage *)package identifier]; break;
+				case 3: value = [(ZBPackage *)package version]; break;
+				case 4: value = [(ZBPackage *)package depictionURL].absoluteString; break;
+				case 5: value = [(ZBPackage *)package author]; break;
+				default: value = [package getField:field]; break;
 			}
 			break;
 	}
-	NSLog(@"Returning \"%@\"...", value);
+	NSLog(@"[GetField] Returning \"%@\"...", value);
 	return value;
 }
 
@@ -96,7 +111,7 @@ void MDGetDataFromURL(NSURL *URL, BOOL useCacheIfPossible, void (^callback)(NSDa
 
 void MDInitializeCore(void) {
 	NSString *str = NSBundle.mainBundle.bundleIdentifier;
-	fieldArray = @[@"name", @"description", @"package", @"version", @"depiction"];
+	fieldArray = @[@"name", @"description", @"package", @"version", @"depiction", @"author"];
 	if ([str isEqualToString:@(CYDIA_BUNDLE_ID)]) {
 		MDCurrentPackageManager = MDPackageManagerCydia;
 	}
