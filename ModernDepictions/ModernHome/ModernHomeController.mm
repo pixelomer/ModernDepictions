@@ -179,7 +179,7 @@
 		if (!cell) {
 			cell = [[FeaturedHeaderView alloc] initWithReuseIdentifier:@"Header"];
 		}
-		cell.text = (NSString *)object;
+		cell.textLabel.text = (NSString *)object;
 	}
 	else if ([object isKindOfClass:[NSDictionary class]]) {
 		cell = [tableView dequeueReusableCellWithIdentifier:@"Package"];

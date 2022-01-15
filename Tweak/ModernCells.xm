@@ -1,3 +1,4 @@
+#import <dlfcn.h>
 #import <UIKit/UIKit.h>
 #import <Headers/Headers.h>
 #import <ModernDepictions/Shared/ModernPackageCell.h>

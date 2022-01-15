@@ -1,6 +1,7 @@
 #import "NSAttributedString+Markdown.h"
 #import "NSMutableString+RegEx.h"
 #import <MMMarkdown/MMMarkdown.h>
+#import <UIKit/UIKit.h>
 
 @implementation NSAttributedString(Markdown)
 

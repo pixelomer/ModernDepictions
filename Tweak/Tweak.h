@@ -1,3 +1,5 @@
+#import <UIKit/UIKit.h>
+
 void ModernDepictionsInitializeCore(void);
 void ModernDepictionsInitializeDepictions(void);
 void ModernDepictionsInitializeHome(void);

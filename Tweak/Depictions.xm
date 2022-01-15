@@ -2,7 +2,6 @@
 #import <Headers/Headers.h>
 #import <ModernDepictions/SileoDepictions/ModernPackageController.h>
 #import <Extensions/UINavigationController+Opacity.h>
-@import GoogleMobileAds;
 
 static NSArray *iOSRepoUpdatesHosts;
 static __kindof UIViewController *(*origPVCInitializer)(CYPackageController *const __unsafe_unretained, SEL, Database *__strong, NSString *__strong, NSString *__strong);
@@ -63,16 +62,6 @@ static __kindof UIViewController *(*origPVCInitializer)(CYPackageController *con
 
 %end
 
-%hook Cydia
-
-- (void)applicationDidFinishLaunching:(id)application {
-	%orig;
-	NSLog(@"Starting GADMobileAds...");
-	[[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
-}
-
-%end
-
 @interface GADNUIKitWebViewController : UIView
 - (UIWebView *)webView;
 @end
@@ -92,10 +81,8 @@ void ModernDepictionsInitializeDepictions(void) {
 	NSNumber *enableiOSRepoUpdatesAPI = [[NSUserDefaults standardUserDefaults] objectForKey:@"EnableiOSRepoUpdatesAPI" inDomain:@"com.pixelomer.moderndepictions.prefs"];
 	if (enableiOSRepoUpdatesAPI && [enableiOSRepoUpdatesAPI boolValue]) {
 		iOSRepoUpdatesHosts = @[
-#if IRU_API_ALLOW_ALL
 			@"repo.packix.com",
 			@"moreinfo.thebigboss.org"
-#endif
 		];
 	}
 	%init(Depictions);

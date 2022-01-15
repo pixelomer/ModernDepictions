@@ -6,16 +6,6 @@
 	<array>
 		<dict>
 			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>headerCellClass</key>
-			<string>HBImageTableCell</string>
-			<key>icon</key>
-			<string>header.png</string>
-			<key>height</key>
-    		<integer>100</integer>
-		</dict>
-		<dict>
-			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<true/>
@@ -32,7 +22,7 @@
 			<key>label</key>
 			<string>Sileo Depictions</string>
 			<key>footerText</key>
-			<string>ModernDepictions allows you to view Sileo depictions using Cydia. The result is not completely same as Sileo. However, it is close enough.</string>
+			<string>Show Sileo depictions in Cydia when available.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -52,7 +42,7 @@
 			<key>label</key>
 			<string>Modern Package Cells</string>
 			<key>footerText</key>
-			<string>Replace Cydia's HTML-based package cells with native package cells inspired from Sileo's design.</string>
+			<string>Replace Cydia's default package cells with package cells inspired by Sileo's design.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -127,9 +117,20 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Experimental</string>
-			<!-- This is not available yet -->
-			<!--key>footerText</key>
-			<string>Experimental repositories: Packix</string-->
+			<key>footerText</key>
+			<string>These are experimental features that are not enabled by default. Use them at your own risk.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.pixelomer.moderndepictions.prefs</string>
+			<key>key</key>
+			<string>EnableiOSRepoUpdatesAPI</string>
+			<key>label</key>
+			<string>Native BigBoss Depictions</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -141,7 +142,7 @@
 			<key>key</key>
 			<string>EnableDepictionWebView</string>
 			<key>label</key>
-			<string>Enable DepictionWebView (Buggy)</string>
+			<string>Enable DepictionWebView</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -153,26 +154,13 @@
 			<key>key</key>
 			<string>LookForSileoPrices</string>
 			<key>label</key>
-			<string>Fetch Payment Info (Beta)</string>
+			<string>Fetch Payment Information</string>
 		</dict>
-		<!-- This is not available yet -->
-		<!--dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.pixelomer.moderndepictions.prefs</string>
-			<key>key</key>
-			<string>EnableiOSRepoUpdatesAPI</string>
-			<key>label</key>
-			<string>Enable experimental repositories</string>
-		</dict-->
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Credits</string>
+			<string>Created By</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>
@@ -183,26 +171,6 @@
 			<true/>
 			<key>user</key>
 			<string>pixelomer</string>
-		</dict>
-		<dict>
-			<key>cellClass</key>
-			<string>HBTwitterCell</string>
-			<key>label</key>
-			<string>Simply Designer</string>
-			<key>showAvatar</key>
-			<true/>
-			<key>user</key>
-			<string>designer_simply</string>
-		</dict>
-		<dict>
-			<key>cellClass</key>
-			<string>HBTwitterCell</string>
-			<key>label</key>
-			<string>EPSYLON</string>
-			<key>showAvatar</key>
-			<true/>
-			<key>user</key>
-			<string>EPSYLON2K</string>
 		</dict>
 	</array>
 	<key>title</key>

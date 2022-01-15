@@ -30,7 +30,7 @@
 	}
 	NSArray *views = @[ (shadowView ?: NSNull.null), imageView ];
 	for (UIView *view in views) {
-		if ([view isKindOfClass:[NSNull null]]) continue;
+		if ([view isKindOfClass:[NSNull class]]) continue;
 		[view.superview addConstraints:[NSLayoutConstraint
 			constraintsWithVisualFormat:@"H:|[v]|"
 			options:0
